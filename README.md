@@ -2,6 +2,8 @@
 
 A dynamic, modern portfolio website that showcases my development skills, projects, and technical expertise using vanilla HTML, CSS, and JavaScript with GitHub API integration.
 
+## 🔗 [View Live Website](https://wian47.github.io/Portfolio/)
+
 ![image](https://github.com/user-attachments/assets/ba2cadee-134f-4bd9-9d60-a62ed7a228a3)
 
 ![image](https://github.com/user-attachments/assets/82f55c39-16ed-4652-b107-b620b979495b)
@@ -50,9 +52,8 @@ portfolio/
 
 ## Setup and Usage
 
-1. Clone the repository
-2. Open `index.html` in your browser
-3. No build tools or dependencies required!
+### View Online
+Visit the live website at [https://wian47.github.io/Portfolio/](https://wian47.github.io/Portfolio/)
 
 ## Key Features
 
@@ -85,7 +86,6 @@ The learning path timeline provides a visual representation of my educational jo
 - Smooth reveal animations
 - Special styling for future goals
 - Mobile-optimized layout
-
 
 ## License
 
