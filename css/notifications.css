@@ -1,0 +1,124 @@
+
+/* Notification Component */
+.notification {
+    position: fixed;
+    top: calc(var(--header-height) + 20px);
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    color: white;
+    font-weight: var(--font-weight-medium);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+    opacity: 0;
+    transform: translateX(30px);
+    animation: slide-in 0.3s forwards;
+}
+
+@keyframes slide-in {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.notification.hide {
+    animation: slide-out 0.3s forwards;
+}
+
+@keyframes slide-out {
+    to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}
+
+.notification.success {
+    background-color: var(--success-color);
+    border-left: 4px solid #2b9348;
+}
+
+.notification.error {
+    background-color: #d00000;
+    border-left: 4px solid #9d0208;
+}
+
+.notification.info {
+    background-color: var(--primary-color);
+    border-left: 4px solid #0353a4;
+}
+
+/* Modal Styles Enhancement */
+.modal-info {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+}
+
+.modal-description h3,
+.modal-tags h3 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-color);
+}
+
+.modal-meta {
+    background-color: var(--card-bg);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+}
+
+.modal-meta p {
+    margin-bottom: var(--spacing-sm);
+}
+
+.modal-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+}
+
+/* Error message styling */
+.error-message {
+    text-align: center;
+    padding: var(--spacing-xl);
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    color: #d00000;
+}
+
+.error-message i {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+}
+
+/* No projects message */
+.no-projects {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--text-color);
+    grid-column: 1 / -1;
+}
+
+/* Responsive modal for mobile */
+@media screen and (max-width: 768px) {
+    .modal-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+    }
+    
+    .notification {
+        width: calc(100% - 40px);
+        max-width: none;
+    }
+}

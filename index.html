@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wian's Portfolio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <meta name="description" content="Professional portfolio of Wian - Software Developer">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="js/fallback.js"></script>
+    <script src="js/debug.js"></script>
+    <script src="js/html-fixer.js"></script>
+</head>
+<body class="light-theme">
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="#home">Wian</a>
+            </div>
+            <button class="mobile-toggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li class="theme-toggle">
+                    <button id="theme-toggle-btn" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Hi, I'm <span class="highlight">Wian</span></h1>
+                <h2>Software Developer</h2>
+                <p>I build modern web applications with a focus on clean code and user experience.</p>
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn primary-btn">View My Work</a>
+                    <a href="#contact" class="btn secondary-btn">Get In Touch</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="animated-background" id="animated-bg"></div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about section-padding">
+            <div class="container">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p class="bio-intro">I'm a passionate <span class="highlight">Software Developer</span> with a focus on creating efficient, scalable, and user-friendly applications.</p>
+                        
+                        <p>My journey in tech started with a curiosity about how things work, which led me to explore various programming languages and frameworks. I enjoy the problem-solving aspects of development and the satisfaction that comes from building solutions that make a positive impact.</p>
+                        
+                        <div class="about-highlights">
+                            <div class="highlight-item">
+                                <i class="fas fa-laptop-code"></i>
+                                <div class="highlight-content">
+                                    <h3>Full-Stack Development</h3>
+                                    <p>I work across the entire development stack, from designing intuitive user interfaces to implementing robust backend systems.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="highlight-item">
+                                <i class="fas fa-code-branch"></i>
+                                <div class="highlight-content">
+                                    <h3>Open Source Contributor</h3>
+                                    <p>I believe in the power of collaborative development and actively contribute to open source projects.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="highlight-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <div class="highlight-content">
+                                    <h3>Continuous Learning</h3>
+                                    <p>Technology evolves quickly, and I'm committed to staying current with the latest tools and best practices.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="about-cta">
+                            <a href="#contact" class="btn secondary-btn">Let's Connect</a>
+                            <a href="#projects" class="btn primary-btn">See My Work</a>
+                        </div>
+                    </div>
+                    <div class="about-image">
+                        <!-- Keep the existing profile image section -->
+                        <div class="image-container">
+                            <div class="profile-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="social-links">
+                            <a href="https://github.com/Wian47" target="_blank" rel="noopener" aria-label="GitHub Profile">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn Profile">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="mailto:contact@example.com" aria-label="Email Me">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects section-padding">
+            <div class="container">
+                <h2 class="section-title">My Projects</h2>
+                <div class="project-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="web">Web</button>
+                    <button class="filter-btn" data-filter="api">API</button>
+                    <button class="filter-btn" data-filter="app">Apps</button>
+                </div>
+                <div class="github-stats">
+                    <div class="stats-item">
+                        <i class="fas fa-code-branch"></i>
+                        <span id="repo-count">-</span>
+                        <p>Repositories</p>
+                    </div>
+                    <div class="stats-item">
+                        <i class="fas fa-star"></i>
+                        <span id="stars-count">-</span>
+                        <p>Stars</p>
+                    </div>
+                    <div class="stats-item">
+                        <i class="fas fa-code"></i>
+                        <span id="commits-count">-</span>
+                        <p>Commits</p>
+                    </div>
+                </div>
+                <div class="projects-grid" id="projects-container">
+                    <!-- Projects will be loaded here via JavaScript -->
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading projects from GitHub...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="skills section-padding">
+            <div class="container">
+                <h2 class="section-title">Skills &amp; Technologies</h2>
+                <div class="skills-content">
+                    <div class="skills-category">
+                        <h3>Frontend</h3>
+                        <div class="skill-items">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>HTML5</span>
+                                    <span class="percentage">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>CSS3/SASS</span>
+                                    <span class="percentage">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>JavaScript</span>
+                                    <span class="percentage">88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 88%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skills-category">
+                        <h3>Backend</h3>
+                        <div class="skill-items">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Node.js</span>
+                                    <span class="percentage">82%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>RESTful APIs</span>
+                                    <span class="percentage">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>SQL/NoSQL</span>
+                                    <span class="percentage">75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tools-container">
+                    <h3>Tools &amp; Frameworks</h3>
+                    <div class="tools-grid">
+                        <div class="tool-item"><i class="fab fa-git-alt"></i><span>Git</span></div>
+                        <div class="tool-item"><i class="fab fa-github"></i><span>GitHub</span></div>
+                        <div class="tool-item"><i class="fab fa-npm"></i><span>NPM</span></div>
+                        <div class="tool-item"><i class="fab fa-docker"></i><span>Docker</span></div>
+                        <div class="tool-item"><i class="fab fa-react"></i><span>React</span></div>
+                        <div class="tool-item"><i class="fas fa-terminal"></i><span>CLI</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact section-padding">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-details">
+                                <h3>Email</h3>
+                                <a href="mailto:contact@example.com">contact@example.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-details">
+                                <h3>Location</h3>
+                                <p>South Africa</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-github"></i>
+                            <div class="contact-details">
+                                <h3>GitHub</h3>
+                                <a href="https://github.com/Wian47" target="_blank" rel="noopener">@Wian47</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn primary-btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-copyright">
+                    <p>&copy; <span id="current-year"></span> Wian. All Rights Reserved.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project Details Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body" id="modal-project-details">
+                <!-- Project details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/github-api.js"></script>
+    <script src="js/ui-interactions.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/validate.js"></script>
+</body>
+</html>
