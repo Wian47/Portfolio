@@ -165,3 +165,56 @@
 .tech-clusters {
     position: relative; /* Add this to create positioning context */
 }
+
+/* Enhance mobile support for tooltips */
+
+/* Base tooltip styles remain mostly unchanged */
+/* ...existing code... */
+
+/* Improve mobile styling */
+@media (max-width: 768px) {
+    .tech-tooltip {
+        width: 85vw !important;
+        max-width: 85vw !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        padding: 15px !important; /* Slightly larger padding for touch targets */
+        z-index: 10000; /* Ensure highest z-index on mobile */
+    }
+    
+    /* Make close button larger on mobile for easier tapping */
+    .tooltip-title i {
+        font-size: 1.2rem !important;
+        padding: 8px !important;
+    }
+    
+    /* Increase tap target size for the "Learn more" link */
+    .tooltip-link {
+        padding: 8px 0 !important;
+        display: inline-block !important;
+        margin-top: 12px !important;
+    }
+    
+    /* Ensure overlay covers entire screen on mobile */
+    .tooltip-overlay {
+        background-color: rgba(0, 0, 0, 0.5) !important; /* Darker overlay for mobile */
+    }
+    
+    /* Make tech items more obviously tappable on mobile */
+    .tech-item {
+        min-height: 80px !important; /* Ensure enough height for tapping */
+        padding: 10px !important;
+    }
+    
+    .tech-item::after {
+        content: '\f05a';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        font-size: 0.7rem;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        opacity: 0.8 !important; /* Always show info icon on mobile */
+        color: var(--primary-color);
+    }
+}

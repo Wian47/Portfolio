@@ -1,5 +1,5 @@
 /**
- * Completely revised tooltip positioning to fix centering issue
+ * Enhanced tooltip functionality for both desktop and mobile devices
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -75,38 +75,63 @@ document.addEventListener('DOMContentLoaded', function() {
     let activeTech = null;
     let activeItem = null;
     
-    // Completely rewritten positioning function with guaranteed centering
+    // Enhanced positioning function with mobile detection
     function positionTooltip(techItem) {
         // Get dimensions and positions
         const rect = techItem.getBoundingClientRect();
         const tooltipWidth = 280; // Fixed tooltip width
         
-        // Calculate exact center position of tech item
-        const buttonCenter = rect.left + (rect.width / 2);
+        // Check if we're on mobile (simplified detection)
+        const isMobile = window.innerWidth < 768;
         
-        // Force tooltip's horizontal center to align with button's center
+        // Set position to fixed for proper rendering
         tooltip.style.position = 'fixed';
-        tooltip.style.width = tooltipWidth + 'px';
-        tooltip.style.left = (buttonCenter - (tooltipWidth/2)) + 'px';
+        tooltip.style.width = isMobile ? '85vw' : tooltipWidth + 'px';
         
-        // Adjust if tooltip goes off screen edges
-        const tooltipLeft = parseFloat(tooltip.style.left);
-        if (tooltipLeft < 10) {
-            tooltip.style.left = '10px';
-        } else if (tooltipLeft + tooltipWidth > window.innerWidth - 10) {
-            tooltip.style.left = (window.innerWidth - tooltipWidth - 10) + 'px';
-        }
-        
-        // Vertical positioning - below or above the item
-        const spaceBelow = window.innerHeight - rect.bottom;
-        const tooltipHeight = tooltip.offsetHeight || 150;
-        
-        if (spaceBelow < tooltipHeight + 20) {
-            // Position above the item
-            tooltip.style.top = (rect.top - tooltipHeight - 10) + 'px';
+        if (isMobile) {
+            // Center horizontally on mobile devices
+            tooltip.style.left = '50%';
+            tooltip.style.transform = 'translateX(-50%)';
+            
+            // Position below or above the item with good spacing
+            const spaceBelow = window.innerHeight - rect.bottom;
+            const tooltipHeight = tooltip.offsetHeight || 150;
+            
+            if (spaceBelow < tooltipHeight + 20) {
+                // Not enough space below, position above with margin
+                tooltip.style.top = (rect.top - tooltipHeight - 15) + 'px';
+            } else {
+                // Position below with margin
+                tooltip.style.top = (rect.bottom + 15) + 'px';
+            }
         } else {
-            // Position below the item
-            tooltip.style.top = (rect.bottom + 10) + 'px';
+            // Desktop positioning (existing logic)
+            // Calculate exact center position of tech item
+            const buttonCenter = rect.left + (rect.width / 2);
+            
+            // Center tooltip on button
+            tooltip.style.transform = '';  // Clear any transform from mobile
+            tooltip.style.left = (buttonCenter - (tooltipWidth/2)) + 'px';
+            
+            // Adjust if tooltip goes off screen edges
+            const tooltipLeft = parseFloat(tooltip.style.left);
+            if (tooltipLeft < 10) {
+                tooltip.style.left = '10px';
+            } else if (tooltipLeft + tooltipWidth > window.innerWidth - 10) {
+                tooltip.style.left = (window.innerWidth - tooltipWidth - 10) + 'px';
+            }
+            
+            // Vertical positioning - below or above the item
+            const spaceBelow = window.innerHeight - rect.bottom;
+            const tooltipHeight = tooltip.offsetHeight || 150;
+            
+            if (spaceBelow < tooltipHeight + 20) {
+                // Position above the item
+                tooltip.style.top = (rect.top - tooltipHeight - 10) + 'px';
+            } else {
+                // Position below the item
+                tooltip.style.top = (rect.bottom + 10) + 'px';
+            }
         }
     }
     
@@ -156,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
         activeItem = null;
     }
     
-    // Add click event to tech items
+    // Improve event handling for both click and touch events
     techItems.forEach(item => {
         // First, make sure all items have the data-tech attribute
         if (!item.getAttribute('data-tech')) {
@@ -167,30 +192,64 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
+        // Remove existing event listener and add a new one that handles both click and touch
+        item.addEventListener('click', handleItemInteraction);
+        
+        // Add touch start event for better mobile response
+        item.addEventListener('touchstart', function(e) {
+            // Prevent default only if we need to show/hide tooltip
             const techId = this.getAttribute('data-tech');
-            
-            // Toggle tooltip if clicking the same tech
-            if (activeTech === techId) {
-                hideTooltip();
-            } else {
-                showTooltip(this);
+            if (techData[techId]) {
+                e.preventDefault();
             }
-        });
+        }, { passive: false });
+        
+        // Add touch end event that will trigger our handler
+        item.addEventListener('touchend', function(e) {
+            const techId = this.getAttribute('data-tech');
+            if (techData[techId]) {
+                e.preventDefault();
+                handleItemInteraction.call(this, e);
+            }
+        }, { passive: false });
     });
     
-    // Close tooltip when clicking X button
+    // Centralized handler for item interaction (both click and touch)
+    function handleItemInteraction(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const techId = this.getAttribute('data-tech');
+        
+        // Toggle tooltip if clicking the same tech
+        if (activeTech === techId) {
+            hideTooltip();
+        } else {
+            showTooltip(this);
+        }
+    }
+    
+    // Add improved touch support for closing tooltip
     closeTooltip.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         hideTooltip();
     });
     
+    closeTooltip.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        hideTooltip();
+    }, { passive: false });
+    
     // Close tooltip when clicking overlay
     tooltipOverlay.addEventListener('click', hideTooltip);
+    
+    tooltipOverlay.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        hideTooltip();
+    }, { passive: false });
     
     // Close tooltip when pressing Escape
     document.addEventListener('keydown', function(e) {
@@ -260,5 +319,16 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Tech items with data-tech attributes:');
     techItems.forEach(item => {
         console.log(`${item.textContent.trim()}: ${item.getAttribute('data-tech') || 'NO DATA-TECH ATTRIBUTE'}`);
+    });
+    
+    // Add specific mobile debugging
+    const isMobile = window.innerWidth < 768;
+    console.log(`Device detected as: ${isMobile ? 'mobile' : 'desktop'}`);
+    
+    // Listen for orientation changes on mobile
+    window.addEventListener('orientationchange', function() {
+        if (activeTech && activeItem) {
+            setTimeout(() => positionTooltip(activeItem), 100);
+        }
     });
 });
