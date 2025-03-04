@@ -4,6 +4,13 @@ A dynamic, modern portfolio website that showcases my development skills, projec
 
 ![image](https://github.com/user-attachments/assets/ba2cadee-134f-4bd9-9d60-a62ed7a228a3)
 
+![image](https://github.com/user-attachments/assets/82f55c39-16ed-4652-b107-b620b979495b)
+
+![image](https://github.com/user-attachments/assets/3b31d991-dfb9-4ef0-a099-e704d5b1fbcd)
+
+![image](https://github.com/user-attachments/assets/9fb24b28-f011-4970-a841-9e1fa4a577e8)
+
+
 ## Features
 
 - **GitHub API Integration**: Dynamically fetches and displays my GitHub repositories
