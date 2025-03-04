@@ -456,7 +456,9 @@ class UIController {
                         // Get the width from the style attribute
                         const styleAttr = entry.target.getAttribute('style');
                         if (styleAttr && styleAttr.includes('width:')) {
-                            const width = styleAttr.match(/width: (\d+)%/)[1];
+                            // FIXED: This line is causing the error - improve regex safety
+                            const widthMatch = styleAttr.match(/width: (\d+)%/);
+                            const width = widthMatch && widthMatch[1] ? widthMatch[1] : 0;
                             
                             // Temporarily set width to 0
                             entry.target.style.width = '0';
