@@ -214,42 +214,69 @@ class GitHubAPI {
         return 'other';
     }
 
-    // Format repositories for display
+    // Format repositories for display with improved categorization
     formatRepositories(repos) {
         return repos.map((repo, index) => {
             // Parse dates
             const createdAt = new Date(repo.created_at).toLocaleDateString();
             const updatedAt = new Date(repo.updated_at).toLocaleDateString();
             
-            // Determine project category based on topics or name
-            let category = 'code';
+            // Get the normalized name for mapping lookups (FIXED: removed duplicate declaration)
+            const normalizedName = repo.name.toLowerCase()
+                .replace(/-/g, '')
+                .replace(/_/g, '')
+                .replace(/\s+/g, '');
             
-            // First check if ProjectImages has a category mapping
-            const normalizedName = repo.name.toLowerCase().replace(/_/g, '-');
-            if (window.ProjectImages && ProjectImages.repoCategories[normalizedName]) {
-                category = ProjectImages.repoCategories[normalizedName];
-            } 
-            // Then use topics if available
-            else if (repo.topics && repo.topics.length > 0) {
-                if (repo.topics.includes('web')) category = 'web';
-                else if (repo.topics.includes('api')) category = 'api';
-                else if (repo.topics.includes('app')) category = 'app';
-            } 
-            // Fallback to name-based categorization
-            else {
-                if (repo.name.includes('web') || repo.name.includes('site')) category = 'web';
-                else if (repo.name.includes('api') || repo.name.includes('service')) category = 'api';
-                else if (repo.name.includes('app') || repo.name.includes('mobile')) category = 'app';
+            // Always check for our specific projects first
+            let category = 'code'; // Default category
+            
+            // Hard-coded category assignments for your specific projects
+            switch(normalizedName) {
+                case 'purplewebeditor':
+                case 'portfolio':
+                case 'todolistapp':
+                case 'passwordchecker':
+                    category = 'web'; // All these should be 'web' now
+                    break;
+                case 'webapplicationvulnerabilityscanner':
+                    category = 'app'; // Changed from 'api' to 'app'
+                    break;
+                default:
+                    // If not one of the specified projects, check ProjectImages mapping
+                    if (window.ProjectImages && ProjectImages.repoCategories[normalizedName]) {
+                        category = ProjectImages.repoCategories[normalizedName];
+                    }
+                    // Then use regular categorization logic
+                    else if (repo.topics && repo.topics.length > 0) {
+                        if (repo.topics.includes('web') || repo.topics.includes('website')) {
+                            category = 'web';
+                        } else if (repo.topics.includes('app') || repo.topics.includes('application')) {
+                            category = 'app';
+                        }
+                    }
+                    // Fallback to name/description
+                    else {
+                        const name = repo.name.toLowerCase();
+                        const description = repo.description ? repo.description.toLowerCase() : '';
+                        
+                        if (name.includes('web') || name.includes('site') || 
+                            description.includes('website') || description.includes('web app') ||
+                            repo.language === 'HTML' || repo.language === 'CSS') {
+                            category = 'web';
+                        } else if (name.includes('app') || name.includes('mobile') || 
+                                 description.includes('application') || description.includes('mobile')) {
+                            category = 'app';
+                        }
+                    }
             }
             
-            // Get image path using ProjectImages utility
+            // Get image path using ProjectImages utility (FIXED: added missing variable)
             let imagePath = null;
             if (window.ProjectImages) {
                 imagePath = ProjectImages.getImagePath(repo.name);
-                console.log(`Set image path for ${repo.name}: ${imagePath}`);
             }
             
-            // Format the repository data
+            // Format the repository data with the updated category
             return {
                 id: index,
                 name: repo.name.replace(/-/g, ' ').replace(/_/g, ' '),
@@ -259,7 +286,7 @@ class GitHubAPI {
                 language: repo.language || 'Text',
                 stars: repo.stargazers_count,
                 forks: repo.forks_count,
-                category: category,
+                category: category, // This now contains our updated category
                 topics: repo.topics || [],
                 createdAt: createdAt,
                 updatedAt: updatedAt,

@@ -99,6 +99,14 @@ async function loadGitHubData(github, ui) {
         const formattedRepos = github.formatRepositories(repos);
         ui.updateProjectsDisplay(formattedRepos);
         
+        // Add this after projects are displayed
+        // Set proper display style for all project cards
+        setTimeout(() => {
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.style.display = 'flex';
+            });
+        }, 300);
+        
     } catch (error) {
         console.error('Error loading GitHub data:', error);
         document.getElementById('projects-container').innerHTML = `

@@ -85,15 +85,15 @@ const ProjectImages = {
     
     /**
      * Map repositories to specific categories
-     * Used for determining fallback images
+     * Used for determining fallback images and filtering
      */
     repoCategories: {
-        // Your actual projects with appropriate categories
-        'purplewebeditor': 'web',
-        'todolistapp': 'app',
-        'portfolio': 'web',
-        'webapplicationvulnerabilityscanner': 'api',
-        'passwordchecker': 'app'
+        // Your actual projects with updated categories
+        'purplewebeditor': 'web',      // Web category
+        'todolistapp': 'web',          // Changed from 'app' to 'web'
+        'portfolio': 'web',            // Already web
+        'webapplicationvulnerabilityscanner': 'app', // Changed from 'api' to 'app'
+        'passwordchecker': 'web'       // Changed from 'app' to 'web'
     },
     
     /**

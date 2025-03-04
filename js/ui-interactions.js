@@ -100,9 +100,10 @@ class UIController {
         this.mobileToggle.classList.toggle('active');
     }
 
-    // Handle filter button clicks
+    // Improved filter projects method with smoother animations
     filterProjects(selectedBtn) {
         const filter = selectedBtn.dataset.filter;
+        console.log(`Filtering projects by: ${filter}`);
         
         // Update active button
         this.filterButtons.forEach(btn => {
@@ -110,22 +111,71 @@ class UIController {
         });
         selectedBtn.classList.add('active');
         
-        // Filter projects
+        // Get all project cards and count visible ones
         const projectCards = document.querySelectorAll('.project-card');
-        projectCards.forEach(card => {
-            if (filter === 'all' || card.dataset.category === filter) {
-                card.style.display = 'block';
+        let visibleCount = 0;
+        
+        // First hide any existing "no projects" message
+        const existingMsg = this.projectsContainer.querySelector('.no-projects');
+        if (existingMsg) {
+            existingMsg.remove();
+        }
+        
+        // Apply filtering with staggered animations
+        projectCards.forEach((card, index) => {
+            const category = card.dataset.category;
+            const shouldBeVisible = filter === 'all' || category === filter;
+            const delay = index * 50; // Stagger the animations
+            
+            if (shouldBeVisible) {
+                // Make visible with animation
+                setTimeout(() => {
+                    // Reset any previous animations
+                    card.classList.remove('fade-out');
+                    card.style.display = 'flex'; // Use flex instead of block
+                    
+                    // Force a reflow before adding the animation class
+                    void card.offsetWidth;
+                    
+                    // Add fade-in animation
+                    card.classList.add('fade-in');
+                }, delay);
+                
+                visibleCount++;
             } else {
-                card.style.display = 'none';
+                // Hide with animation
+                setTimeout(() => {
+                    // Add fade-out animation
+                    card.classList.remove('fade-in');
+                    card.classList.add('fade-out');
+                    
+                    // Hide after animation completes
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 500); // Match the animation duration
+                }, delay);
             }
         });
+        
+        // Show "no projects" message if needed after animations complete
+        setTimeout(() => {
+            if (visibleCount === 0) {
+                const noProjectsMsg = document.createElement('p');
+                noProjectsMsg.className = 'no-projects fade-in'; // Add animation class
+                noProjectsMsg.textContent = `No ${filter} projects found.`;
+                this.projectsContainer.appendChild(noProjectsMsg);
+            }
+        }, projectCards.length * 50 + 600); // Wait for all animations to finish
     }
 
-    // Create HTML for project cards with robust image handling
+    // Create HTML for project cards with improved structure
     createProjectCard(project) {
         const card = document.createElement('div');
         card.classList.add('project-card');
         card.dataset.category = project.category;
+        
+        // Add CSS for transitions
+        card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
         
         let tagsHTML = '';
         if (project.topics.length > 0) {
@@ -140,12 +190,6 @@ class UIController {
         const normalizedName = project.name.replace(/\s+/g, '-').toLowerCase();
         const imagePath = project.imagePath || 
                          `assets/projects/${normalizedName}.jpg`;
-        
-        // Get category fallback
-        let categoryFallback = 'assets/projects/default-code.jpg';
-        if (window.ProjectImages) {
-            categoryFallback = ProjectImages.getCategoryImage(project.category);
-        }
         
         // Create the image HTML with enhanced error handling
         const imageHtml = `
