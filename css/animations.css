@@ -69,3 +69,67 @@ section.in-view {
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+/* Additional animations for skills section */
+.tech-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.tech-item.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    /* Keep the animation as a fallback, but mainly use CSS transitions */
+    animation: none;
+}
+
+@keyframes itemPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.tech-cluster:hover .tech-item:hover {
+    animation: itemPulse 1s infinite;
+}
+
+.timeline-visible .timeline-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timeline .timeline-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.timeline-visible .timeline-item:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.timeline-visible .timeline-item:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+/* Add this to ensure animations play even if intersection observer fails */
+@media (min-width: 768px) {
+    .skills-section-visible .tech-item {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: calc(var(--item-index, 0) * 100ms);
+    }
+    
+    .skills-section-visible .timeline-item {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: calc(var(--item-index, 0) * 300ms);
+    }
+}

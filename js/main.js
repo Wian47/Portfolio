@@ -14,6 +14,40 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add CSS class for page loading animation
     document.body.classList.add('loaded');
+    
+    // Add scroll handler to check for tech section visibility
+    window.addEventListener('scroll', function() {
+        const skills = document.getElementById('skills');
+        
+        if (skills) {
+            const rect = skills.getBoundingClientRect();
+            const isVisible = (
+                rect.top < window.innerHeight && 
+                rect.bottom > 0
+            );
+            
+            if (isVisible) {
+                skills.classList.add('skills-section-visible');
+            }
+        }
+    });
+    
+    // Check immediately after load
+    setTimeout(() => {
+        const skills = document.getElementById('skills');
+        
+        if (skills) {
+            const rect = skills.getBoundingClientRect();
+            const isVisible = (
+                rect.top < window.innerHeight && 
+                rect.bottom > 0
+            );
+            
+            if (isVisible) {
+                skills.classList.add('skills-section-visible');
+            }
+        }
+    }, 300);
 });
 
 // Load GitHub data and update UI
@@ -63,10 +97,32 @@ function initHeroAnimation() {
     // Clear existing content
     animatedBg.innerHTML = '';
     
-    // Create background pattern
+    // Create background pattern - modified to feel more "security" focused
     const pattern = document.createElement('div');
     pattern.classList.add('hero-pattern');
     animatedBg.appendChild(pattern);
+    
+    // Add binary/code-like elements
+    for (let i = 0; i < 15; i++) {
+        const codeElement = document.createElement('div');
+        codeElement.classList.add('code-element');
+        codeElement.style.position = 'absolute';
+        codeElement.style.color = 'var(--primary-color)';
+        codeElement.style.opacity = Math.random() * 0.1 + 0.05;
+        codeElement.style.fontSize = `${Math.random() * 12 + 8}px`;
+        codeElement.style.fontFamily = 'monospace';
+        codeElement.style.left = `${Math.random() * 100}%`;
+        codeElement.style.top = `${Math.random() * 100}%`;
+        codeElement.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        // Add binary/hexadecimal content
+        const content = Math.random() > 0.5 ? 
+            '01010101010101' : 
+            '0xF8A1D937E2C4';
+        codeElement.textContent = content;
+        
+        animatedBg.appendChild(codeElement);
+    }
     
     // Add floating elements for depth
     for (let i = 0; i < 5; i++) {
@@ -80,11 +136,12 @@ function initHeroAnimation() {
         floatingEl.style.top = `${Math.random() * 90}%`;
         floatingEl.style.opacity = Math.random() * 0.07 + 0.03;
         
-        // Random color from theme
+        // Cyber security color palette
         const colors = [
             'var(--primary-color)', 
-            'var(--secondary-color)', 
-            'var(--highlight-color)'
+            'var(--secondary-color)',
+            'var(--highlight-color)',
+            '#3a0ca3'  // Additional deep purple
         ];
         floatingEl.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         
@@ -95,4 +152,21 @@ function initHeroAnimation() {
         
         animatedBg.appendChild(floatingEl);
     }
+    
+    // Force tech items and timeline visible on desktop after a short delay
+    setTimeout(() => {
+        const skills = document.getElementById('skills');
+        if (skills) {
+            const techItems = skills.querySelectorAll('.tech-item');
+            techItems.forEach((item, index) => {
+                // Set custom property for staggered delay
+                item.style.setProperty('--item-index', index);
+            });
+            
+            // Add class to parent to trigger fallback CSS animations
+            if (window.innerWidth >= 768) {
+                skills.classList.add('skills-section-visible');
+            }
+        }
+    }, 1000);
 }

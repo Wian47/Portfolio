@@ -67,6 +67,9 @@ class UIController {
 
         // Initialize background animation
         this.initBackgroundAnimation();
+
+        // Initialize skill animations
+        this.initSkillsAnimations();
     }
 
     // Initialize theme (light/dark)
@@ -441,4 +444,173 @@ class UIController {
         }
         this.showNotification(message, 'error');
     }
+
+    // Add this method to UIController class for improved skill animations
+    initSkillsAnimations() {
+        // Create intersection observer for skill bars with lower threshold
+        const observeSkills = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Get the width from the style attribute
+                        const styleAttr = entry.target.getAttribute('style');
+                        if (styleAttr && styleAttr.includes('width:')) {
+                            const width = styleAttr.match(/width: (\d+)%/)[1];
+                            
+                            // Temporarily set width to 0
+                            entry.target.style.width = '0';
+                            
+                            // Wait a moment, then animate to the actual width
+                            setTimeout(() => {
+                                entry.target.style.width = `${width}%`;
+                            }, 200);
+                        }
+                        
+                        // Stop observing this element
+                        observeSkills.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
+        );
+        
+        // Apply observer to all skill progress bars
+        document.querySelectorAll('.skill-progress').forEach(bar => {
+            // Ensure the bar has a width set
+            if (bar.style.width) {
+                observeSkills.observe(bar);
+            }
+        });
+        
+        // Create a separate observer for tech clusters with longer rootMargin
+        const observeTechClusters = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const techItems = entry.target.querySelectorAll('.tech-item');
+                        
+                        techItems.forEach((item, index) => {
+                            // Add a class instead of direct animation
+                            setTimeout(() => {
+                                item.classList.add('fade-in');
+                            }, index * 100);
+                        });
+                        
+                        // Stop observing this container
+                        observeTechClusters.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+        );
+        
+        // Apply observer to each tech cluster
+        document.querySelectorAll('.tech-cluster').forEach(cluster => {
+            observeTechClusters.observe(cluster);
+        });
+        
+        // Enhanced timeline animation with better detection
+        const observeTimeline = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('timeline-visible');
+                        observeTimeline.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+        );
+        
+        // Apply observer to timeline
+        const timeline = document.querySelector('.timeline');
+        if (timeline) {
+            observeTimeline.observe(timeline);
+        }
+
+        // Add a scroll event handler as a fallback for tech items
+        this.setupFallbackForTechItems();
+    }
+
+    // Add this new method to handle cases where IntersectionObserver doesn't trigger
+    setupFallbackForTechItems() {
+        // Flag to track if animations have been triggered
+        let techItemsAnimated = false;
+        let timelineAnimated = false;
+        
+        // Function to check position and trigger animations if needed
+        const checkPositionAndAnimate = () => {
+            // Handle tech clusters
+            if (!techItemsAnimated) {
+                const techClusters = document.querySelector('.tech-clusters');
+                if (techClusters) {
+                    const rect = techClusters.getBoundingClientRect();
+                    // If the top of the tech clusters is in view
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        const techItems = document.querySelectorAll('.tech-item');
+                        techItems.forEach((item, index) => {
+                            setTimeout(() => {
+                                item.classList.add('fade-in');
+                            }, index * 100);
+                        });
+                        techItemsAnimated = true;
+                    }
+                }
+            }
+            
+            // Handle timeline
+            if (!timelineAnimated) {
+                const timeline = document.querySelector('.timeline');
+                if (timeline) {
+                    const rect = timeline.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        timeline.classList.add('timeline-visible');
+                        timelineAnimated = true;
+                    }
+                }
+            }
+            
+            // If both are animated, remove the scroll listener
+            if (techItemsAnimated && timelineAnimated) {
+                window.removeEventListener('scroll', checkPositionAndAnimate);
+            }
+        };
+        
+        // Run once to check initial state (important for desktop)
+        checkPositionAndAnimate();
+        
+        // Add scroll listener
+        window.addEventListener('scroll', checkPositionAndAnimate);
+    }
+}
+
+// Add this code to check if animations are loaded after the page is fully loaded
+window.addEventListener('load', function() {
+    // Check if tech items are visible but not animated
+    setTimeout(() => {
+        document.querySelectorAll('.tech-item:not(.fade-in)').forEach((item, index) => {
+            if (isElementInViewport(item)) {
+                setTimeout(() => {
+                    item.classList.add('fade-in');
+                }, index * 100);
+            }
+        });
+        
+        // Check if timeline is visible but not animated
+        const timeline = document.querySelector('.timeline:not(.timeline-visible)');
+        if (timeline && isElementInViewport(timeline)) {
+            timeline.classList.add('timeline-visible');
+        }
+    }, 500);
+});
+
+// Helper function to check if element is in viewport
+function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.left <= (window.innerWidth || document.documentElement.clientWidth) &&
+        rect.bottom >= 0 &&
+        rect.right >= 0
+    );
 }
