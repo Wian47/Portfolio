@@ -86,13 +86,6 @@ The learning path timeline provides a visual representation of my educational jo
 - Special styling for future goals
 - Mobile-optimized layout
 
-## Customization
-
-To use this portfolio for your own projects:
-
-1. Update the GitHub username in `main.js` to your own
-2. Modify personal information in `index.html`
-3. Customize colors and styling in `css/styles.css`
 
 ## License
 
