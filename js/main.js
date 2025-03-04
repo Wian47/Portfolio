@@ -64,6 +64,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }, 300);
+
+    // Add a final fallback for skill bars in case they don't animate properly
+    setTimeout(() => {
+        const skillBars = document.querySelectorAll('.skill-progress');
+        skillBars.forEach(bar => {
+            const targetWidth = bar.getAttribute('data-width') || bar.style.width || '0%';
+            if (bar.style.width === '0px' || bar.style.width === '0%' || !bar.style.width) {
+                console.log('Applying final fallback for skill bar:', targetWidth);
+                bar.classList.add('force-show');
+                bar.style.width = targetWidth;
+            }
+        });
+    }, 3000);
 });
 
 // Load GitHub data and update UI

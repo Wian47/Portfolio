@@ -729,16 +729,26 @@ social-links a:hover {
 
 .skill-bar {
     height: 8px;
-    background-color: var(--card-bg);
+    background-color: var(--background-color);
     border-radius: 4px;
     overflow: hidden;
+    position: relative; /* Add this for positioning context */
 }
 
 .skill-progress {
     height: 100%;
     background-color: var(--primary-color);
     border-radius: 4px;
-    transition: width 1s ease-in-out;
+    width: 0; /* Start at 0 width */
+    transition: width 1.5s ease-out; /* Ensure transition is here in CSS */
+    position: relative; /* Add this for better rendering */
+    min-width: 0; /* Ensure it can go to zero width */
+    will-change: width; /* Optimize for animations */
+}
+
+/* Add a special class for when animation fails */
+.skill-progress.force-show {
+    transition: none !important;
 }
 
 .tools-container {
@@ -837,14 +847,23 @@ social-links a:hover {
     background-color: var(--background-color);
     border-radius: 4px;
     overflow: hidden;
+    position: relative; /* Add this for positioning context */
 }
 
 .skill-progress {
     height: 100%;
     background-color: var(--primary-color);
     border-radius: 4px;
-    width: 0;
-    transition: width 1.5s ease-out;
+    width: 0; /* Start at 0 width */
+    transition: width 1.5s ease-out; /* Ensure transition is here in CSS */
+    position: relative; /* Add this for better rendering */
+    min-width: 0; /* Ensure it can go to zero width */
+    will-change: width; /* Optimize for animations */
+}
+
+/* Add a special class for when animation fails */
+.skill-progress.force-show {
+    transition: none !important;
 }
 
 /* Technology clusters styling */

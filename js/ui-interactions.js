@@ -470,29 +470,41 @@ class UIController {
 
     // Add this method to UIController class for improved skill animations
     initSkillsAnimations() {
-        // Create intersection observer for skill bars with lower threshold
-        const observeSkills = new IntersectionObserver(
+        // Create a new reliable method for skill bar animations
+        const skillBars = document.querySelectorAll('.skill-progress');
+        
+        // Store original widths before resetting
+        skillBars.forEach(bar => {
+            // Get the percentage from the style or data attribute
+            const width = bar.style.width || bar.getAttribute('data-width') || '0%';
+            // Store the target width as a data attribute for reliable access
+            bar.setAttribute('data-width', width);
+            // Start with zero width
+            bar.style.width = '0';
+        });
+        
+        // Create a better intersection observer with lower threshold
+        const skillObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Get the width from the style attribute
-                        const styleAttr = entry.target.getAttribute('style');
-                        if (styleAttr && styleAttr.includes('width:')) {
-                            // FIXED: This line is causing the error - improve regex safety
-                            const widthMatch = styleAttr.match(/width: (\d+)%/);
-                            const width = widthMatch && widthMatch[1] ? widthMatch[1] : 0;
-                            
-                            // Temporarily set width to 0
-                            entry.target.style.width = '0';
-                            
-                            // Wait a moment, then animate to the actual width
-                            setTimeout(() => {
-                                entry.target.style.width = `${width}%`;
-                            }, 200);
-                        }
+                        const bar = entry.target;
+                        // Use the stored target width
+                        const targetWidth = bar.getAttribute('data-width');
+                        
+                        // Ensure bar has needed transition
+                        bar.style.transition = 'width 1.5s ease-out';
+                        
+                        // Trigger reflow before setting width to ensure transition plays
+                        void bar.offsetWidth;
+                        
+                        // Set to final width
+                        setTimeout(() => {
+                            bar.style.width = targetWidth;
+                        }, 100);
                         
                         // Stop observing this element
-                        observeSkills.unobserve(entry.target);
+                        skillObserver.unobserve(bar);
                     }
                 });
             },
@@ -500,13 +512,13 @@ class UIController {
         );
         
         // Apply observer to all skill progress bars
-        document.querySelectorAll('.skill-progress').forEach(bar => {
-            // Ensure the bar has a width set
-            if (bar.style.width) {
-                observeSkills.observe(bar);
-            }
+        skillBars.forEach(bar => {
+            skillObserver.observe(bar);
         });
         
+        // Add this as a backup to ensure bars animate even when observer fails
+        this.setupSkillBarsFallback();
+
         // Create a separate observer for tech clusters with longer rootMargin
         const observeTechClusters = new IntersectionObserver(
             (entries) => {
@@ -555,6 +567,60 @@ class UIController {
 
         // Add a scroll event handler as a fallback for tech items
         this.setupFallbackForTechItems();
+    }
+
+    // Add a new method for skill bars fallback animation
+    setupSkillBarsFallback() {
+        const skillBars = document.querySelectorAll('.skill-progress');
+        let animationApplied = false;
+        
+        // Function to check position and animate if needed
+        const checkAndAnimateBars = () => {
+            if (animationApplied) return;
+            
+            const skills = document.getElementById('skills');
+            if (!skills) return;
+            
+            const rect = skills.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+            
+            if (isVisible) {
+                skillBars.forEach(bar => {
+                    const targetWidth = bar.getAttribute('data-width');
+                    if (bar.style.width === '0px' || bar.style.width === '0%' || !bar.style.width) {
+                        // Ensure transition is defined
+                        bar.style.transition = 'width 1.5s ease-out';
+                        
+                        // Force reflow
+                        void bar.offsetWidth;
+                        
+                        // Set width after a short delay
+                        setTimeout(() => {
+                            bar.style.width = targetWidth;
+                        }, 100);
+                    }
+                });
+                
+                animationApplied = true;
+                window.removeEventListener('scroll', checkAndAnimateBars);
+            }
+        };
+        
+        // Run on page load and scroll
+        setTimeout(checkAndAnimateBars, 500);
+        window.addEventListener('scroll', checkAndAnimateBars);
+        
+        // Auto-reset if animations are stuck after 5 seconds
+        setTimeout(() => {
+            skillBars.forEach(bar => {
+                const targetWidth = bar.getAttribute('data-width');
+                if (bar.style.width === '0px' || bar.style.width === '0%' || !bar.style.width) {
+                    console.log('Resetting stuck skill bar:', bar);
+                    bar.style.transition = 'width 1s ease-out';
+                    bar.style.width = targetWidth;
+                }
+            });
+        }, 5000);
     }
 
     // Add this new method to handle cases where IntersectionObserver doesn't trigger
