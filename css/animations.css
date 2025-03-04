@@ -80,8 +80,6 @@ section.in-view {
 .tech-item.fade-in {
     opacity: 1;
     transform: translateY(0);
-    /* Keep the animation as a fallback, but mainly use CSS transitions */
-    animation: none;
 }
 
 @keyframes itemPulse {
@@ -132,4 +130,9 @@ section.in-view {
         transform: translateY(0);
         transition-delay: calc(var(--item-index, 0) * 300ms);
     }
+}
+
+/* Make body transitions smoother when changing theme */
+body {
+    transition: background-color 0.5s ease, color 0.5s ease;
 }

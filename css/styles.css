@@ -33,6 +33,10 @@
 
     /* RGB value for primary color */
     --primary-rgb: 58, 134, 255;
+    
+    /* RGB value for highlight and secondary colors */
+    --highlight-rgb: 255, 190, 11;
+    --secondary-rgb: 131, 56, 236;
 }
 
 .dark-theme {
@@ -47,6 +51,10 @@
 
     /* RGB value for dark theme primary color */
     --primary-rgb: 76, 201, 240;
+    
+    /* RGB values for dark theme */
+    --highlight-rgb: 247, 37, 133;
+    --secondary-rgb: 114, 9, 183;
 }
 
 /* Base Styles */
@@ -61,6 +69,7 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Body background enhancements */
 body {
     font-family: var(--font-family-main);
     color: var(--text-color);
@@ -68,6 +77,11 @@ body {
     line-height: 1.6;
     transition: background-color var(--transition-speed), color var(--transition-speed);
     overflow-x: hidden;
+    position: relative; /* Important for z-index management */
+}
+
+body::before {
+    content: none;
 }
 
 a {
@@ -77,7 +91,7 @@ a {
 }
 
 a:hover {
-    color: var(--secondary-color);
+    color: var (--secondary-color);
 }
 
 ul {
@@ -265,14 +279,14 @@ img {
 .hero h2 {
     font-size: 2rem;
     margin-bottom: var(--spacing-lg);
-    color: var(--secondary-color);
+    color: var (--secondary-color);
     position: relative;
     display: inline-block;
 }
 
 .hero p {
     font-size: 1.2rem;
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var (--spacing-lg);
     max-width: 600px;
 }
 
@@ -284,6 +298,8 @@ img {
     flex: 1;
     position: relative;
     height: 100%;
+    background-color: transparent !important; /* Force transparency */
+    background: transparent !important; /* Ensure a completely transparent background */
 }
 
 .animated-background {
@@ -294,19 +310,21 @@ img {
     left: 0;
     z-index: 1;
     overflow: hidden;
-    background-color: var(--background-color);
+    background-color: transparent !important; /* Force transparency */
+    background: transparent !important; /* Ensure background is transparent */
 }
 
 .hero-pattern {
     position: absolute;
     width: 100%;
     height: 100%;
-    opacity: 0.05;
+    opacity: 0.02; /* Even more subtle */
     background-image: 
-        radial-gradient(var(--primary-color) 2px, transparent 2px),
-        radial-gradient(var(--secondary-color) 2px, transparent 2px);
+        radial-gradient(var(--primary-color) 1px, transparent 1px),
+        radial-gradient(var(--secondary-color) 1px, transparent 1px);
     background-size: 40px 40px;
     background-position: 0 0, 20px 20px;
+    display: none !important; /* Hide the pattern completely */
 }
 
 .hero-visual::after {
@@ -321,6 +339,7 @@ img {
     background-size: contain;
     opacity: 0.05;
     z-index: 0;
+    display: none !important; /* Hide the SVG icon */
 }
 
 .cta-buttons {
@@ -388,7 +407,7 @@ img {
     transition: all var(--transition-speed);
 }
 
-.social-links a:hover {
+social-links a:hover {
     background-color: var(--primary-color);
     color: white;
     transform: translateY(-3px);
@@ -1308,8 +1327,23 @@ footer {
         margin-left: 60px !important;
     }
     
-    .tech-items {
-        grid-template-columns: repeat(2, 1fr);
+    /* Handle transition delays differently on mobile */
+    .timeline-visible .timeline-item {
+        transition-delay: 0.1s !important;
+    }
+    
+    .timeline-visible .timeline-item:nth-child(even),
+    .timeline-visible .timeline-item:nth-child(odd) {
+        transition-delay: 0.1s !important;
+    }
+    
+    .timeline-item {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .network-line,
+    .network-node {
+        display: none;
     }
 }
 
@@ -1352,4 +1386,173 @@ footer {
     .tech-items {
         grid-template-columns: 1fr;
     }
+}
+
+/* Learning path timeline - enhanced for more items */
+.learning-path {
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--spacing-md) 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background: var(--primary-color);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: var (--spacing-lg);
+    padding: 0 var(--spacing-md);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.timeline-item:hover .timeline-dot {
+    transform: translateX(-50%) scale(1.2);
+    background-color: var(--highlight-color);
+}
+
+.timeline-content {
+    position: relative;
+    width: 45%;
+    padding: var(--spacing-md);
+    background: rgba(var(--primary-rgb), 0.1);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-item:hover .timeline-content {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+    margin-left: auto;
+}
+
+.timeline-content h4 {
+    margin: 0 0 var(--spacing-xs);
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.timeline-content p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Make timeline visible */
+.timeline-visible .timeline-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timeline-visible .timeline-item:nth-child(2) {
+    transition-delay: 0.2s;
+}
+
+.timeline-visible .timeline-item:nth-child(3) {
+    transition-delay: 0.4s;
+}
+
+.timeline-visible .timeline-item:nth-child(4) {
+    transition-delay: 0.6s;
+}
+
+.timeline-visible .timeline-item:nth-child(5) {
+    transition-delay: 0.8s;
+}
+
+.timeline-visible .timeline-item:nth-child(6) {
+    transition-delay: 1s;
+}
+
+.timeline-visible .timeline-item:nth-child(7) {
+    transition-delay: 1.2s;
+}
+
+/* Responsive design for timeline on mobile */
+@media screen and (max-width: 768px) {
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-dot {
+        left: 30px;
+    }
+    
+    .timeline-content {
+        width: calc(100% - 70px);
+        margin-left: 70px !important;
+    }
+    
+    /* Handle transition delays differently on mobile */
+    .timeline-visible .timeline-item {
+        transition-delay: 0.1s !important;
+    }
+    
+    .timeline-visible .timeline-item:nth-child(even),
+    .timeline-visible .timeline-item:nth-child(odd) {
+        transition-delay: 0.1s !important;
+    }
+    
+    .timeline-item {
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+section {
+    position: relative;
+    z-index: 1;
+}
+
+.about, .skills, .contact {
+    position: relative;
+    background-color: var(--background-color);
+    box-shadow: 0 1px 5px var(--shadow-color);
+}
+
+.projects {
+    position: relative;
+    background-color: var(--background-color);
+    box-shadow: 0 1px 5px var(--shadow-color);
+}
+
+/* Reset code elements for black background */
+.code-element {
+    display: none !important; /* Hide all binary/hex elements completely */
+}
+
+/* Remove any remaining floating elements */
+.floating-element {
+    display: none !important;
 }

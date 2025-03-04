@@ -1,0 +1,175 @@
+/* Special animations for the learning path timeline */
+
+/* Timeline connection animation */
+@keyframes timeline-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
+    }
+}
+
+/* Special glowing animation for timeline dots */
+.timeline-dot {
+    position: relative;
+}
+
+.timeline-dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    background: transparent;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: timeline-pulse 2s infinite;
+}
+
+/* Adjust the timing of the pulse animation for each dot */
+.timeline-item:nth-child(1) .timeline-dot::after {
+    animation-delay: 0s;
+}
+
+.timeline-item:nth-child(2) .timeline-dot::after {
+    animation-delay: 0.3s;
+}
+
+.timeline-item:nth-child(3) .timeline-dot::after {
+    animation-delay: 0.6s;
+}
+
+.timeline-item:nth-child(4) .timeline-dot::after {
+    animation-delay: 0.9s;
+}
+
+.timeline-item:nth-child(5) .timeline-dot::after {
+    animation-delay: 1.2s;
+}
+
+.timeline-item:nth-child(6) .timeline-dot::after {
+    animation-delay: 1.5s;
+}
+
+.timeline-item:nth-child(7) .timeline-dot::after {
+    animation-delay: 1.8s;
+}
+
+/* Add course tag badges */
+.course-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: rgba(var(--primary-rgb), 0.2);
+    color: var(--primary-color);
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-top: 6px;
+}
+
+/* Future Goals Styling */
+.future-goals {
+    background: linear-gradient(to right, rgba(var(--primary-rgb), 0.1), rgba(var(--secondary-rgb), 0.1));
+    border-left: 3px solid var(--highlight-color);
+}
+
+.goals-list {
+    list-style: none;
+    margin: 12px 0;
+    padding: 0;
+}
+
+.goals-list li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.goals-list li i {
+    color: var(--highlight-color);
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
+.goal-target {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 10px;
+    background-color: rgba(var(--highlight-rgb), 0.15);
+    border-radius: 12px;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-medium);
+}
+
+/* Hover effect for goals */
+.goals-list li:hover i {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+}
+
+/* Add the new CSS variable for highlight color RGB value */
+:root {
+    --highlight-rgb: 255, 190, 11; /* RGB value for highlight color */
+    --secondary-rgb: 131, 56, 236; /* RGB value for secondary color */
+}
+
+.dark-theme {
+    --highlight-rgb: 247, 37, 133; /* RGB value for dark theme highlight color */
+    --secondary-rgb: 114, 9, 183; /* RGB value for dark theme secondary color */
+}
+
+/* Enhanced mobile timeline fixes */
+@media screen and (max-width: 768px) {
+    /* Make sure timeline content is visible and properly positioned */
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-dot {
+        left: 30px;
+    }
+    
+    /* Fix content positioning and visibility */
+    .timeline-content {
+        width: calc(100% - 70px) !important; /* Force width */
+        margin-left: 60px !important;        /* Force margin */
+        opacity: 1 !important;               /* Force visibility */
+    }
+    
+    /* Force timeline items to be visible by default on mobile */
+    .timeline-item {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        margin-bottom: 30px;
+        min-height: 80px; /* Ensure minimum height */
+    }
+    
+    /* Fix future goals section on mobile */
+    .goals-list li {
+        margin-bottom: 12px;
+    }
+    
+    /* Ensure visibility regardless of animation state */
+    .timeline-visible .timeline-item,
+    .timeline-visible .timeline-item:nth-child(even),
+    .timeline-visible .timeline-item:nth-child(odd) {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+}
+
+/* Ensure basic timeline visibility even if JS fails */
+.timeline {
+    min-height: 300px; /* Provide minimum height */
+}
+
+.timeline-item {
+    min-height: 50px; /* Minimum height per item */
+}

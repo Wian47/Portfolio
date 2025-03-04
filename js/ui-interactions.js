@@ -66,6 +66,7 @@ class UIController {
         this.initIntersectionObservers();
 
         // Initialize background animation
+
         this.initBackgroundAnimation();
 
         // Initialize skill animations
@@ -558,13 +559,20 @@ class UIController {
                 }
             }
             
-            // Handle timeline
+            // Handle timeline with more items
             if (!timelineAnimated) {
                 const timeline = document.querySelector('.timeline');
                 if (timeline) {
                     const rect = timeline.getBoundingClientRect();
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
                         timeline.classList.add('timeline-visible');
+                        
+                        // Set custom property for each timeline item for staggered animation
+                        const timelineItems = timeline.querySelectorAll('.timeline-item');
+                        timelineItems.forEach((item, index) => {
+                            item.style.setProperty('--item-index', index);
+                        });
+                        
                         timelineAnimated = true;
                     }
                 }

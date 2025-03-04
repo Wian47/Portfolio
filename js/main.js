@@ -1,4 +1,3 @@
-// Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize UI Controller
     const ui = new UIController();
@@ -6,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize GitHub API with your username
     const github = new GitHubAPI('Wian47');
     
-    // Initialize hero section animation with improved background
+    // Initialize hero section animation 
     initHeroAnimation();
     
     // Load GitHub data
@@ -88,70 +87,16 @@ async function loadGitHubData(github, ui) {
     }
 }
 
-// Initialize the animated background in hero section
+// Update the initHeroAnimation function to include timeline item initialization
 function initHeroAnimation() {
     const animatedBg = document.getElementById('animated-bg');
     
     if (!animatedBg) return;
     
-    // Clear existing content
+    // Clear existing content completely
     animatedBg.innerHTML = '';
     
-    // Create background pattern - modified to feel more "security" focused
-    const pattern = document.createElement('div');
-    pattern.classList.add('hero-pattern');
-    animatedBg.appendChild(pattern);
-    
-    // Add binary/code-like elements
-    for (let i = 0; i < 15; i++) {
-        const codeElement = document.createElement('div');
-        codeElement.classList.add('code-element');
-        codeElement.style.position = 'absolute';
-        codeElement.style.color = 'var(--primary-color)';
-        codeElement.style.opacity = Math.random() * 0.1 + 0.05;
-        codeElement.style.fontSize = `${Math.random() * 12 + 8}px`;
-        codeElement.style.fontFamily = 'monospace';
-        codeElement.style.left = `${Math.random() * 100}%`;
-        codeElement.style.top = `${Math.random() * 100}%`;
-        codeElement.style.transform = `rotate(${Math.random() * 360}deg)`;
-        
-        // Add binary/hexadecimal content
-        const content = Math.random() > 0.5 ? 
-            '01010101010101' : 
-            '0xF8A1D937E2C4';
-        codeElement.textContent = content;
-        
-        animatedBg.appendChild(codeElement);
-    }
-    
-    // Add floating elements for depth
-    for (let i = 0; i < 5; i++) {
-        const floatingEl = document.createElement('div');
-        floatingEl.classList.add('floating-element');
-        
-        const size = Math.random() * 150 + 100;
-        floatingEl.style.width = `${size}px`;
-        floatingEl.style.height = `${size}px`;
-        floatingEl.style.left = `${Math.random() * 90}%`;
-        floatingEl.style.top = `${Math.random() * 90}%`;
-        floatingEl.style.opacity = Math.random() * 0.07 + 0.03;
-        
-        // Cyber security color palette
-        const colors = [
-            'var(--primary-color)', 
-            'var(--secondary-color)',
-            'var(--highlight-color)',
-            '#3a0ca3'  // Additional deep purple
-        ];
-        floatingEl.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        
-        // Add animation with random duration and delay
-        const duration = Math.random() * 20 + 15;
-        const delay = Math.random() * 5;
-        floatingEl.style.animation = `float ${duration}s ease-in-out ${delay}s infinite alternate`;
-        
-        animatedBg.appendChild(floatingEl);
-    }
+    // Don't create any new elements at all - leave the background empty
     
     // Force tech items and timeline visible on desktop after a short delay
     setTimeout(() => {
@@ -166,6 +111,19 @@ function initHeroAnimation() {
             // Add class to parent to trigger fallback CSS animations
             if (window.innerWidth >= 768) {
                 skills.classList.add('skills-section-visible');
+            } else {
+                // Force timeline visibility on mobile immediately
+                const timeline = document.querySelector('.timeline');
+                if (timeline) {
+                    timeline.classList.add('timeline-visible');
+                    
+                    // Force individual items visible on mobile
+                    const timelineItems = timeline.querySelectorAll('.timeline-item');
+                    timelineItems.forEach(item => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    });
+                }
             }
         }
     }, 1000);
