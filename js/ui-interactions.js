@@ -121,7 +121,7 @@ class UIController {
         });
     }
 
-    // Create HTML for project cards
+    // Create HTML for project cards with robust image handling
     createProjectCard(project) {
         const card = document.createElement('div');
         card.classList.add('project-card');
@@ -136,10 +136,32 @@ class UIController {
             tagsHTML = `<span class="project-tag">${project.language}</span>`;
         }
         
-        card.innerHTML = `
-            <div class="project-image">
-                <i class="fas ${this.getProjectIcon(project.category)}"></i>
+        // Determine image path and fallbacks
+        const normalizedName = project.name.replace(/\s+/g, '-').toLowerCase();
+        const imagePath = project.imagePath || 
+                         `assets/projects/${normalizedName}.jpg`;
+        
+        // Get category fallback
+        let categoryFallback = 'assets/projects/default-code.jpg';
+        if (window.ProjectImages) {
+            categoryFallback = ProjectImages.getCategoryImage(project.category);
+        }
+        
+        // Create the image HTML with enhanced error handling
+        const imageHtml = `
+            <div class="project-image project-preview">
+                <img 
+                    src="${imagePath}" 
+                    alt="${project.name}" 
+                    data-category="${project.category}"
+                    data-repo="${normalizedName}"
+                    onerror="window.projectImageErrorHandler(this, '${normalizedName}', '${project.category}')"
+                >
             </div>
+        `;
+        
+        card.innerHTML = `
+            ${imageHtml}
             <div class="project-info">
                 <h3>${project.name}</h3>
                 <p>${this.truncateText(project.description, 100)}</p>

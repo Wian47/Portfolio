@@ -605,12 +605,41 @@ social-links a:hover {
 
 .project-image {
     height: 180px;
-    background-color: #ddd;
+    background-color: var(--card-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-color);
     font-size: 3rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.project-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-speed);
+}
+
+.project-card:hover .project-preview img {
+    transform: scale(1.05);
+}
+
+.fallback-image {
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fallback-image::after {
+    content: '\f121';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 3rem;
+    color: var(--text-color);
+    opacity: 0.5;
 }
 
 .project-info {

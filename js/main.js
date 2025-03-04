@@ -1,4 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Force clear GitHub cache to apply new filters
+    sessionStorage.removeItem('github_repos');
+    sessionStorage.removeItem('github_stats');
+    
+    // Check if required modules are loaded
+    if (!window.ProjectImages) {
+        console.error('ProjectImages utility not found! Creating fallback...');
+        // Create minimal fallback
+        window.ProjectImages = {
+            getImagePath: function() { return null; },
+            getCategoryImage: function(category) {
+                return `assets/projects/default-${category || 'code'}.jpg`;
+            },
+            customMappings: {}
+        };
+    }
+    
     // Initialize UI Controller
     const ui = new UIController();
     
