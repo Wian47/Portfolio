@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="css/notifications.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/timeline.css">
-    <link rel="stylesheet" href="css/no-scrollbar.css"> <!-- Add this line -->
+    <link rel="stylesheet" href="css/no-scrollbar.css">
+    <link rel="stylesheet" href="css/tooltips.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <meta name="description" content="Professional portfolio of Wian - Cyber Security Student & Web Developer">
+    <meta name="description" content="Professional portfolio of Wian - Cyber Security Student &amp; Web Developer">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="js/fallback.js"></script>
@@ -295,34 +296,71 @@
                     <div class="tech-cluster">
                         <h4 class="cluster-title">Development</h4>
                         <div class="tech-items">
-                            <div class="tech-item"><i class="fab fa-python"></i><span>Python</span></div>
-                            <div class="tech-item"><i class="fab fa-js"></i><span>JavaScript</span></div>
-                            <div class="tech-item"><i class="fas fa-code"></i><span>Flutter/Dart</span></div>
-                            <div class="tech-item"><i class="fab fa-git-alt"></i><span>Git</span></div>
+                            <div class="tech-item" data-tech="python">
+                                <i class="fab fa-python"></i><span>Python</span>
+                            </div>
+                            <div class="tech-item" data-tech="javascript">
+                                <i class="fab fa-js"></i><span>JavaScript</span>
+                            </div>
+                            <div class="tech-item" data-tech="flutter">
+                                <i class="fas fa-code"></i><span>Flutter/Dart</span>
+                            </div>
+                            <div class="tech-item" data-tech="git">
+                                <i class="fab fa-git-alt"></i><span>Git</span>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="tech-cluster">
                         <h4 class="cluster-title">Web Technologies</h4>
                         <div class="tech-items">
-                            <div class="tech-item"><i class="fab fa-html5"></i><span>HTML5</span></div>
-                            <div class="tech-item"><i class="fab fa-css3-alt"></i><span>CSS3</span></div>
-                            <div class="tech-item"><i class="fab fa-js"></i><span>JavaScript</span></div>
-                            <div class="tech-item"><i class="fab fa-react"></i><span>React</span></div>
+                            <div class="tech-item" data-tech="html">
+                                <i class="fab fa-html5"></i><span>HTML5</span>
+                            </div>
+                            <div class="tech-item" data-tech="css">
+                                <i class="fab fa-css3-alt"></i><span>CSS3</span>
+                            </div>
+                            <div class="tech-item" data-tech="javascript">
+                                <i class="fab fa-js"></i><span>JavaScript</span>
+                            </div>
+                            <div class="tech-item" data-tech="react">
+                                <i class="fab fa-react"></i><span>React</span>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="tech-cluster">
                         <h4 class="cluster-title">Systems &amp; Security</h4>
                         <div class="tech-items">
-                            <div class="tech-item"><i class="fab fa-linux"></i><span>Linux</span></div>
-                            <div class="tech-item"><i class="fas fa-shield-alt"></i><span>Security</span></div>
-                            <div class="tech-item"><i class="fas fa-network-wired"></i><span>Networking</span></div>
-                            <div class="tech-item"><i class="fas fa-database"></i><span>SQL</span></div>
+                            <div class="tech-item" data-tech="linux">
+                                <i class="fab fa-linux"></i><span>Linux</span>
+                            </div>
+                            <div class="tech-item" data-tech="security">
+                                <i class="fas fa-shield-alt"></i><span>Security</span>
+                            </div>
+                            <div class="tech-item" data-tech="networking">
+                                <i class="fas fa-network-wired"></i><span>Networking</span>
+                            </div>
+                            <div class="tech-item" data-tech="sql">
+                                <i class="fas fa-database"></i><span>SQL</span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
+            <!-- This closes the tech-clusters div -->
+
+            <!-- Add tooltip container and overlay here, OUTSIDE of tech-clusters -->
+            <div class="tooltip-overlay"></div>
+            <div class="tech-tooltip" id="tech-tooltip">
+                <div class="tooltip-title">
+                    <span id="tooltip-title">Technology</span>
+                    <i class="fas fa-times" id="close-tooltip"></i>
+                </div>
+                <div class="tooltip-description" id="tooltip-description"></div>
+                <a href="#" class="tooltip-link" id="tooltip-link" target="_blank">Learn more</a>
+            </div>
+
                 <!-- Certification and learning path -->
                 <div class="learning-path">
                     <h3 class="learning-path-title">Learning Path</h3>
@@ -423,21 +461,27 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Update the contact form section for better interaction -->
                     <div class="contact-form">
                         <form id="contactForm">
                             <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" name="name" required>
+                                <input type="text" id="name" name="name" placeholder=" " required>
+                                <label for="name"><i class="fas fa-user"></i> Your Name</label>
+                                <span class="error-message">Please enter your name</span>
                             </div>
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" required>
+                                <input type="email" id="email" name="email" placeholder=" " required>
+                                <label for="email"><i class="fas fa-envelope"></i> Your Email</label>
+                                <span class="error-message">Please enter a valid email</span>
                             </div>
                             <div class="form-group">
-                                <label for="message">Message</label>
-                                <textarea id="message" name="message" rows="5" required></textarea>
+                                <textarea id="message" name="message" rows="5" placeholder=" " required></textarea>
+                                <label for="message"><i class="fas fa-comment"></i> Your Message</label>
+                                <span class="error-message">Please enter your message</span>
                             </div>
-                            <button type="submit" class="btn primary-btn">Send Message</button>
+                            <button type="submit" class="btn primary-btn">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -472,12 +516,13 @@
         </div>
     </div>
 
-    <!-- Scripts - UPDATED (removed debug files) -->
+    <!-- Scripts -->
     <script src="js/project-images.js"></script>
     <script src="js/github-api.js"></script>
     <script src="js/ui-interactions.js"></script>
     <script src="js/main.js"></script>
     <script src="js/validate.js"></script>
     <script src="js/contact.js"></script>
+    <script src="js/tooltips.js"></script>
 </body>
 </html>
