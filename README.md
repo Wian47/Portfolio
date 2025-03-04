@@ -17,7 +17,8 @@ A dynamic, modern portfolio website that showcases my development skills, projec
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **Dark/Light Theme**: User preference-based theme switching with local storage persistence
 - **Project Filtering**: Filter projects by category (web, API, applications)
-- **Interactive UI**: Smooth animations, transitions, and micro-interactions
+- **Interactive UI**: Smooth animations and micro-interactions
+- **Enhanced Timeline**: Interactive timeline for showing learning path and certifications
 - **Contact Form**: Form validation and submission handling
 - **Accessibility Features**: ARIA roles and keyboard navigation support
 
@@ -35,14 +36,15 @@ portfolio/
 ├── index.html              # Main HTML document
 ├── css/
 │   ├── styles.css          # Main styles
-│   └── notifications.css   # Notification component styles
+│   ├── animations.css      # Animation definitions
+│   ├── notifications.css   # Notification component styles
+│   └── timeline.css        # Timeline component styles
 ├── js/
 │   ├── github-api.js       # GitHub API integration
 │   ├── ui-interactions.js  # UI components and interactions
-│   └── main.js            # Application initialization
-├── assets/
-│   ├── favicon.ico         # Site favicon
-│   └── images/             # Project images
+│   ├── main.js            # Application initialization
+│   ├── validate.js        # Form validation
+│   └── fallback.js        # Fallback handlers
 └── README.md               # Project documentation
 ```
 
@@ -52,7 +54,7 @@ portfolio/
 2. Open `index.html` in your browser
 3. No build tools or dependencies required!
 
-## Features
+## Key Features
 
 ### GitHub Integration
 
@@ -64,16 +66,25 @@ The portfolio automatically pulls my latest repositories from GitHub and display
 - Links to GitHub repository and live demo (if available)
 - Detailed view with additional information
 
-### Theme Switching
+### Enhanced Dark Mode
 
-The site offers both light and dark themes that respect the user's system preferences but can also be toggled manually. Theme choices are saved to local storage for persistence between visits.
+The site offers both light and dark themes that respect the user's system preferences but can also be toggled manually. The dark mode has been specially optimized to eliminate visual artifacts and ensure a seamless experience.
 
 ### Responsive Layout
 
 The design adapts to different screen sizes:
 - **Desktop**: Full layout with multiple columns
 - **Tablet**: Adjusted spacing and layout
-- **Mobile**: Single column layout with mobile navigation
+- **Mobile**: Single column layout with mobile navigation and optimized timeline display
+
+### Interactive Timeline
+
+The learning path timeline provides a visual representation of my educational journey and certification path, with:
+
+- Animated timeline dots
+- Smooth reveal animations
+- Special styling for future goals
+- Mobile-optimized layout
 
 ## Customization
 
