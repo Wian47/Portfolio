@@ -2,6 +2,8 @@
 
 A dynamic, modern portfolio website that showcases my development skills, projects, and technical expertise using vanilla HTML, CSS, and JavaScript with GitHub API integration.
 
+![image](https://github.com/user-attachments/assets/ba2cadee-134f-4bd9-9d60-a62ed7a228a3)
+
 ## Features
 
 - **GitHub API Integration**: Dynamically fetches and displays my GitHub repositories
