@@ -275,6 +275,9 @@ img {
 
 .fa-sun {
     display: none;
+    color: var(--text-color);
+    transform: rotate(0deg);
+    transition: transform 0.5s ease, color 0.3s ease;
 }
 
 .dark-theme .fa-moon {
@@ -284,6 +287,7 @@ img {
 .dark-theme .fa-sun {
     display: inline-block;
     color: var(--highlight-color);
+    transform: rotate(180deg);
 }
 
 /* Language selector styling */
