@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     observer.observe(contactForm);
     
-    // Handle input focus/blur events for animation
+    // Handle input focus/blur events for animation only (not validation)
     const formGroups = document.querySelectorAll('.form-group');
     formGroups.forEach(group => {
         const input = group.querySelector('input, textarea');
@@ -71,28 +71,23 @@ document.addEventListener('DOMContentLoaded', function() {
             group.classList.add('focused');
         });
         
-        // Blur event
+        // Blur event - MODIFIED: Only handle styling, not validation
         input.addEventListener('blur', () => {
             group.classList.remove('focused');
             if (input.value) {
                 group.classList.add('has-content');
             } else {
                 group.classList.remove('has-content');
+                
+                // Remove error styling if present
+                group.classList.remove('error');
             }
             
-            // Validate on blur
-            validateInput(input);
-        });
-        
-        // Input event for real-time validation
-        input.addEventListener('input', () => {
-            if (group.classList.contains('error')) {
-                validateInput(input);
-            }
+            // REMOVED: validateInput(input) call from here
         });
     });
     
-    // Validate single input
+    // Validate single input - only called during form submission now
     function validateInput(input) {
         const group = input.closest('.form-group');
         
@@ -129,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
         group.classList.add('success');
     }
     
-    // Form submission
+    // Form submission - Validation happens ONLY on submit now
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
         

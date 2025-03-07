@@ -16,6 +16,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="js/fallback.js"></script>
     <link rel="stylesheet" href="css/mobile-tooltips.css">
+    <link rel="stylesheet" href="css/a11y-panel.css">
+    <link rel="stylesheet" href="css/print.css">
 </head>
 <body class="light-theme">
     <header>
@@ -127,6 +129,9 @@
                         <div class="about-cta">
                             <a href="#contact" class="btn secondary-btn">Get In Touch</a>
                             <a href="#skills" class="btn primary-btn">View My Skills</a>
+                            <a id="print-resume-btn" href="#" class="btn secondary-btn print-btn">
+                                <i class="fas fa-print"></i> <span>Print Resume</span>
+                            </a>
                         </div>
                     </div>
                     <div class="about-image">
@@ -467,21 +472,21 @@
                         <form id="contactForm">
                             <div class="form-group">
                                 <input type="text" id="name" name="name" placeholder=" " required>
-                                <label for="name"><i class="fas fa-user"></i> Your Name</label>
+                                <label for="name"><i class="fas fa-user"></i> <span>Your Name</span></label>
                                 <span class="error-message">Please enter your name</span>
                             </div>
                             <div class="form-group">
                                 <input type="email" id="email" name="email" placeholder=" " required>
-                                <label for="email"><i class="fas fa-envelope"></i> Your Email</label>
+                                <label for="email"><i class="fas fa-envelope"></i> <span>Your Email</span></label>
                                 <span class="error-message">Please enter a valid email</span>
                             </div>
                             <div class="form-group">
                                 <textarea id="message" name="message" rows="5" placeholder=" " required></textarea>
-                                <label for="message"><i class="fas fa-comment"></i> Your Message</label>
+                                <label for="message"><i class="fas fa-comment"></i> <span>Your Message</span></label>
                                 <span class="error-message">Please enter your message</span>
                             </div>
                             <button type="submit" class="btn primary-btn">
-                                <i class="fas fa-paper-plane"></i> Send Message
+                                <i class="fas fa-paper-plane"></i> <span>Send Message</span>
                             </button>
                         </form>
                     </div>
@@ -503,6 +508,9 @@
                     <a href="#skills">Skills</a>
                     <a href="#contact">Contact</a>
                 </div>
+                <button class="btn secondary-btn" onclick="window.location.href='404.html'">
+                    Try My 404 Game
+                </button>
             </div>
         </div>
     </footer>
@@ -517,14 +525,22 @@
         </div>
     </div>
 
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Scroll to top">↑</button>
+
     <!-- Scripts -->
     <script src="js/project-images.js"></script>
     <script src="js/github-api.js"></script>
+    <script src="js/a11y-tools.js"></script>
     <script src="js/ui-interactions.js"></script>
     <script src="js/main.js"></script>
     <script src="js/validate.js"></script>
     <script src="js/contact.js"></script>
     <script src="js/tooltips.js"></script>
     <script src="js/mobile-tooltips.js"></script>
+    <script src="js/typing-animation.js"></script>
+    <script src="js/scroll-progress.js"></script>
+    <script src="js/project-search.js"></script>
+    <script src="js/project-share.js"></script>
 </body>
 </html>

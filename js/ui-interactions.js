@@ -173,8 +173,6 @@ class UIController {
         const card = document.createElement('div');
         card.classList.add('project-card');
         card.dataset.category = project.category;
-        
-        // Add CSS for transitions
         card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
         
         let tagsHTML = '';
@@ -186,12 +184,10 @@ class UIController {
             tagsHTML = `<span class="project-tag">${project.language}</span>`;
         }
         
-        // Determine image path and fallbacks
         const normalizedName = project.name.replace(/\s+/g, '-').toLowerCase();
-        const imagePath = project.imagePath || 
-                         `assets/projects/${normalizedName}.jpg`;
+        const imagePath = project.imagePath || `assets/projects/${normalizedName}.jpg`;
+        const readingTime = this.calculateReadingTime(project.description);
         
-        // Create the image HTML with enhanced error handling
         const imageHtml = `
             <div class="project-image project-preview">
                 <img 
@@ -209,6 +205,9 @@ class UIController {
             <div class="project-info">
                 <h3>${project.name}</h3>
                 <p>${this.truncateText(project.description, 100)}</p>
+                <div class="project-meta">
+                    <span class="reading-time"><i class="far fa-clock"></i> ${readingTime} min read</span>
+                </div>
                 <div class="project-tags">
                     ${tagsHTML}
                 </div>
@@ -223,13 +222,26 @@ class UIController {
             </div>
         `;
         
-        // Add event listener to details button
         const detailsBtn = card.querySelector('.details-btn');
-        detailsBtn.addEventListener('click', () => {
-            this.showProjectDetails(project);
-        });
+        detailsBtn.addEventListener('click', () => this.showProjectDetails(project));
         
         return card;
+    }
+
+    // Add method to calculate reading time
+    calculateReadingTime(text) {
+        if (!text) return "< 1";
+        
+        // Average reading speed (words per minute)
+        const wordsPerMinute = 200;
+        
+        // Count words in text
+        const wordCount = text.trim().split(/\s+/).length;
+        
+        // Calculate reading time in minutes
+        const readingTime = Math.max(1, Math.round(wordCount / wordsPerMinute));
+        
+        return readingTime;
     }
 
     // Get icon based on project category
@@ -248,6 +260,12 @@ class UIController {
 
     // Show project details in modal
     showProjectDetails(project) {
+        const topicsHtml = project.topics.length > 0 ? 
+            project.topics.map(topic => `<span class="project-tag">${topic}</span>`).join('') : 
+            '<p>No topics specified</p>';
+            
+        const shareButtons = this.generateShareButtons(project);
+        
         const modalContent = `
             <h2>${project.name}</h2>
             <div class="modal-info">
@@ -266,25 +284,51 @@ class UIController {
             <div class="modal-tags">
                 <h3>Topics</h3>
                 <div class="tags-container">
-                    ${project.topics.length > 0 ? 
-                        project.topics.map(topic => `<span class="project-tag">${topic}</span>`).join('') : 
-                        '<p>No topics specified</p>'}
+                    ${topicsHtml}
                 </div>
             </div>
             <div class="modal-actions">
                 <a href="${project.url}" class="btn primary-btn" target="_blank" rel="noopener">
                     <i class="fab fa-github"></i> View on GitHub
                 </a>
-                ${project.homepage ? 
-                    `<a href="${project.homepage}" class="btn secondary-btn" target="_blank" rel="noopener">
+                ${project.homepage ? `
+                    <a href="${project.homepage}" class="btn secondary-btn" target="_blank" rel="noopener">
                         <i class="fas fa-external-link-alt"></i> View Live Demo
-                    </a>` : ''}
+                    </a>
+                ` : ''}
+            </div>
+            <div class="share-buttons">
+                ${shareButtons}
             </div>
         `;
-        
+
         this.modalContent.innerHTML = modalContent;
         this.modal.style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Add method to generate share buttons
+    generateShareButtons(project) {
+        const projectUrl = project.homepage || project.url;
+        const projectTitle = `Check out ${project.name}`;
+        const projectDesc = project.description || 'A cool project I found';
+        
+        // Create share URLs
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(projectTitle)}&url=${encodeURIComponent(projectUrl)}`;
+        const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(projectUrl)}`;
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(projectUrl)}`;
+        
+        return `
+            <a href="${twitterUrl}" class="share-btn twitter" target="_blank" rel="noopener" aria-label="Share on Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="${linkedinUrl}" class="share-btn linkedin" target="_blank" rel="noopener" aria-label="Share on LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="${facebookUrl}" class="share-btn facebook" target="_blank" rel="noopener" aria-label="Share on Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        `;
     }
 
     // Hide modal
@@ -352,7 +396,6 @@ class UIController {
         }
         
         const sections = document.querySelectorAll('section');
-        
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -367,7 +410,6 @@ class UIController {
         
         // Skill bars animation
         const skillBars = document.querySelectorAll('.skill-progress');
-        
         const skillObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -404,25 +446,53 @@ class UIController {
     // Activate scroll spy for navigation
     activateScrollSpy() {
         const scrollPosition = window.scrollY + 100; // Offset
+        const allSections = Array.from(document.querySelectorAll('section'));
+        const sections = allSections.reverse();
         
-        document.querySelectorAll('section').forEach(section => {
+        let activeFound = false;
+        
+        for (const section of sections) {   
             const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
             const sectionId = section.getAttribute('id');
             
-            if (
-                scrollPosition >= sectionTop && 
-                scrollPosition < sectionTop + sectionHeight
-            ) {
-                // Remove active class from all nav links
-                this.navLinks.forEach(link => {
-                    link.classList.remove('active');
-                });
-                
-                // Add active class to current section nav link
-                document.querySelector(`.nav-link[href="#${sectionId}"]`)?.classList.add('active');
+            if (sectionId === 'contact' && 
+                (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+                this.highlightNavLink(sectionId);
+                activeFound = true;
+                break;
             }
+            
+            if (scrollPosition >= sectionTop && 
+                scrollPosition < sectionTop + sectionHeight) {
+                this.highlightNavLink(sectionId);
+                activeFound = true;
+                break;
+            }
+        }
+        
+        if (!activeFound && sections.length > 0) {
+            const visibleSections = allSections.filter(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top < window.innerHeight && rect.bottom > 0;
+            });
+            
+            if (visibleSections.length > 0) {
+                this.highlightNavLink(visibleSections[0].getAttribute('id'));
+            }
+        }
+    }
+
+    // Helper method to highlight the correct nav link
+    highlightNavLink(sectionId) {
+        this.navLinks.forEach(link => {
+            link.classList.remove('active');
         });
+        
+        const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
     }
 
     // Helper to truncate text
@@ -462,35 +532,23 @@ class UIController {
         }
         
         try {
-            // Clear existing background
             animatedBg.innerHTML = '';
-            
-            // Create a more subtle, professional pattern
             const patternDiv = document.createElement('div');
             patternDiv.classList.add('hero-pattern');
             animatedBg.appendChild(patternDiv);
             
-            // Add subtle floating elements
             for (let i = 0; i < 10; i++) {
                 const floatingEl = document.createElement('div');
                 floatingEl.classList.add('floating-element');
-                
-                // Randomize size, position and opacity
                 const size = Math.random() * 100 + 50;
                 floatingEl.style.width = `${size}px`;
                 floatingEl.style.height = `${size}px`;
-                
                 floatingEl.style.left = `${Math.random() * 100}%`;
                 floatingEl.style.top = `${Math.random() * 100}%`;
                 floatingEl.style.opacity = `${Math.random() * 0.05 + 0.02}`;
-                
-                // Use primary/secondary colors
                 const colors = ['var(--primary-color)', 'var(--secondary-color)', 'var(--highlight-color)'];
                 floatingEl.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                // Add subtle animation
                 floatingEl.style.animation = `float ${Math.random() * 15 + 20}s ease-in-out ${Math.random() * 5}s infinite alternate`;
-                
                 animatedBg.appendChild(floatingEl);
             }
         } catch (error) {
@@ -512,113 +570,36 @@ class UIController {
         this.showNotification(message, 'error');
     }
 
-    // Add this method to UIController class for improved skill animations
+    // Simplified initialization of animations
     initSkillsAnimations() {
-        // Create a new reliable method for skill bar animations
         const skillBars = document.querySelectorAll('.skill-progress');
-        
-        // Store original widths before resetting
-        skillBars.forEach(bar => {
-            // Get the percentage from the style or data attribute
-            const width = bar.style.width || bar.getAttribute('data-width') || '0%';
-            // Store the target width as a data attribute for reliable access
-            bar.setAttribute('data-width', width);
-            // Start with zero width
-            bar.style.width = '0';
-        });
-        
-        // Create a better intersection observer with lower threshold
-        const skillObserver = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const bar = entry.target;
-                        // Use the stored target width
-                        const targetWidth = bar.getAttribute('data-width');
-                        
-                        // Ensure bar has needed transition
-                        bar.style.transition = 'width 1.5s ease-out';
-                        
-                        // Trigger reflow before setting width to ensure transition plays
-                        void bar.offsetWidth;
-                        
-                        // Set to final width
-                        setTimeout(() => {
-                            bar.style.width = targetWidth;
-                        }, 100);
-                        
-                        // Stop observing this element
-                        skillObserver.unobserve(bar);
-                    }
-                });
-            },
-            { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
-        );
-        
-        // Apply observer to all skill progress bars
-        skillBars.forEach(bar => {
-            skillObserver.observe(bar);
-        });
-        
-        // Add this as a backup to ensure bars animate even when observer fails
-        this.setupSkillBarsFallback();
+        const options = { threshold: 0.1, rootMargin: '0px 0px -10% 0px' };
 
-        // Create a separate observer for tech clusters with longer rootMargin
-        const observeTechClusters = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const techItems = entry.target.querySelectorAll('.tech-item');
-                        
-                        techItems.forEach((item, index) => {
-                            // Add a class instead of direct animation
-                            setTimeout(() => {
-                                item.classList.add('fade-in');
-                            }, index * 100);
-                        });
-                        
-                        // Stop observing this container
-                        observeTechClusters.unobserve(entry.target);
-                    }
-                });
-            },
-            { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
-        );
-        
-        // Apply observer to each tech cluster
-        document.querySelectorAll('.tech-cluster').forEach(cluster => {
-            observeTechClusters.observe(cluster);
-        });
-        
-        // Enhanced timeline animation with better detection
-        const observeTimeline = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('timeline-visible');
-                        observeTimeline.unobserve(entry.target);
-                    }
-                });
-            },
-            { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
-        );
-        
-        // Apply observer to timeline
-        const timeline = document.querySelector('.timeline');
-        if (timeline) {
-            observeTimeline.observe(timeline);
-        }
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bar = entry.target;
+                    const targetWidth = bar.getAttribute('data-width');
+                    bar.style.transition = 'width 1.5s ease-out';
+                    setTimeout(() => {
+                        bar.style.width = targetWidth;
+                    }, 100);
+                    skillObserver.unobserve(bar);
+                }
+            });
+        }, options);
 
-        // Add a scroll event handler as a fallback for tech items
-        this.setupFallbackForTechItems();
+        skillBars.forEach(bar => skillObserver.observe(bar));
+
+        // Add fallback
+        setTimeout(() => this.setupSkillBarsFallback(), 5000);
     }
 
     // Add a new method for skill bars fallback animation
     setupSkillBarsFallback() {
         const skillBars = document.querySelectorAll('.skill-progress');
         let animationApplied = false;
-        
-        // Function to check position and animate if needed
+
         const checkAndAnimateBars = () => {
             if (animationApplied) return;
             
@@ -632,13 +613,8 @@ class UIController {
                 skillBars.forEach(bar => {
                     const targetWidth = bar.getAttribute('data-width');
                     if (bar.style.width === '0px' || bar.style.width === '0%' || !bar.style.width) {
-                        // Ensure transition is defined
                         bar.style.transition = 'width 1.5s ease-out';
-                        
-                        // Force reflow
                         void bar.offsetWidth;
-                        
-                        // Set width after a short delay
                         setTimeout(() => {
                             bar.style.width = targetWidth;
                         }, 100);
@@ -650,16 +626,13 @@ class UIController {
             }
         };
         
-        // Run on page load and scroll
         setTimeout(checkAndAnimateBars, 500);
         window.addEventListener('scroll', checkAndAnimateBars);
         
-        // Auto-reset if animations are stuck after 5 seconds
         setTimeout(() => {
             skillBars.forEach(bar => {
                 const targetWidth = bar.getAttribute('data-width');
                 if (bar.style.width === '0px' || bar.style.width === '0%' || !bar.style.width) {
-                    console.log('Resetting stuck skill bar:', bar);
                     bar.style.transition = 'width 1s ease-out';
                     bar.style.width = targetWidth;
                 }
@@ -669,18 +642,14 @@ class UIController {
 
     // Add this new method to handle cases where IntersectionObserver doesn't trigger
     setupFallbackForTechItems() {
-        // Flag to track if animations have been triggered
         let techItemsAnimated = false;
         let timelineAnimated = false;
-        
-        // Function to check position and trigger animations if needed
+
         const checkPositionAndAnimate = () => {
-            // Handle tech clusters
             if (!techItemsAnimated) {
                 const techClusters = document.querySelector('.tech-clusters');
                 if (techClusters) {
                     const rect = techClusters.getBoundingClientRect();
-                    // If the top of the tech clusters is in view
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
                         const techItems = document.querySelectorAll('.tech-item');
                         techItems.forEach((item, index) => {
@@ -693,58 +662,30 @@ class UIController {
                 }
             }
             
-            // Handle timeline with more items
             if (!timelineAnimated) {
                 const timeline = document.querySelector('.timeline');
                 if (timeline) {
                     const rect = timeline.getBoundingClientRect();
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
                         timeline.classList.add('timeline-visible');
-                        
-                        // Set custom property for each timeline item for staggered animation
                         const timelineItems = timeline.querySelectorAll('.timeline-item');
                         timelineItems.forEach((item, index) => {
                             item.style.setProperty('--item-index', index);
                         });
-                        
                         timelineAnimated = true;
                     }
                 }
             }
             
-            // If both are animated, remove the scroll listener
             if (techItemsAnimated && timelineAnimated) {
                 window.removeEventListener('scroll', checkPositionAndAnimate);
             }
         };
         
-        // Run once to check initial state (important for desktop)
         checkPositionAndAnimate();
-        
-        // Add scroll listener
         window.addEventListener('scroll', checkPositionAndAnimate);
     }
 }
-
-// Add this code to check if animations are loaded after the page is fully loaded
-window.addEventListener('load', function() {
-    // Check if tech items are visible but not animated
-    setTimeout(() => {
-        document.querySelectorAll('.tech-item:not(.fade-in)').forEach((item, index) => {
-            if (isElementInViewport(item)) {
-                setTimeout(() => {
-                    item.classList.add('fade-in');
-                }, index * 100);
-            }
-        });
-        
-        // Check if timeline is visible but not animated
-        const timeline = document.querySelector('.timeline:not(.timeline-visible)');
-        if (timeline && isElementInViewport(timeline)) {
-            timeline.classList.add('timeline-visible');
-        }
-    }, 500);
-});
 
 // Helper function to check if element is in viewport
 function isElementInViewport(el) {
@@ -756,3 +697,19 @@ function isElementInViewport(el) {
         rect.right >= 0
     );
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollBtn = document.getElementById('scrollToTopBtn');
+    
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollBtn.classList.add('show');
+        } else {
+            scrollBtn.classList.remove('show');
+        }
+    });
+    
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});

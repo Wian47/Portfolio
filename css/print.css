@@ -1,0 +1,61 @@
+/* Print-specific styles for the portfolio website */
+
+@media print {
+    /* Hide everything by default */
+    body > *:not(.print-resume) {
+        display: none !important;
+    }
+    
+    /* Show only print content */
+    .print-resume {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Basic print styles */
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.4;
+        color: #000;
+        background: #fff;
+        margin: 0;
+        padding: 20px;
+    }
+    
+    /* Print layout and spacing */
+    .resume-section {
+        margin-bottom: 20px;
+        page-break-inside: avoid;
+    }
+    
+    h1, h2, h3 {
+        page-break-after: avoid;
+    }
+    
+    .resume-item {
+        page-break-inside: avoid;
+    }
+    
+    /* Remove unnecessary decoration */
+    a {
+        color: #000;
+        text-decoration: none;
+    }
+    
+    /* Ensure good contrast */
+    .print-resume {
+        color: #000 !important;
+        background: white !important;
+    }
+}
+
+/* Print button styling for non-print view */
+.print-btn {
+    display: inline-flex;
+    align-items: center;
+}
+
+.print-btn i {
+    margin-right: 8px;
+}

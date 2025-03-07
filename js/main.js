@@ -87,7 +87,7 @@ async function loadGitHubData(github, ui) {
         
         // Get GitHub stats
         const stats = await github.getStats();
-        ui.updateGitHubStats(stats);
+        updateGitHubStatsWithAnimation(stats);
         
         // Get repositories
         const repos = await github.getRepositories();
@@ -117,12 +117,57 @@ async function loadGitHubData(github, ui) {
         `;
         
         // Show some fallback data for stats
-        ui.updateGitHubStats({
+        updateGitHubStatsWithAnimation({
             repoCount: '-',
             starsCount: '-',
             commitsCount: '-'
         });
     }
+}
+
+// Update UI with animated counters for statistics
+function updateGitHubStatsWithAnimation(stats) {
+    animateCounter('repo-count', stats.repoCount);
+    animateCounter('stars-count', stats.starsCount);
+    animateCounter('commits-count', stats.commitsCount);
+}
+
+// Function to animate counting up
+function animateCounter(elementId, targetValue) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    // If target is not a number, just set the value
+    if (isNaN(parseInt(targetValue))) {
+        element.textContent = targetValue;
+        return;
+    }
+    
+    // Convert to number for animation
+    const target = parseInt(targetValue);
+    let current = 0;
+    const increment = Math.max(1, Math.floor(target / 50)); // Adjust speed based on value
+    const duration = 1500; // Animation duration in ms
+    const stepTime = duration / (target / increment);
+    
+    // Clear any existing animation
+    if (element._countInterval) {
+        clearInterval(element._countInterval);
+    }
+    
+    // Create animation interval
+    element._countInterval = setInterval(() => {
+        current += increment;
+        
+        // If we've reached or exceeded the target
+        if (current >= target) {
+            element.textContent = target;
+            clearInterval(element._countInterval);
+            element._countInterval = null;
+        } else {
+            element.textContent = current;
+        }
+    }, stepTime);
 }
 
 // Update the initHeroAnimation function to include timeline item initialization

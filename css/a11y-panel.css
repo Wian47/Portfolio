@@ -1,0 +1,259 @@
+/* Accessibility panel styling */
+.a11y-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    z-index: 998;
+    transition: all 0.3s ease;
+}
+
+.a11y-toggle:hover {
+    transform: scale(1.1);
+}
+
+.a11y-panel {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 280px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 20px var(--shadow-color);
+    padding: 15px;
+    z-index: 999;
+    transform: translateY(20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.a11y-panel.show {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.a11y-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.a11y-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--primary-color);
+}
+
+.a11y-close {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.a11y-section {
+    margin-bottom: 15px;
+}
+
+.a11y-section h4 {
+    font-size: 0.9rem;
+    margin: 0 0 8px 0;
+    color: var(--primary-color);
+}
+
+.a11y-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.a11y-btn {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.2s ease;
+}
+
+.a11y-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.a11y-btn:hover:not(.active) {
+    border-color: var(--primary-color);
+}
+
+.language-selector {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.a11y-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+}
+
+.a11y-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    transition: .3s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--text-color);
+    transition: .3s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(22px);
+    background-color: white;
+}
+
+.a11y-setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.a11y-setting span {
+    font-size: 0.9rem;
+}
+
+/* Print button styling */
+.print-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.print-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Text size classes - Fixed implementation */
+body.text-sm {
+    font-size: 14px !important;
+}
+
+body.text-md {
+    font-size: 16px !important;
+}
+
+body.text-lg {
+    font-size: 18px !important;
+}
+
+body.text-xl {
+    font-size: 20px !important;
+}
+
+/* High contrast mode */
+body.high-contrast {
+    --primary-color: #ffcc00;
+    --secondary-color: #ff6600;
+    --text-color: #ffffff;
+    --background-color: #000000;
+    --card-bg: #222222;
+    --border-color: #444444;
+    --highlight-color: #ffcc00;
+}
+
+/* Remove reduced motion since it's causing display issues */
+.a11y-setting:has(#reduce-motion-toggle) {
+    display: none;
+}
+
+/* Print styles for resume */
+@media print {
+    .print-content {
+        background-color: white;
+        color: black;
+        padding: 20px;
+    }
+    
+    .print-content h1,
+    .print-content h2,
+    .print-content h3 {
+        color: #000;
+    }
+    
+    body.printing * {
+        visibility: hidden;
+    }
+    
+    body.printing .print-content,
+    body.printing .print-content * {
+        visibility: visible;
+    }
+    
+    body.printing .print-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+}

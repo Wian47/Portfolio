@@ -249,6 +249,28 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background-color: transparent;
+}
+
+#theme-toggle-btn i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#theme-toggle-btn:hover {
+    transform: rotate(15deg);
+}
+
+.dark-theme #theme-toggle-btn:hover {
+    transform: rotate(-15deg);
 }
 
 .fa-sun {
@@ -262,6 +284,55 @@ img {
 .dark-theme .fa-sun {
     display: inline-block;
     color: var(--highlight-color);
+}
+
+/* Language selector styling */
+.language-selector-container {
+    margin-left: var(--spacing-md);
+}
+
+.language-selector {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color var(--transition-speed);
+}
+
+.language-selector:hover,
+.language-selector:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.dark-theme .language-selector {
+    background-color: var(--card-bg);
+}
+
+/* Print button styles */
+.print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Responsive adjustments for language selector */
+@media screen and (max-width: 768px) {
+    .language-selector-container {
+        margin: var(--spacing-sm) 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .language-selector {
+        width: 80%;
+        max-width: 200px;
+        padding: 8px 15px;
+    }
 }
 
 /* Hero Section */
@@ -1096,6 +1167,9 @@ social-links a:hover {
 
 .contact-details {
     flex: 1; /* Allow the details to expand */
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
 }
 
 .contact-details h3 {
@@ -1109,6 +1183,23 @@ social-links a:hover {
     margin: 0;
     display: block; /* Ensure block level for consistent rendering */
     line-height: 1.5;
+}
+
+.contact-details a {
+    display: inline;
+    width: auto;
+    padding: 0;
+    background-color: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+/* Fix for mobile alignment */
+@media screen and (max-width: 768px) {
+    .contact-details {
+        width: fit-content;
+        max-width: 100%;
+    }
 }
 
 /* Force vertical alignment on mobile */
@@ -1829,4 +1920,192 @@ section {
 /* Remove any remaining floating elements */
 .floating-element {
     display: none !important;
+}
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: none;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--primary-color, #3a86ff);
+    color: #fff;
+    cursor: pointer;
+    z-index: 999;
+    transition: opacity 0.3s ease;
+}
+.scroll-to-top.show {
+    display: block;
+    opacity: 0.9;
+}
+.scroll-to-top:hover {
+    opacity: 1;
+}
+
+/* Project search styles */
+.project-search {
+    position: relative;
+    max-width: 300px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.project-search input {
+    width: 100%;
+    padding: 10px 15px 10px 35px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.project-search input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+    outline: none;
+}
+
+.project-search i {
+    position: absolute;
+    left: 12px;
+    color: var(--text-color);
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.project-search input:focus + i,
+.project-search:hover i {
+    opacity: 1;
+    color: var(--primary-color);
+}
+
+/* Highlight animation for search results */
+@keyframes highlightPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.project-card.search-highlight {
+    animation: highlightPulse 0.5s ease;
+    box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+}
+
+/* Scroll to top button */
+.scroll-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    width: 50px;
+    height: 50px;
+    display: none; /* .show will override this */
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color, #3a86ff);
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    animation: scrollToTopBounce 2s infinite;
+}
+
+.scroll-to-top.show {
+    display: flex;
+    opacity: 0.9;
+}
+
+.scroll-to-top:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* Scroll progress bar */
+.scroll-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary-color), var(--highlight-color));
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.3s ease, width 0.1s linear;
+}
+
+.scroll-progress-bar.visible {
+    opacity: 1;
+}
+
+/* Reading time styles */
+.project-meta {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.reading-time {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.reading-time i {
+    color: var(--primary-color);
+}
+
+/* Share buttons styles */
+.modal-share {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.share-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.share-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.share-btn:hover {
+    transform: translateY(-3px);
+}
+
+.share-btn.twitter {
+    background-color: #1DA1F2;
+}
+
+.share-btn.linkedin {
+    background-color: #0077B5;
+}
+
+.share-btn.facebook {
+    background-color: #4267B2;
+}
+
+.share-btn.web-share {
+    background-color: var(--primary-color);
 }
