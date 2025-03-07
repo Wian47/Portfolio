@@ -86,7 +86,3 @@ The learning path timeline provides a visual representation of my educational jo
 - Smooth reveal animations
 - Special styling for future goals
 - Mobile-optimized layout
-
-## License
-
-MIT License - feel free to use and modify for your own portfolio!
