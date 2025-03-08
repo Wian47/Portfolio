@@ -46,6 +46,65 @@
     z-index: 0;
 }
 
+/* Particle background styles - updated for global visibility */
+.particle-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Place it behind all content but still visible */
+    pointer-events: none; /* Make sure clicks pass through */
+}
+
+.particle-background canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Make sure clicks pass through */
+}
+
+/* Ensure all page sections have proper background settings */
+main, 
+section, 
+header, 
+footer {
+    position: relative;
+    z-index: 2; /* Above the particles */
+    background-color: transparent; /* Make sections transparent */
+}
+
+/* Set solid background only for specific sections that need it */
+.about, 
+.projects, 
+.skills, 
+.contact, 
+footer {
+    background-color: transparent !important; /* Force transparency */
+    backdrop-filter: none;
+    box-shadow: none;
+}
+
+/* Make sure sections have proper z-index to appear above particles */
+section, header, footer {
+    position: relative;
+    z-index: 1;
+    background-color: transparent !important; /* Force transparency for sections */
+}
+
+/* Specifically ensure header has good z-index */
+header {
+    position: relative;
+    z-index: 1001; /* Above everything */
+    pointer-events: auto !important;
+}
+
+/* Only add semi-transparent background to navbar */
+.navbar {
+    background-color: rgba(var(--background-rgb), 0.9) !important;
+    backdrop-filter: blur(5px);
+}
+
 /* Style for sections that fade in when they come into view */
 section {
     opacity: 0;

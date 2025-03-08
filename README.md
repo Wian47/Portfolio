@@ -1,6 +1,6 @@
-# Personal Portfolio Website
+# Portfolio Website
 
-A dynamic, modern portfolio website that showcases my development skills, projects, and technical expertise using vanilla HTML, CSS, and JavaScript with GitHub API integration.
+A modern, responsive portfolio website built with HTML, CSS, and JavaScript. Features a dark/light theme, interactive project showcase, and smooth animations.
 
 ## 🔗 [View Live Website](https://wian47.github.io/Portfolio/)
 
@@ -12,77 +12,120 @@ A dynamic, modern portfolio website that showcases my development skills, projec
 
 ![image](https://github.com/user-attachments/assets/9fb24b28-f011-4970-a841-9e1fa4a577e8)
 
-
 ## Features
 
-- **GitHub API Integration**: Dynamically fetches and displays my GitHub repositories
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Dark/Light Theme**: User preference-based theme switching with local storage persistence
-- **Project Filtering**: Filter projects by category (web, API, applications)
-- **Interactive UI**: Smooth animations and micro-interactions
-- **Enhanced Timeline**: Interactive timeline for showing learning path and certifications
-- **Contact Form**: Form validation and submission handling
-- **Accessibility Features**: ARIA roles and keyboard navigation support
+- 🌓 Dark/Light theme switching
+- 🎨 Particle background animation 
+- 📱 Fully responsive design
+- 🎯 Interactive project cards
+- 📈 GitHub stats integration
+- 💼 Project filtering system
+- 🎮 Custom 404 page with Snake game
+- 🛠 Skills visualization
+- 📝 Contact form with validation
+- 🔄 Smooth page transitions
+- 🖱 Custom cursor effects
 
-## Technologies Used
+## Tech Stack
 
-- **HTML5**: Semantic markup for improved accessibility and SEO
-- **CSS3**: Custom properties, flexbox, grid, animations, and media queries
-- **JavaScript**: ES6+, async/await, DOM manipulation, Intersection Observer API
-- **GitHub REST API**: Fetching repository data and user information
+- HTML5
+- CSS3 (with CSS Variables)
+- Vanilla JavaScript
+- Font Awesome Icons
+- EmailJS for contact form
+
+## Getting Started
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Wian47/Portfolio.git
+```
+
+2. Navigate to the project directory:
+```bash
+cd Portfolio
+```
+
+3. Open `index.html` in your browser or use a local server:
+```bash
+python -m http.server 8000
+```
 
 ## Project Structure
 
 ```
-portfolio/
-├── index.html              # Main HTML document
+Portfolio/
 ├── css/
-│   ├── styles.css          # Main styles
-│   ├── animations.css      # Animation definitions
-│   ├── notifications.css   # Notification component styles
-│   └── timeline.css        # Timeline component styles
+│   ├── animations.css
+│   ├── custom-cursor.css
+│   ├── styles.css
+│   └── tooltips.css
 ├── js/
-│   ├── github-api.js       # GitHub API integration
-│   ├── ui-interactions.js  # UI components and interactions
-│   ├── main.js            # Application initialization
-│   ├── validate.js        # Form validation
-│   └── fallback.js        # Fallback handlers
-└── README.md               # Project documentation
+│   ├── github-api.js
+│   ├── main.js
+│   ├── particles.js
+│   └── ui-interactions.js
+├── assets/
+│   ├── favicon/
+│   └── projects/
+├── index.html
+└── 404.html
 ```
 
-## Setup and Usage
+## Features in Detail
 
-### View Online
-Visit the live website at [https://wian47.github.io/Portfolio/](https://wian47.github.io/Portfolio/)
+### Theme Switching
+- Automatic theme detection based on system preferences
+- Manual toggle between light and dark themes
+- Theme persistence across sessions
 
-## Key Features
+### Project Showcase
+- Dynamic project loading from GitHub API
+- Category filtering system
+- Interactive project cards with hover effects
+- Modal view for project details
+- Share functionality for projects
 
-### GitHub Integration
+### Animations
+- Smooth scroll transitions
+- Section reveal animations
+- Skill bar animations
+- Particle background effects
+- Timeline animations for learning path
 
-The portfolio automatically pulls my latest repositories from GitHub and displays them as interactive project cards. Each project includes:
+### Responsive Design
+- Mobile-first approach
+- Custom mobile navigation
+- Optimized images and assets
+- Touch-friendly interactions
 
-- Project name and description
-- Primary language used
-- Topics/tags
-- Links to GitHub repository and live demo (if available)
-- Detailed view with additional information
+## Browser Support
 
-### Enhanced Dark Mode
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
 
-The site offers both light and dark themes that respect the user's system preferences but can also be toggled manually. The dark mode has been specially optimized to eliminate visual artifacts and ensure a seamless experience.
+## Contributing
 
-### Responsive Layout
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/new-feature`
+3. Commit your changes: `git commit -m 'Add new feature'`
+4. Push to the branch: `git push origin feature/new-feature`
+5. Submit a pull request
 
-The design adapts to different screen sizes:
-- **Desktop**: Full layout with multiple columns
-- **Tablet**: Adjusted spacing and layout
-- **Mobile**: Single column layout with mobile navigation and optimized timeline display
+## License
 
-### Interactive Timeline
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-The learning path timeline provides a visual representation of my educational journey and certification path, with:
+## Contact
 
-- Animated timeline dots
-- Smooth reveal animations
-- Special styling for future goals
-- Mobile-optimized layout
+Wian Schoeman - wian.schoeman1@gmail.com
+
+Project Link: https://github.com/Wian47/Portfolio
+
+## Acknowledgments
+
+- Font Awesome for icons
+- EmailJS for contact form functionality
+- Marked.js for README parsing
