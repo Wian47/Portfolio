@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load GitHub data
     loadGitHubData(github, ui);
     
-    // Remove any language/translation initialization that might be here
+    // Remove any particle-related code here if present
 });
 
 // Load GitHub data and update UI

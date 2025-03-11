@@ -46,22 +46,12 @@
     z-index: 0;
 }
 
-/* Particle background styles - updated for global visibility */
-.particle-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Place it behind all content but still visible */
-    pointer-events: none; /* Make sure clicks pass through */
-}
-
-.particle-background canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Make sure clicks pass through */
+/* Keep other animation styles */
+.floating-element {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    z-index: 0;
 }
 
 /* Ensure all page sections have proper background settings */
