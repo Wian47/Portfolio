@@ -229,3 +229,50 @@ body {
 .typing-text .highlight {
     color: var(--primary-color);
 }
+
+/* Use transform instead of top/left for better performance */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    will-change: transform, opacity;
+}
+
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Optimize button animations */
+.button-clicked {
+    transform: scale(0.98);
+    transition: transform 0.2s ease-out;
+}
+
+/* Use CSS properties that trigger GPU acceleration */
+.animated-element {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Reduce animation complexity on mobile */
+@media (max-width: 768px) {
+    .animate-on-scroll {
+        transition-duration: 0.3s;
+    }
+}
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .animate-on-scroll {
+        transition: none;
+        transform: none;
+        opacity: 1;
+    }
+    
+    .button-clicked {
+        transform: none;
+        transition: none;
+    }
+}

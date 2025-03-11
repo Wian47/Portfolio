@@ -310,31 +310,6 @@ img {
     transform: rotate(180deg);
 }
 
-/* Language selector styling */
-.language-selector-container {
-    margin-left: var(--spacing-md);
-}
-
-.language-selector {
-    background-color: transparent;
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: 0.9rem;
-    cursor: pointer;
-    padding: 5px 10px;
-    transition: border-color var(--transition-speed);
-}
-
-.language-selector:hover,
-.language-selector:focus {
-    border-color: var(--primary-color);
-    outline: none;
-}
-
-.dark-theme .language-selector {
-    background-color: var(--card-bg);
-}
 
 /* Print button styles */
 .print-btn {
@@ -343,20 +318,6 @@ img {
     gap: 8px;
 }
 
-/* Responsive adjustments for language selector */
-@media screen and (max-width: 768px) {
-    .language-selector-container {
-        margin: var(--spacing-sm) 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-    .language-selector {
-        width: 80%;
-        max-width: 200px;
-        padding: 8px 15px;
-    }
-}
 
 /* Hero Section */
 .hero {
@@ -2040,4 +2001,111 @@ section {
 
 .share-btn.web-share {
     background-color: var(--primary-color);
+}
+
+/* Add performance optimizations */
+.hero, .about, .projects, .skills, .contact {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Improve responsive design */
+@media screen and (max-width: 768px) {
+    :root {
+        --section-spacing: 60px;
+        --font-size-base: 14px;
+    }
+    
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+    
+    .hero-content {
+        padding: var(--spacing-lg) 0;
+    }
+    
+    .project-card {
+        width: 100%;
+    }
+}
+
+/* Add content visibility for better performance */
+.section {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+}
+
+/* Optimize animations */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Add content-visibility for better performance */
+.section {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+}
+
+/* Optimize animations */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Improve responsive design */
+@media screen and (max-width: 768px) {
+    :root {
+        --section-spacing: 60px;
+        --font-size-base: 14px;
+    }
+    
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+    
+    .hero-content {
+        padding: var(--spacing-lg) 0;
+    }
+    
+    .project-card {
+        width: 100%;
+    }
+
+    /* Optimize touch targets for mobile */
+    .nav-link,
+    .button,
+    .project-card {
+        min-height: 44px;
+        padding: 12px;
+    }
+}
+
+/* Add performance optimizations */
+.hero, .about, .projects, .skills, .contact {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Optimize images */
+img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Improve text rendering */
+body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }

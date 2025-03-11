@@ -16,6 +16,9 @@ class UIController {
         this.contactForm = document.getElementById('contactForm');
         this.currentYearSpan = document.getElementById('current-year');
         
+        // Cache DOM elements
+        this.buttons = document.querySelectorAll('button, .btn');
+        
         // Initialize
         this.init();
     }
@@ -71,6 +74,35 @@ class UIController {
 
         // Initialize skill animations
         this.initSkillsAnimations();
+        
+        // Use event delegation for better performance
+        document.body.addEventListener('click', (e) => {
+            const target = e.target.closest('button, .btn');
+            if (!target) return;
+
+            // Prevent multiple clicks
+            if (target.dataset.processing) return;
+            
+            target.dataset.processing = 'true';
+            
+            // Remove processing flag after animation
+            requestAnimationFrame(() => {
+                this.handleButtonClick(target);
+                setTimeout(() => {
+                    delete target.dataset.processing;
+                }, 300);
+            });
+        });
+    }
+
+    handleButtonClick(button) {
+        // Add click animation using CSS instead of JS
+        button.classList.add('button-clicked');
+        
+        // Remove animation class after transition
+        setTimeout(() => {
+            button.classList.remove('button-clicked');
+        }, 300);
     }
 
     // Initialize theme (light/dark)

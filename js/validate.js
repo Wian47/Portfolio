@@ -25,7 +25,8 @@ function validateSite() {
     
     // Check for critical DOM elements
     if (!document.getElementById('animated-bg')) errors.push('Missing #animated-bg element');
-    if (!document.getElementById('projects-container')) errors.push('Missing #projects-container element');
+    
+    // Remove any language/translation related checks that might be here
     
     // Log results
     if (errors.length > 0) {

@@ -28,100 +28,46 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load GitHub data
     loadGitHubData(github, ui);
     
-    // Add CSS class for page loading animation
-    document.body.classList.add('loaded');
-    
-    // Add scroll handler to check for tech section visibility
-    window.addEventListener('scroll', function() {
-        const skills = document.getElementById('skills');
-        
-        if (skills) {
-            const rect = skills.getBoundingClientRect();
-            const isVisible = (
-                rect.top < window.innerHeight && 
-                rect.bottom > 0
-            );
-            
-            if (isVisible) {
-                skills.classList.add('skills-section-visible');
-            }
-        }
-    });
-    
-    // Check immediately after load
-    setTimeout(() => {
-        const skills = document.getElementById('skills');
-        
-        if (skills) {
-            const rect = skills.getBoundingClientRect();
-            const isVisible = (
-                rect.top < window.innerHeight && 
-                rect.bottom > 0
-            );
-            
-            if (isVisible) {
-                skills.classList.add('skills-section-visible');
-            }
-        }
-    }, 300);
-
-    // Add a final fallback for skill bars in case they don't animate properly
-    setTimeout(() => {
-        const skillBars = document.querySelectorAll('.skill-progress');
-        skillBars.forEach(bar => {
-            const targetWidth = bar.getAttribute('data-width') || bar.style.width || '0%';
-            if (bar.style.width === '0px' || bar.style.width === '0%' || !bar.style.width) {
-                console.log('Applying final fallback for skill bar:', targetWidth);
-                bar.classList.add('force-show');
-                bar.style.width = targetWidth;
-            }
-        });
-    }, 3000);
+    // Remove any language/translation initialization that might be here
 });
 
 // Load GitHub data and update UI
 async function loadGitHubData(github, ui) {
     try {
-        // Show loading state
         ui.showLoading();
         
-        // Get GitHub stats
-        const stats = await github.getStats();
-        updateGitHubStatsWithAnimation(stats);
+        // Use Promise.all for parallel requests
+        const [stats, repos] = await Promise.all([
+            github.getStats(),
+            github.getRepositories()
+        ]);
         
-        // Get repositories
-        const repos = await github.getRepositories();
         if (!repos || repos.length === 0) {
             throw new Error('No repositories found');
         }
         
-        // Format and display projects
-        const formattedRepos = github.formatRepositories(repos);
-        ui.updateProjectsDisplay(formattedRepos);
-        
-        // Add this after projects are displayed
-        // Set proper display style for all project cards
-        setTimeout(() => {
-            document.querySelectorAll('.project-card').forEach(card => {
-                card.style.display = 'flex';
+        // Update UI efficiently
+        requestAnimationFrame(() => {
+            updateGitHubStatsWithAnimation(stats);
+            const formattedRepos = github.formatRepositories(repos);
+            ui.updateProjectsDisplay(formattedRepos);
+            
+            // Optimize project card display
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.project-card').forEach(card => {
+                    card.style.display = 'flex';
+                    card.style.opacity = '0';
+                    requestAnimationFrame(() => {
+                        card.style.transition = 'opacity 0.3s ease-out';
+                        card.style.opacity = '1';
+                    });
+                });
             });
-        }, 300);
+        });
         
     } catch (error) {
         console.error('Error loading GitHub data:', error);
-        document.getElementById('projects-container').innerHTML = `
-            <div class="error-message">
-                <i class="fas fa-exclamation-circle"></i>
-                <p>Failed to load GitHub projects. Please try again later.</p>
-            </div>
-        `;
-        
-        // Show some fallback data for stats
-        updateGitHubStatsWithAnimation({
-            repoCount: '-',
-            starsCount: '-',
-            commitsCount: '-'
-        });
+        ui.showError('Failed to load GitHub projects. Please try again later.');
     }
 }
 
@@ -137,8 +83,8 @@ function animateCounter(elementId, targetValue) {
     const element = document.getElementById(elementId);
     if (!element) return;
     
-    // If target is not a number, just set the value
-    if (isNaN(parseInt(targetValue))) {
+    // If target is not a number or we're on mobile, just set the value directly
+    if (isNaN(parseInt(targetValue)) || window.innerWidth < 768) {
         element.textContent = targetValue;
         return;
     }
@@ -146,28 +92,37 @@ function animateCounter(elementId, targetValue) {
     // Convert to number for animation
     const target = parseInt(targetValue);
     let current = 0;
-    const increment = Math.max(1, Math.floor(target / 50)); // Adjust speed based on value
-    const duration = 1500; // Animation duration in ms
-    const stepTime = duration / (target / increment);
+    
+    // Adjust animation parameters based on screen size and device performance
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 100 : 1500;
+    const increment = Math.max(1, Math.floor(target / (window.innerWidth < 1024 ? 25 : 50)));
+    const stepTime = Math.max(16, duration / (target / increment)); // Ensure minimum 16ms (60fps)
     
     // Clear any existing animation
     if (element._countInterval) {
         clearInterval(element._countInterval);
     }
     
-    // Create animation interval
-    element._countInterval = setInterval(() => {
-        current += increment;
+    // Use requestAnimationFrame for smoother animation
+    let lastTime = performance.now();
+    const animate = (currentTime) => {
+        const deltaTime = currentTime - lastTime;
         
-        // If we've reached or exceeded the target
-        if (current >= target) {
-            element.textContent = target;
-            clearInterval(element._countInterval);
-            element._countInterval = null;
-        } else {
+        if (deltaTime >= stepTime) {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target;
+                return;
+            }
             element.textContent = current;
+            lastTime = currentTime;
+            requestAnimationFrame(animate);
+        } else {
+            requestAnimationFrame(animate);
         }
-    }, stepTime);
+    };
+    
+    requestAnimationFrame(animate);
 }
 
 // Update the initHeroAnimation function to include timeline item initialization
@@ -211,3 +166,36 @@ function initHeroAnimation() {
         }
     }, 1000);
 }
+
+// Add debouncing for performance
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Add intersection observer for lazy loading
+const observerOptions = {
+    root: null,
+    rootMargin: '50px',
+    threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.section').forEach(section => {
+    observer.observe(section);
+});
