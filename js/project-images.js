@@ -8,7 +8,7 @@ const ProjectImages = {
     basePath: 'assets/projects/',
     
     // Possible file extensions to try (in order of preference)
-    fileExtensions: ['jpg', 'png', 'jpeg', 'webp', 'gif'],
+    fileExtensions: ['png', 'jpg', 'jpeg', 'webp', 'gif'],
     
     // Cache for successful image paths to improve performance
     pathCache: {},
@@ -33,16 +33,58 @@ const ProjectImages = {
             return this.pathCache[repoName];
         }
         
+        // First, check for exact name matches
+        const exactNameMap = {
+            'todo list app': 'assets/projects/To Do List App.png',
+            'to do list app': 'assets/projects/To Do List App.png',
+            'password checker': 'assets/projects/Password Checker.png',
+            'purple web editor': 'assets/projects/Purple Web Editor.png',
+            'portfolio': 'assets/projects/Portfolio.png',
+            'web application vulnerability scanner': 'assets/projects/Web-Application-Vulnerability-Scanner.png'
+        };
+        
+        const lowerName = repoName.toLowerCase();
+        if (exactNameMap[lowerName]) {
+            const path = exactNameMap[lowerName];
+            this.log(`Found exact match for "${repoName}": ${path}`);
+            this.pathCache[repoName] = path;
+            return path;
+        }
+        
         // Normalize repository name (remove spaces, convert to lowercase)
         const normalizedName = this.normalizeRepoName(repoName);
         this.log(`Looking for image for repo: ${repoName} (normalized: ${normalizedName})`);
         
-        // First, check for custom mapping
-        if (this.customMappings[normalizedName]) {
-            const customPath = this.customMappings[normalizedName];
+        // Check for custom mapping with expanded variants
+        const expandedMappings = {
+            ...this.customMappings,
+            'todolist': 'assets/projects/To Do List App.png',
+            'todo': 'assets/projects/To Do List App.png',
+            'todoapplication': 'assets/projects/To Do List App.png',
+            'todoapp': 'assets/projects/To Do List App.png',
+            'passwordcheck': 'assets/projects/Password Checker.png'
+        };
+        
+        if (expandedMappings[normalizedName]) {
+            const customPath = expandedMappings[normalizedName];
             this.log(`Found custom mapping for ${normalizedName}: ${customPath}`);
             this.pathCache[repoName] = customPath;
             return customPath;
+        }
+        
+        // Generate path based on keywords in the name
+        if (normalizedName.includes('todo') || normalizedName.includes('list')) {
+            const path = 'assets/projects/To Do List App.png';
+            this.log(`Keyword match "todo/list" for ${repoName}: ${path}`);
+            this.pathCache[repoName] = path;
+            return path;
+        }
+        
+        if (normalizedName.includes('password') || normalizedName.includes('checker')) {
+            const path = 'assets/projects/Password Checker.png';
+            this.log(`Keyword match "password/checker" for ${repoName}: ${path}`);
+            this.pathCache[repoName] = path;
+            return path;
         }
         
         // Use first extension as default path for src attribute
@@ -75,7 +117,7 @@ const ProjectImages = {
      * These are checked first before attempting standard paths
      */
     customMappings: {
-        // Your actual projects
+        // Your actual projects with exact name matches
         'purplewebeditor': 'assets/projects/Purple Web Editor.png',
         'todolistapp': 'assets/projects/To Do List App.png',
         'portfolio': 'assets/projects/Portfolio.png',

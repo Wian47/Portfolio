@@ -1,0 +1,27 @@
+{
+  "name": "Wian's Portfolio",
+  "short_name": "Wian",
+  "description": "Professional portfolio of Wian - Cyber Security Student & Web Developer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4a63e7",
+  "icons": [
+    {
+      "src": "assets/favicon/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/favicon/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait",
+  "categories": ["portfolio", "web development", "cyber security"],
+  "prefer_related_applications": false,
+  "related_applications": []
+} 

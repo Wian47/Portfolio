@@ -1,38 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Add resource hints -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://api.github.com">
-    <link rel="dns-prefetch" href="https://api.github.com">
-    
-    <!-- Preload critical assets -->
-    <link rel="preload" href="css/styles.css" as="style">
-    <link rel="preload" href="js/main.js" as="script">
-    
+    <!-- Meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional portfolio of Wian - Cyber Security Student &amp; Web Developer">
+    <meta name="theme-color" content="#4a63e7">
+    
+    <!-- Title -->
     <title>Wian's Portfolio</title>
-    <!-- Remove any language/translation related scripts or stylesheets -->
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/favicon/6361475.png">
     <link rel="shortcut icon" href="assets/favicon/6361475.png">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/notifications.css">
     <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/notifications.css">
     <link rel="stylesheet" href="css/timeline.css">
-    <link rel="stylesheet" href="css/no-scrollbar.css">
     <link rel="stylesheet" href="css/tooltips.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <meta name="description" content="Professional portfolio of Wian - Cyber Security Student &amp; Web Developer">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" async></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" async></script>
-    <script src="js/fallback.js" defer></script>
-    <link rel="stylesheet" href="css/mobile-tooltips.css">
+    <link rel="stylesheet" href="css/no-scrollbar.css">
     <link rel="stylesheet" href="css/a11y-panel.css">
-    <link rel="stylesheet" href="css/print.css">
-    <!-- Removed custom-cursor.css -->
+    <link rel="stylesheet" href="css/mobile-tooltips.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PWA Support - Add after site works properly -->
+    <!-- <link rel="manifest" href="manifest.json"> -->
+    <!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
+    <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> -->
+    
+    <!-- Critical JavaScript -->
+    <script src="js/fallback.js" defer></script>
+    
+    <!-- Basic performance tracking -->
+    <script>
+        // Track page load performance
+        if (window.performance && window.performance.mark) {
+            window.performance.mark('start_parse');
+            document.addEventListener('DOMContentLoaded', function() {
+                window.performance.mark('dom_loaded');
+            });
+        }
+        
+        // Add theme class based on user preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedTheme = localStorage.getItem('theme');
+            const theme = savedTheme || (prefersDarkMode ? 'dark-theme' : 'light-theme');
+            document.body.classList.add(theme);
+        });
+    </script>
 </head>
 <body class="light-theme">
+    <!-- Clear any cached data first -->
+    <script src="js/clear-cache.js"></script>
+    
     <header>
         <nav class="navbar">
             <div class="logo">
@@ -540,21 +564,68 @@
     <!-- Scroll to Top Button -->
     <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Scroll to top">↑</button>
 
-    <!-- Scripts -->
-    <script src="js/project-images.js" defer></script>
-    <script src="js/github-api.js" defer></script>
-    <script src="js/a11y-tools.js" defer></script>
-    <script src="js/ui-interactions.js" defer></script>
-    <script src="js/main.js" defer></script>
-    <script src="js/validate.js" defer></script>
-    <script src="js/contact.js" defer></script>
-    <script src="js/tooltips.js" defer></script>
-    <script src="js/mobile-tooltips.js" defer></script>
-    <script src="js/typing-animation.js" defer></script>
-    <script src="js/scroll-progress.js" defer></script>
-    <script src="js/project-search.js" defer></script>
-    <script src="js/project-share.js" defer></script>
-    <!-- Remove this line -->
-    <!-- <script src="js/particles.js" defer></script> -->
+    <!-- Scripts - Basic loading order to ensure functionality -->
+    <script src="js/main.js"></script>
+    <script src="js/direct-images.js"></script>
+    <script src="js/github-api.js"></script>
+    <script src="js/ui-interactions.js"></script>
+    <script src="js/project-images.js"></script>
+    <script src="js/a11y-tools.js"></script>
+    <script src="js/validate.js"></script>
+    <script src="js/contact.js"></script>
+    <script src="js/tooltips.js"></script>
+    <script src="js/mobile-tooltips.js"></script>
+    <script src="js/typing-animation.js"></script>
+    <script src="js/project-search.js"></script>
+    <script src="js/project-share.js"></script>
+    <script src="js/scroll-progress.js"></script>
+    
+    <!-- Third-party scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <!-- Simple performance monitoring -->
+    <script>
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Performance monitoring (simplified)
+        window.addEventListener('load', function() {
+            if (window.performance && window.performance.timing) {
+                setTimeout(function() {
+                    const pageLoadTime = window.performance.timing.loadEventEnd - window.performance.timing.navigationStart;
+                    console.info('Page fully loaded in:', pageLoadTime + 'ms');
+                }, 0);
+            }
+        });
+    </script>
+
+    <!-- Preload project images to ensure availability -->
+    <div style="display: none; visibility: hidden; width: 0; height: 0;">
+        <img src="assets/projects/Portfolio.png" alt="Preloaded Image">
+        <img src="assets/projects/Purple Web Editor.png" alt="Preloaded Image">
+        <img src="assets/projects/To Do List App.png" alt="Preloaded Image">
+        <img src="assets/projects/Web-Application-Vulnerability-Scanner.png" alt="Preloaded Image">
+        <img src="assets/projects/Password Checker.png" alt="Preloaded Image">
+        
+        <!-- Add default fallback images -->
+        <img src="assets/projects/default-code.jpg" alt="Default Code Image">
+        <img src="assets/projects/default-web.jpg" alt="Default Web Image">
+        <img src="assets/projects/default-app.jpg" alt="Default App Image">
+    </div>
+
+    <!-- Make sure image optimization runs after everything else -->
+    <script>
+        // Ensure optimizeProjectImages runs after everything is loaded
+        window.addEventListener('load', function() {
+            if (window.optimizeProjectImages) {
+                setTimeout(window.optimizeProjectImages, 1000);
+                setTimeout(window.optimizeProjectImages, 3000);
+            }
+        });
+    </script>
+    
+    <!-- Force correct images regardless of other scripts -->
+    <script src="js/force-images.js"></script>
 </body>
 </html>

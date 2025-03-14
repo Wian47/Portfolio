@@ -217,15 +217,20 @@ class GitHubAPI {
     // Format repositories for display with improved categorization
     formatRepositories(repos) {
         return repos.map((repo, index) => {
+            // Store the original repo name before formatting
+            const originalName = repo.name;
+            
             // Parse dates
             const createdAt = new Date(repo.created_at).toLocaleDateString();
             const updatedAt = new Date(repo.updated_at).toLocaleDateString();
             
-            // Get the normalized name for mapping lookups (FIXED: removed duplicate declaration)
+            // Get the normalized name for mapping lookups
             const normalizedName = repo.name.toLowerCase()
                 .replace(/-/g, '')
                 .replace(/_/g, '')
                 .replace(/\s+/g, '');
+            
+            console.log(`Repository ${index}: "${repo.name}" (normalized: "${normalizedName}")`);
             
             // Always check for our specific projects first
             let category = 'code'; // Default category
@@ -235,7 +240,10 @@ class GitHubAPI {
                 case 'purplewebeditor':
                 case 'portfolio':
                 case 'todolistapp':
+                case 'todo':
+                case 'todolist':
                 case 'passwordchecker':
+                case 'passwordcheck':
                     category = 'web'; // All these should be 'web' now
                     break;
                 case 'webapplicationvulnerabilityscanner':
@@ -279,6 +287,7 @@ class GitHubAPI {
             // Format the repository data with the updated category
             return {
                 id: index,
+                original_name: originalName, // Store the original name
                 name: repo.name.replace(/-/g, ' ').replace(/_/g, ' '),
                 description: repo.description || `A ${category} project.`,
                 url: repo.html_url,
@@ -286,11 +295,11 @@ class GitHubAPI {
                 language: repo.language || 'Text',
                 stars: repo.stargazers_count,
                 forks: repo.forks_count,
-                category: category, // This now contains our updated category
+                category: category,
                 topics: repo.topics || [],
                 createdAt: createdAt,
                 updatedAt: updatedAt,
-                imagePath: imagePath
+                html_url: repo.html_url // Ensure this is available for links
             };
         });
     }
@@ -320,5 +329,144 @@ class GitHubAPI {
         // Cache expired, remove it
         sessionStorage.removeItem(key);
         return null;
+    }
+
+    // Find function that creates project elements
+    createProjectElement(repo) {
+        // Create project card
+        const projectCard = document.createElement('div');
+        projectCard.className = 'project-card';
+        projectCard.dataset.category = repo.category;
+        projectCard.dataset.repoName = repo.name;
+        
+        // Simplified image path selection - directly use our mapping
+        let imagePath;
+        
+        // Use the global getProjectImage function if available
+        if (window.getProjectImage) {
+            imagePath = window.getProjectImage(repo.name, repo.category);
+            console.log(`Using direct image mapping for ${repo.name}: ${imagePath}`);
+        } 
+        // Fallback to direct lookup in the PROJECT_IMAGES object
+        else if (window.PROJECT_IMAGES) {
+            const lowerName = repo.name.toLowerCase();
+            imagePath = window.PROJECT_IMAGES[lowerName] || 
+                       window.PROJECT_IMAGES[`_default_${repo.category}`] || 
+                       window.PROJECT_IMAGES['_default_code'];
+        }
+        // Last resort fallback
+        else {
+            imagePath = 'assets/projects/Portfolio.png'; // Default fallback
+        }
+        
+        // Build the project card HTML
+        projectCard.innerHTML = `
+            <div class="project-image">
+                <img src="${imagePath}" alt="${repo.name}" data-category="${repo.category}" data-original-name="${repo.original_name || ''}"
+                     onerror="this.src='assets/projects/Portfolio.png'">
+            </div>
+            <div class="project-details">
+                <h3>${repo.name}</h3>
+                <p>${repo.description || 'No description available'}</p>
+                <div class="project-meta">
+                    <span class="project-date">Updated: ${repo.updatedAt}</span>
+                    <span class="project-lang">${repo.language || 'N/A'}</span>
+                </div>
+                <div class="project-actions">
+                    <button class="btn details-btn" data-repo-name="${repo.name}">Details</button>
+                    <a href="${repo.html_url}" target="_blank" class="btn github-btn" rel="noopener">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="btn live-btn" rel="noopener">
+                        <i class="fas fa-external-link-alt"></i> Live
+                    </a>` : ''}
+                    <button class="btn share-btn" data-repo-name="${repo.name}" data-repo-url="${repo.html_url}">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Add project card click event
+        const detailsBtn = projectCard.querySelector('.details-btn');
+        if (detailsBtn) {
+            detailsBtn.addEventListener('click', () => {
+                this.showProjectDetails(repo);
+            });
+        }
+        
+        // Add share button functionality if available
+        const shareBtn = projectCard.querySelector('.share-btn');
+        if (shareBtn && window.ProjectShare) {
+            shareBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const repoName = shareBtn.dataset.repoName;
+                const repoUrl = shareBtn.dataset.repoUrl;
+                window.ProjectShare.shareProject(repoName, repoUrl);
+            });
+        }
+        
+        return projectCard;
+    }
+
+    // Display projects in the UI with better error handling
+    displayProjects(repos) {
+        console.log('Displaying projects:', repos.length);
+        
+        // Get container
+        const container = document.getElementById('projects-container');
+        if (!container) {
+            console.error('Projects container not found');
+            return;
+        }
+        
+        // Clear loading indicator
+        container.innerHTML = '';
+        
+        // Check if we have projects
+        if (!repos || repos.length === 0) {
+            container.innerHTML = `
+                <div class="no-projects">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>No projects available. Please check your GitHub connection.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Display projects
+        repos.forEach(repo => {
+            try {
+                const projectElement = this.createProjectElement(repo);
+                container.appendChild(projectElement);
+            } catch (err) {
+                console.error(`Error creating project element for ${repo.name}:`, err);
+                
+                // Create a basic error fallback card
+                const errorCard = document.createElement('div');
+                errorCard.className = 'project-card error-card';
+                errorCard.innerHTML = `
+                    <div class="project-image">
+                        <img src="assets/projects/default-code.jpg" alt="${repo.name || 'Unknown Project'}">
+                    </div>
+                    <div class="project-details">
+                        <h3>${repo.name || 'Unknown Project'}</h3>
+                        <p>${repo.description || 'No description available'}</p>
+                        <div class="project-meta">
+                            <span class="project-date">Error loading project details</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(errorCard);
+            }
+        });
+        
+        // Run optimizeProjectImages after projects are loaded
+        if (window.optimizeProjectImages) {
+            setTimeout(() => {
+                window.optimizeProjectImages();
+                console.log('Ran optimizeProjectImages after loading projects');
+            }, 500);
+        }
     }
 }

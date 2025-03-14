@@ -1,23 +1,44 @@
+// Define direct project mappings for images
+window.PROJECT_IMAGE_MAPPING = {
+    'To Do List App': 'assets/projects/To Do List App.png',
+    'Todo List App': 'assets/projects/To Do List App.png',
+    'Todo': 'assets/projects/To Do List App.png',
+    'TodoList': 'assets/projects/To Do List App.png',
+    'TODO': 'assets/projects/To Do List App.png',
+    'Password Checker': 'assets/projects/Password Checker.png',
+    'Password': 'assets/projects/Password Checker.png',
+    'Purple Web Editor': 'assets/projects/Purple Web Editor.png',
+    'Portfolio': 'assets/projects/Portfolio.png',
+    'Web Application Vulnerability Scanner': 'assets/projects/Web-Application-Vulnerability-Scanner.png'
+};
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Force clear GitHub cache to apply new filters
-    sessionStorage.removeItem('github_repos');
-    sessionStorage.removeItem('github_stats');
-    
-    // Check if required modules are loaded
-    if (!window.ProjectImages) {
-        console.error('ProjectImages utility not found! Creating fallback...');
-        // Create minimal fallback
-        window.ProjectImages = {
-            getImagePath: function() { return null; },
-            getCategoryImage: function(category) {
-                return `assets/projects/default-${category || 'code'}.jpg`;
-            },
-            customMappings: {}
-        };
-    }
-    
-    // Initialize UI Controller
     const ui = new UIController();
+    
+    // Fix for hash navigation
+    document.addEventListener('click', function(event) {
+        let target = event.target;
+        
+        while (target && target.tagName !== 'A') {
+            target = target.parentNode;
+            if (!target) return;
+        }
+        
+        if (target && target.getAttribute('href') && target.getAttribute('href').startsWith('#')) {
+            event.preventDefault();
+            
+            const targetId = target.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                const headerHeight = document.querySelector('header').offsetHeight;
+                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                
+                ui.smoothScrollTo(targetPosition);
+                history.pushState(null, null, targetId);
+            }
+        }
+    });
     
     // Initialize GitHub API with your username
     const github = new GitHubAPI('Wian47');
@@ -36,10 +57,17 @@ async function loadGitHubData(github, ui) {
     try {
         ui.showLoading();
         
-        // Use Promise.all for parallel requests
-        const [stats, repos] = await Promise.all([
-            github.getStats(),
-            github.getRepositories()
+        // Add timeout to handle API failures
+        const timeout = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Request timeout')), 10000)
+        );
+
+        const [stats, repos] = await Promise.race([
+            Promise.all([
+                github.getStats(),
+                github.getRepositories()
+            ]),
+            timeout
         ]);
         
         if (!repos || repos.length === 0) {
@@ -51,23 +79,12 @@ async function loadGitHubData(github, ui) {
             updateGitHubStatsWithAnimation(stats);
             const formattedRepos = github.formatRepositories(repos);
             ui.updateProjectsDisplay(formattedRepos);
-            
-            // Optimize project card display
-            requestAnimationFrame(() => {
-                document.querySelectorAll('.project-card').forEach(card => {
-                    card.style.display = 'flex';
-                    card.style.opacity = '0';
-                    requestAnimationFrame(() => {
-                        card.style.transition = 'opacity 0.3s ease-out';
-                        card.style.opacity = '1';
-                    });
-                });
-            });
         });
         
     } catch (error) {
         console.error('Error loading GitHub data:', error);
-        ui.showError('Failed to load GitHub projects. Please try again later.');
+        ui.handleError('Failed to load GitHub projects. Please try again later.', 
+                      document.getElementById('projects-container'));
     }
 }
 
