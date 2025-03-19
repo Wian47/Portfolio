@@ -93,39 +93,14 @@ Portfolio/
 - Particle background effects
 - Timeline animations for learning path
 
-### Responsive Design
-- Mobile-first approach
-- Custom mobile navigation
-- Optimized images and assets
-- Touch-friendly interactions
-
 ## Browser Support
-
 - Chrome (latest)
 - Firefox (latest)
 - Safari (latest)
 - Edge (latest)
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/new-feature`
-3. Commit your changes: `git commit -m 'Add new feature'`
-4. Push to the branch: `git push origin feature/new-feature`
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contact
 
 Wian Schoeman - wian.schoeman1@gmail.com
 
 Project Link: https://github.com/Wian47/Portfolio
-
-## Acknowledgments
-
-- Font Awesome for icons
-- EmailJS for contact form functionality
-- Marked.js for README parsing
