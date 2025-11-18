@@ -487,6 +487,8 @@ const App: React.FC = () => {
                     key={selectedProject.id}
                     src={selectedProject.image} 
                     alt={selectedProject.title} 
+                    referrerPolicy="no-referrer"
+                    onError={(e) => { e.currentTarget.src = 'https://placehold.co/1000x600/0f1021/ffffff?text=Image+Unavailable'; }}
                     initial={{ opacity: 0, scale: 1.1 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}

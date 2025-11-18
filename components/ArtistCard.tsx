@@ -31,6 +31,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
         <motion.img 
           src={project.image} 
           alt={project.title} 
+          referrerPolicy="no-referrer"
+          onError={(e) => { e.currentTarget.src = 'https://placehold.co/1000x600/0f1021/ffffff?text=Image+Unavailable'; }}
           className="h-full w-full object-cover grayscale will-change-transform opacity-60"
           variants={{
             rest: { scale: 1, filter: 'grayscale(100%)' },
