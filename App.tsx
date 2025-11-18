@@ -12,7 +12,6 @@ import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GlitchText';
 import CustomCursor from './components/CustomCursor';
 import ProjectCard from './components/ArtistCard';
-import AIChat from './components/AIChat';
 import { Project } from './types';
 
 // Projects Data simulating Wian's skills
@@ -127,7 +126,6 @@ const App: React.FC = () => {
     <div className="relative min-h-screen text-white selection:bg-[#6c5ce7] selection:text-white cursor-auto md:cursor-none overflow-x-hidden">
       <CustomCursor />
       <FluidBackground />
-      <AIChat />
       
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 md:px-8 py-6 mix-blend-difference">
@@ -320,10 +318,10 @@ const App: React.FC = () => {
                         <span className="text-yellow-300">./init_portfolio.sh</span>
                       </div>
                       <div className="text-gray-400 pl-4">
-                        > Loading modules...<br/>
-                        > Accessing secure vault...<br/>
-                        > Decrypting project files...<br/>
-                        > <span className="text-green-400">Success!</span>
+                        &gt; Loading modules...<br/>
+                        &gt; Accessing secure vault...<br/>
+                        &gt; Decrypting project files...<br/>
+                        &gt; <span className="text-green-400">Success!</span>
                       </div>
                       <div className="h-px w-full bg-white/10 my-4" />
                       <div className="flex gap-2 animate-pulse">
