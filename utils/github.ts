@@ -1,12 +1,16 @@
 import { Project } from '../types';
 
+// Import images directly so Vite can process them
+import netscanImg from '../assets/netscan.png';
+import ulpmImg from '../assets/ulpm.jpg';
+
 const GITHUB_USERNAME = 'Wian47';
 const API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&type=public`;
 
 // Image mappings for specific projects
 const PROJECT_IMAGES: Record<string, string> = {
-    'CLI-NetworkScanner': '/assets/netscan.png',
-    'ULPM': '/assets/ulpm.jpg',
+    'CLI-NetworkScanner': netscanImg,
+    'ULPM': ulpmImg,
 };
 
 export const fetchGitHubProjects = async (): Promise<Project[]> => {
@@ -25,7 +29,7 @@ export const fetchGitHubProjects = async (): Promise<Project[]> => {
                 category: `${repo.language || 'Code'} / GitHub`,
                 year: new Date(repo.updated_at).getFullYear().toString(),
                 description: repo.description || 'No description provided.',
-                image: PROJECT_IMAGES[repo.name] || '', // Use specific image or empty string
+                image: PROJECT_IMAGES[repo.name] || '',
                 link: repo.html_url
             }));
     } catch (error) {
