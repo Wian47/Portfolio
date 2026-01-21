@@ -34,7 +34,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
             alt={project.title}
             referrerPolicy="no-referrer"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
-            className="h-full w-full object-cover grayscale will-change-transform opacity-60"
+            className="h-full w-full object-contain grayscale will-change-transform opacity-60"
             variants={{
               rest: { scale: 1, filter: 'grayscale(100%)' },
               hover: { scale: 1.05, filter: 'grayscale(0%)' }
@@ -65,7 +65,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
         <div>
           <div className="overflow-hidden">
             <motion.h3
-              className="font-heading text-2xl md:text-4xl font-bold text-white mb-2 will-change-transform"
+              className="font-heading text-2xl md:text-4xl font-bold text-white mb-2 will-change-transform break-words"
               variants={{
                 rest: { y: 0 },
                 hover: { y: -5 }

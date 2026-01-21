@@ -457,7 +457,7 @@ const App: React.FC = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                    className="absolute inset-0 w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-500"
                   />
                 </AnimatePresence>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1a1b3b] via-transparent to-transparent md:bg-gradient-to-r" />
@@ -476,7 +476,7 @@ const App: React.FC = () => {
                     <span className="font-mono text-sm tracking-widest uppercase">{selectedProject.year}</span>
                   </div>
 
-                  <h3 className="text-3xl md:text-5xl font-heading font-bold uppercase leading-none mb-2 text-white">
+                  <h3 className="text-3xl md:text-5xl font-heading font-bold uppercase leading-none mb-2 text-white break-words">
                     {selectedProject.title}
                   </h3>
 
