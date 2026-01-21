@@ -12,6 +12,7 @@ export interface Project {
   image: string;
   year: string;
   description: string;
+  link?: string;
 }
 
 export interface ChatMessage {

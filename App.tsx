@@ -13,68 +13,20 @@ import GradientText from './components/GlitchText';
 import CustomCursor from './components/CustomCursor';
 import ProjectCard from './components/ArtistCard';
 import { Project } from './types';
+import { fetchGitHubProjects } from './utils/github';
 
-// Projects Data simulating Wian's skills
-const PROJECTS: Project[] = [
-  { 
-    id: '1', 
-    title: 'Network Sentinel', 
-    category: 'Python / Cybersecurity', 
-    year: '2024', 
-    image: 'https://images.unsplash.com/photo-1558494949-efc5e60c9480?q=80&w=1000&auto=format&fit=crop',
-    description: 'A Python-based network traffic analyzer designed to detect anomalies and potential security breaches in real-time. Features packet sniffing and automated log generation.'
-  },
-  { 
-    id: '2', 
-    title: 'SecureChat', 
-    category: 'Flutter / Dart', 
-    year: '2024', 
-    image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop',
-    description: 'A cross-platform mobile messaging application focusing on end-to-end encryption. Built with Flutter, ensuring privacy and data integrity for users.'
-  },
-  { 
-    id: '3', 
-    title: 'Portfolio V1', 
-    category: 'React / TypeScript', 
-    year: '2025', 
-    image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1000&auto=format&fit=crop',
-    description: 'An interactive portfolio website showcasing my journey as a developer. Utilizes Framer Motion for animations and Tailwind CSS for responsive design.'
-  },
-  { 
-    id: '4', 
-    title: 'Linux Hardener', 
-    category: 'Bash / Linux', 
-    year: '2024', 
-    image: 'https://images.unsplash.com/photo-1629654297299-c8506221ca52?q=80&w=1000&auto=format&fit=crop',
-    description: 'Automated bash script suite for hardening Linux servers. Disables unused services, configures firewalls, and audits user permissions.'
-  },
-  { 
-    id: '5', 
-    title: 'Ethical Hack Lab', 
-    category: 'Documentation', 
-    year: '2024', 
-    image: 'https://images.unsplash.com/photo-1563206767-5b1d97281917?q=80&w=1000&auto=format&fit=crop',
-    description: 'Comprehensive documentation and reports from controlled penetration testing environments, focusing on vulnerability assessment and mitigation strategies.'
-  },
-  { 
-    id: '6', 
-    title: 'Visual CSS Art', 
-    category: 'HTML5 / CSS3', 
-    year: '2023', 
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop',
-    description: 'A collection of pure CSS experiments and visual designs, demonstrating the creative potential of modern web styling techniques.'
-  },
-];
 
 const TECH_STACK = [
   { name: 'Python', color: 'bg-[#3776AB]' },
-  { name: 'Java', color: 'bg-[#007396]' },
-  { name: 'Flutter/Dart', color: 'bg-[#02569B]' },
-  { name: 'HTML5', color: 'bg-[#E34F26]' },
-  { name: 'CSS3', color: 'bg-[#1572B6]' },
+  { name: 'C / C++', color: 'bg-[#00599C]' },
+  { name: 'Bash', color: 'bg-[#4EAA25]' },
+  { name: 'PowerShell', color: 'bg-[#5391FE]' },
+  { name: 'SQL', color: 'bg-[#CC2927]' },
+  { name: 'JavaScript', color: 'bg-[#F7DF1E] text-black' },
   { name: 'Linux', color: 'bg-[#FCC624] text-black' },
   { name: 'Git', color: 'bg-[#F05032]' },
-  { name: 'TypeScript', color: 'bg-[#3178C6]' },
+  { name: 'PenTest+', color: 'bg-[#FF4500]' },
+  { name: 'CASP+', color: 'bg-[#800080]' },
 ];
 
 const App: React.FC = () => {
@@ -83,6 +35,17 @@ const App: React.FC = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    const loadProjects = async () => {
+      const githubProjects = await fetchGitHubProjects();
+      if (githubProjects.length > 0) {
+        setProjects(githubProjects);
+      }
+    };
+    loadProjects();
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -112,30 +75,30 @@ const App: React.FC = () => {
 
   const navigateProject = (direction: 'next' | 'prev') => {
     if (!selectedProject) return;
-    const currentIndex = PROJECTS.findIndex(p => p.id === selectedProject.id);
+    const currentIndex = projects.findIndex(p => p.id === selectedProject.id);
     let nextIndex;
     if (direction === 'next') {
-      nextIndex = (currentIndex + 1) % PROJECTS.length;
+      nextIndex = (currentIndex + 1) % projects.length;
     } else {
-      nextIndex = (currentIndex - 1 + PROJECTS.length) % PROJECTS.length;
+      nextIndex = (currentIndex - 1 + projects.length) % projects.length;
     }
-    setSelectedProject(PROJECTS[nextIndex]);
+    setSelectedProject(projects[nextIndex]);
   };
-  
+
   return (
     <div className="relative min-h-screen text-white selection:bg-[#6c5ce7] selection:text-white cursor-auto md:cursor-none overflow-x-hidden">
       <CustomCursor />
       <FluidBackground />
-      
+
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 md:px-8 py-6 mix-blend-difference">
         <div className="font-heading text-xl md:text-2xl font-bold tracking-tighter text-white cursor-default z-50">WIAN.DEV</div>
-        
+
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-10 text-sm font-bold tracking-widest uppercase">
           {['About', 'Projects', 'Contact'].map((item) => (
-            <button 
-              key={item} 
+            <button
+              key={item}
               onClick={() => scrollToSection(item.toLowerCase())}
               className="hover:text-[#a8fbd3] transition-colors text-white cursor-pointer bg-transparent border-none"
               data-hover="true"
@@ -146,11 +109,11 @@ const App: React.FC = () => {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button 
+        <button
           className="md:hidden text-white z-50 relative w-10 h-10 flex items-center justify-center"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-           {mobileMenuOpen ? <X /> : <Menu />}
+          {mobileMenuOpen ? <X /> : <Menu />}
         </button>
       </nav>
 
@@ -178,11 +141,11 @@ const App: React.FC = () => {
 
       {/* HERO SECTION */}
       <header className="relative h-[100svh] min-h-[600px] flex flex-col items-center justify-center overflow-hidden px-4">
-        <motion.div 
+        <motion.div
           style={{ y, opacity }}
           className="z-10 text-center flex flex-col items-center w-full max-w-6xl pb-24 md:pb-20"
         >
-           {/* Role Tag */}
+          {/* Role Tag */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -198,7 +161,7 @@ const App: React.FC = () => {
 
           {/* Main Title */}
           <div className="relative w-full flex justify-center items-center flex-col">
-             <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -206,18 +169,18 @@ const App: React.FC = () => {
             >
               Hi there, I'm
             </motion.h2>
-            <GradientText 
-              text="WIAN" 
-              as="h1" 
-              className="text-[20vw] md:text-[18vw] leading-[0.8] font-black tracking-tighter text-center" 
+            <GradientText
+              text="WIAN"
+              as="h1"
+              className="text-[20vw] md:text-[18vw] leading-[0.8] font-black tracking-tighter text-center"
             />
           </div>
-          
+
           <motion.div
-             initial={{ scaleX: 0 }}
-             animate={{ scaleX: 1 }}
-             transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
-             className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-[#6c5ce7] to-transparent mt-8 mb-8"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
+            className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-[#6c5ce7] to-transparent mt-8 mb-8"
           />
 
           <motion.p
@@ -226,7 +189,7 @@ const App: React.FC = () => {
             transition={{ delay: 0.8, duration: 1 }}
             className="text-base md:text-xl font-light max-w-2xl mx-auto text-white/80 leading-relaxed drop-shadow-lg px-4"
           >
-            Aspiring Cyber Security Professional & Web Developer
+            Aspiring Cyber Security Professional. Strong foundation in information security, ethical hacking, and network defense.
           </motion.p>
         </motion.div>
       </header>
@@ -238,28 +201,28 @@ const App: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16">
-            
+
             {/* Text Content */}
             <div className="lg:col-span-7 order-2 lg:order-1">
               <h2 className="text-4xl md:text-6xl font-heading font-bold mb-8 leading-tight flex items-center gap-4">
                 About <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Me</span>
               </h2>
-              
+
               <div className="prose prose-invert max-w-none text-gray-200 text-lg font-light leading-relaxed">
                 <p className="mb-6">
-                  Aspiring Cyber Security Professional & Web Developer with a strong foundation in information security and a passion for protecting digital assets. I'm currently pursuing Cyber Security studies and actively learning about network security, ethical hacking, and IT support.
+                  Aspiring Cyber Security Professional with a completed Higher Certificate in Information Systems. I possess a strong foundation in information security, ethical hacking, and network defense, backed by high academic achievement in advanced modules such as CASP+ and PenTest+.
                 </p>
                 <p className="mb-8">
-                  I also love web development—especially designing engaging, visually appealing websites with CSS, which fuels my creative side. My goal is to secure digital environments while crafting dynamic web experiences.
+                  Eager to apply my hands-on knowledge of Linux, penetration testing, and security analysis in a professional environment. I am looking for opportunities as a Cyber Security Intern, Junior Security Analyst, or IT Support Specialist.
                 </p>
-                
+
                 <div className="space-y-4 mt-8">
                   {[
-                    { icon: GraduationCap, label: 'Studies', text: 'Cyber Security at Eduvos, Bedfordview, Gauteng (since February 2024)' },
-                    { icon: Users, label: 'Collaboration', text: 'Interested in cybersecurity projects and open-source security initiatives' },
-                    { icon: Code, label: 'Web Development', text: 'Passionate about building engaging websites with creative CSS design' },
-                    { icon: Zap, label: 'Seeking Guidance', text: 'Looking to expand my skills in network security and ethical hacking' },
-                    { icon: MessageSquare, label: 'Ask Me About', text: 'Cyber security fundamentals, IT support, programming, and web development' },
+                    { icon: GraduationCap, label: 'Studies', text: 'Higher Certificate in Information Systems: Cyber Security at Eduvos (Feb 2024 - Present)' },
+                    { icon: Users, label: 'Focus', text: 'Network Security, Ethical Hacking, and System Hardening' },
+                    { icon: Code, label: 'Tech', text: 'Fluent in Python, Bash, and Network Protocols' },
+                    { icon: Zap, label: 'Goal', text: 'Securing digital environments and critical infrastructure' },
+                    { icon: MessageSquare, label: 'Ask Me About', text: 'Penetration Testing, Linux Administration, and Security Analysis' },
                     { icon: Mail, label: 'Reach Me', text: 'wian.schoeman1@gmail.com', link: 'mailto:wian.schoeman1@gmail.com' },
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-4 group">
@@ -269,22 +232,22 @@ const App: React.FC = () => {
                       <div>
                         <span className="font-bold text-white mr-2">{item.label}:</span>
                         {item.link ? (
-                           <a href={item.link} className="text-[#a8fbd3] hover:underline">{item.text}</a>
+                          <a href={item.link} className="text-[#a8fbd3] hover:underline">{item.text}</a>
                         ) : (
-                           <span className="text-gray-300">{item.text}</span>
+                          <span className="text-gray-300">{item.text}</span>
                         )}
                       </div>
                     </div>
                   ))}
-                   <div className="flex items-start gap-4 group mt-4 p-4 bg-[#6c5ce7]/10 rounded-xl border border-[#6c5ce7]/20">
-                      <div className="mt-1">
-                        <Zap className="w-5 h-5 text-yellow-400" />
-                      </div>
-                      <div>
-                        <span className="font-bold text-white mr-2">Fun Fact:</span>
-                        <span className="text-gray-300">I love exploring emerging security technologies and new programming languages</span>
-                      </div>
+                  <div className="flex items-start gap-4 group mt-4 p-4 bg-[#6c5ce7]/10 rounded-xl border border-[#6c5ce7]/20">
+                    <div className="mt-1">
+                      <Zap className="w-5 h-5 text-yellow-400" />
                     </div>
+                    <div>
+                      <span className="font-bold text-white mr-2">Fun Fact:</span>
+                      <span className="text-gray-300">I love exploring emerging security technologies and new programming languages</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -310,26 +273,26 @@ const App: React.FC = () => {
               <div className="relative h-[400px] lg:h-[600px] w-full sticky top-32">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6c5ce7] to-[#a8fbd3] rounded-3xl rotate-3 opacity-20 blur-xl" />
                 <div className="relative h-full w-full rounded-3xl overflow-hidden border border-white/10 bg-[#0f1021] flex flex-col items-center justify-center p-8 shadow-2xl">
-                   <Terminal className="w-24 h-24 text-[#a8fbd3] mb-6 opacity-80" />
-                   <div className="w-full space-y-3 font-mono text-xs md:text-sm opacity-70">
-                      <div className="flex gap-2">
-                        <span className="text-pink-500">user@wian-dev</span>
-                        <span className="text-white">:~$</span>
-                        <span className="text-yellow-300">./init_portfolio.sh</span>
-                      </div>
-                      <div className="text-gray-400 pl-4">
-                        &gt; Loading modules...<br/>
-                        &gt; Accessing secure vault...<br/>
-                        &gt; Decrypting project files...<br/>
-                        &gt; <span className="text-green-400">Success!</span>
-                      </div>
-                      <div className="h-px w-full bg-white/10 my-4" />
-                      <div className="flex gap-2 animate-pulse">
-                        <span className="text-pink-500">user@wian-dev</span>
-                        <span className="text-white">:~$</span>
-                        <span className="w-2 h-5 bg-white/50 block" />
-                      </div>
-                   </div>
+                  <Terminal className="w-24 h-24 text-[#a8fbd3] mb-6 opacity-80" />
+                  <div className="w-full space-y-3 font-mono text-xs md:text-sm opacity-70">
+                    <div className="flex gap-2">
+                      <span className="text-pink-500">user@wian-dev</span>
+                      <span className="text-white">:~$</span>
+                      <span className="text-yellow-300">./init_portfolio.sh</span>
+                    </div>
+                    <div className="text-gray-400 pl-4">
+                      &gt; Loading modules...<br />
+                      &gt; Accessing secure vault...<br />
+                      &gt; Decrypting project files...<br />
+                      &gt; <span className="text-green-400">Success!</span>
+                    </div>
+                    <div className="h-px w-full bg-white/10 my-4" />
+                    <div className="flex gap-2 animate-pulse">
+                      <span className="text-pink-500">user@wian-dev</span>
+                      <span className="text-white">:~$</span>
+                      <span className="w-2 h-5 bg-white/50 block" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -341,15 +304,16 @@ const App: React.FC = () => {
       {/* PROJECTS SECTION */}
       <section id="projects" className="relative z-10 py-20 md:py-32">
         <div className="max-w-[1600px] mx-auto px-4 md:px-6">
-           <div className="mb-12 md:mb-16 px-4">
-             <h2 className="text-5xl md:text-8xl font-heading font-bold uppercase leading-[0.9] drop-shadow-lg break-words">
-              Featured <br/> 
+          <div className="mb-12 md:mb-16 px-4">
+            <h2 className="text-5xl md:text-8xl font-heading font-bold uppercase leading-[0.9] drop-shadow-lg break-words">
+              Featured <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6c5ce7] to-[#a8fbd3]">Projects</span>
             </h2>
+
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-white/10 bg-black/20 backdrop-blur-sm">
-            {PROJECTS.map((project) => (
+            {projects.map((project) => (
               <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
             ))}
           </div>
@@ -360,42 +324,42 @@ const App: React.FC = () => {
       <section id="contact" className="relative z-10 py-20 md:py-32 px-4 md:px-6 bg-black/30 backdrop-blur-lg">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-20">
-             <h2 className="text-5xl md:text-8xl font-heading font-bold text-white opacity-90">
-               CONNECT
-             </h2>
-             <p className="text-[#a8fbd3] font-mono uppercase tracking-widest mt-2 relative z-10 text-sm md:text-base">
-               Let's secure the future together
-             </p>
+            <h2 className="text-5xl md:text-8xl font-heading font-bold text-white opacity-90">
+              CONNECT
+            </h2>
+            <p className="text-[#a8fbd3] font-mono uppercase tracking-widest mt-2 relative z-10 text-sm md:text-base">
+              Let's secure the future together
+            </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { 
-                name: 'Email Me', 
-                value: 'wian.schoeman1@gmail.com', 
-                icon: Mail, 
+              {
+                name: 'Email Me',
+                value: 'wian.schoeman1@gmail.com',
+                icon: Mail,
                 action: 'Send Email',
                 href: 'mailto:wian.schoeman1@gmail.com',
-                color: 'white', 
-                accent: 'bg-white/5' 
+                color: 'white',
+                accent: 'bg-white/5'
               },
-              { 
-                name: 'GitHub', 
-                value: '@wian-dev', 
-                icon: Github, 
+              {
+                name: 'GitHub',
+                value: '@Wian47',
+                icon: Github,
                 action: 'View Profile',
-                href: '#',
-                color: 'purple', 
-                accent: 'bg-[#6c5ce7]/10 border-[#6c5ce7]/50' 
+                href: 'https://github.com/Wian47',
+                color: 'purple',
+                accent: 'bg-[#6c5ce7]/10 border-[#6c5ce7]/50'
               },
-              { 
-                name: 'LinkedIn', 
-                value: 'Wian Schoeman', 
-                icon: Linkedin, 
-                action: 'Connect',
-                href: '#',
-                color: 'teal', 
-                accent: 'bg-[#4fb7b3]/10 border-[#4fb7b3]/50' 
+              {
+                name: 'Mobile',
+                value: '+27 79 156 2411',
+                icon: Zap,
+                action: 'Call / WhatsApp',
+                href: 'tel:+27791562411',
+                color: 'teal',
+                accent: 'bg-[#4fb7b3]/10 border-[#4fb7b3]/50'
               },
             ].map((item, i) => (
               <motion.a
@@ -412,7 +376,7 @@ const App: React.FC = () => {
                   <h3 className="text-2xl font-heading font-bold mb-2 text-white">{item.name}</h3>
                   <p className="text-white/60 font-mono text-sm">{item.value}</p>
                 </div>
-                
+
                 <div className="mt-8 flex items-center gap-2 text-sm font-bold uppercase tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">
                   {item.action} <ArrowUpRight className="w-4 h-4" />
                 </div>
@@ -425,16 +389,16 @@ const App: React.FC = () => {
       <footer className="relative z-10 border-t border-white/10 py-12 md:py-16 bg-black/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           <div>
-             <div className="font-heading text-2xl font-bold tracking-tighter mb-2 text-white">WIAN.DEV</div>
-             <div className="flex gap-2 text-xs font-mono text-gray-400">
-               <span>&copy; {new Date().getFullYear()} Wian Schoeman</span>
-             </div>
+            <div className="font-heading text-2xl font-bold tracking-tighter mb-2 text-white">WIAN.DEV</div>
+            <div className="flex gap-2 text-xs font-mono text-gray-400">
+              <span>&copy; {new Date().getFullYear()} Wian Schoeman</span>
+            </div>
           </div>
-          
+
           <div className="flex gap-6">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Github className="w-5 h-5"/></a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin className="w-5 h-5"/></a>
-            <a href="mailto:wian.schoeman1@gmail.com" className="text-gray-400 hover:text-white transition-colors"><Mail className="w-5 h-5"/></a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin className="w-5 h-5" /></a>
+            <a href="mailto:wian.schoeman1@gmail.com" className="text-gray-400 hover:text-white transition-colors"><Mail className="w-5 h-5" /></a>
           </div>
         </div>
       </footer>
@@ -483,10 +447,10 @@ const App: React.FC = () => {
               {/* Image Side */}
               <div className="w-full md:w-1/2 h-64 md:h-auto relative overflow-hidden">
                 <AnimatePresence mode="wait">
-                  <motion.img 
+                  <motion.img
                     key={selectedProject.id}
-                    src={selectedProject.image} 
-                    alt={selectedProject.title} 
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
                     referrerPolicy="no-referrer"
                     onError={(e) => { e.currentTarget.src = 'https://placehold.co/1000x600/0f1021/ffffff?text=Image+Unavailable'; }}
                     initial={{ opacity: 0, scale: 1.1 }}
@@ -508,28 +472,36 @@ const App: React.FC = () => {
                   transition={{ duration: 0.4, delay: 0.1 }}
                 >
                   <div className="flex items-center gap-3 text-[#a8fbd3] mb-4">
-                     <Cpu className="w-4 h-4" />
-                     <span className="font-mono text-sm tracking-widest uppercase">{selectedProject.year}</span>
+                    <Cpu className="w-4 h-4" />
+                    <span className="font-mono text-sm tracking-widest uppercase">{selectedProject.year}</span>
                   </div>
-                  
+
                   <h3 className="text-3xl md:text-5xl font-heading font-bold uppercase leading-none mb-2 text-white">
                     {selectedProject.title}
                   </h3>
-                  
+
                   <p className="text-lg text-[#6c5ce7] font-bold tracking-widest uppercase mb-6">
                     {selectedProject.category}
                   </p>
-                  
+
                   <div className="h-px w-20 bg-white/20 mb-6" />
-                  
+
                   <p className="text-gray-300 leading-relaxed text-lg font-light mb-8">
                     {selectedProject.description}
                   </p>
 
                   <div className="flex gap-4">
-                     <button className="px-6 py-3 bg-white text-black font-bold uppercase text-xs tracking-widest hover:bg-[#a8fbd3] transition-colors" data-hover="true">
+                    {selectedProject.link && (
+                      <a
+                        href={selectedProject.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-3 bg-white text-black font-bold uppercase text-xs tracking-widest hover:bg-[#a8fbd3] transition-colors inline-block"
+                        data-hover="true"
+                      >
                         View Source
-                     </button>
+                      </a>
+                    )}
                   </div>
                 </motion.div>
               </div>
