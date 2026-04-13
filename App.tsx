@@ -27,6 +27,10 @@ const TECH_STACK = [
   { name: 'Git', color: 'bg-[#F05032]' },
   { name: 'PenTest+', color: 'bg-[#FF4500]' },
   { name: 'CASP+', color: 'bg-[#800080]' },
+  { name: 'TrueNAS', color: 'bg-[#0095D5]' },
+  { name: 'ZimaOS', color: 'bg-[#4fb7b3]' },
+  { name: 'CompTIA A+', color: 'bg-[#FF4500]' },
+  { name: 'CompTIA Network+', color: 'bg-[#00599C]' },
 ];
 
 const App: React.FC = () => {
@@ -40,8 +44,28 @@ const App: React.FC = () => {
   useEffect(() => {
     const loadProjects = async () => {
       const githubProjects = await fetchGitHubProjects();
+      const manualProjects: Project[] = [
+        {
+          id: 'truenas-deployment',
+          title: 'Small Business TrueNAS Deployment',
+          category: 'TrueNAS / Server Administration',
+          image: 'https://placehold.co/1000x600/0f1021/a8fbd3?text=TrueNAS+Deployment',
+          year: new Date().getFullYear().toString(),
+          description: 'Upgraded legacy hardware (HP ProLiant Microserver Gen7) and engineered an on-premises NAS using TrueNAS to successfully replace costly third-party cloud storage for a small business.'
+        },
+        {
+          id: 'zimaos-home-server',
+          title: 'ZimaOS Home Server & VPN Infrastructure',
+          category: 'ZimaOS / Networking / VPN',
+          image: 'https://placehold.co/1000x600/0f1021/6c5ce7?text=ZimaOS+Server',
+          year: new Date().getFullYear().toString(),
+          description: 'Engineered a self-hosted cloud environment on a Dell Optiplex 3060 Micro running ZimaOS, featuring Nextcloud for data management and secure zero-trust remote access via Tailscale.'
+        }
+      ];
       if (githubProjects.length > 0) {
-        setProjects(githubProjects);
+        setProjects([...manualProjects, ...githubProjects]);
+      } else {
+        setProjects(manualProjects);
       }
     };
     loadProjects();
@@ -155,8 +179,8 @@ const App: React.FC = () => {
             <Shield className="w-4 h-4" />
             <span>Cyber Security</span>
             <span className="text-white/30">|</span>
-            <Code className="w-4 h-4" />
-            <span>Web Development</span>
+            <Terminal className="w-4 h-4" />
+            <span>Systems Administration</span>
           </motion.div>
 
           {/* Main Title */}
@@ -189,7 +213,7 @@ const App: React.FC = () => {
             transition={{ delay: 0.8, duration: 1 }}
             className="text-base md:text-xl font-light max-w-2xl mx-auto text-white/80 leading-relaxed drop-shadow-lg px-4"
           >
-            Aspiring Cyber Security Professional. Strong foundation in information security, ethical hacking, and network defense.
+            Aspiring Cyber Security & IT Operations Professional. Blending a strong foundation in network defense with hands-on system administration and infrastructure troubleshooting.
           </motion.p>
         </motion.div>
       </header>
@@ -209,20 +233,17 @@ const App: React.FC = () => {
               </h2>
 
               <div className="prose prose-invert max-w-none text-gray-200 text-lg font-light leading-relaxed">
-                <p className="mb-6">
-                  Aspiring Cyber Security Professional with a completed Higher Certificate in Information Systems. I possess a strong foundation in information security, ethical hacking, and network defense, backed by high academic achievement in advanced modules such as CASP+ and PenTest+.
-                </p>
                 <p className="mb-8">
-                  Eager to apply my hands-on knowledge of Linux, penetration testing, and security analysis in a professional environment. I am looking for opportunities as a Cyber Security Intern, Junior Security Analyst, or IT Support Specialist.
+                  Aspiring Cyber Security and IT Operations professional with a completed Higher Certificate in Cyber Security. I blend a strong academic foundation in ethical hacking, network defense, and security analysis with practical, hands-on experience in systems administration and infrastructure deployment. Proven ability to design, deploy, and manage secure server environments, coupled with a high technical aptitude for mastering complex platforms.
                 </p>
 
                 <div className="space-y-4 mt-8">
                   {[
                     { icon: GraduationCap, label: 'Studies', text: 'Higher Certificate in Information Systems: Cyber Security at Eduvos (Feb 2024 - Present)' },
-                    { icon: Users, label: 'Focus', text: 'Network Security, Ethical Hacking, and System Hardening' },
+                    { icon: Users, label: 'Focus', text: 'IT Support, Server Deployment, and Network Security' },
                     { icon: Code, label: 'Tech', text: 'Fluent in Python, Bash, and Network Protocols' },
                     { icon: Zap, label: 'Goal', text: 'Securing digital environments and critical infrastructure' },
-                    { icon: MessageSquare, label: 'Ask Me About', text: 'Penetration Testing, Linux Administration, and Security Analysis' },
+                    { icon: MessageSquare, label: 'Ask Me About', text: 'TrueNAS Deployments, Home Lab Infrastructure, and Penetration Testing' },
                     { icon: Mail, label: 'Reach Me', text: 'wian.schoeman1@gmail.com', link: 'mailto:wian.schoeman1@gmail.com' },
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-4 group">
@@ -328,7 +349,7 @@ const App: React.FC = () => {
               CONNECT
             </h2>
             <p className="text-[#a8fbd3] font-mono uppercase tracking-widest mt-2 relative z-10 text-sm md:text-base">
-              Let's secure the future together
+              Let's build and secure resilient systems.
             </p>
           </div>
 
