@@ -14,6 +14,8 @@ import CustomCursor from './components/CustomCursor';
 import ProjectCard from './components/ArtistCard';
 import { Project } from './types';
 import { fetchGitHubProjects } from './utils/github';
+import trueNASLogo from './assets/TrueNAS.png';
+import zimaOSLogo from './assets/ZimaOS.png';
 
 
 const TECH_STACK = [
@@ -49,7 +51,7 @@ const App: React.FC = () => {
           id: 'truenas-deployment',
           title: 'Small Business TrueNAS Deployment',
           category: 'TrueNAS / Server Administration',
-          image: 'https://placehold.co/1000x600/0f1021/a8fbd3?text=TrueNAS+Deployment',
+          image: trueNASLogo,
           year: new Date().getFullYear().toString(),
           description: 'Upgraded legacy hardware (HP ProLiant Microserver Gen7) and engineered an on-premises NAS using TrueNAS to successfully replace costly third-party cloud storage for a small business.'
         },
@@ -57,7 +59,7 @@ const App: React.FC = () => {
           id: 'zimaos-home-server',
           title: 'ZimaOS Home Server & VPN Infrastructure',
           category: 'ZimaOS / Networking / VPN',
-          image: 'https://placehold.co/1000x600/0f1021/6c5ce7?text=ZimaOS+Server',
+          image: zimaOSLogo,
           year: new Date().getFullYear().toString(),
           description: 'Engineered a self-hosted cloud environment on a Dell Optiplex 3060 Micro running ZimaOS, featuring Nextcloud for data management and secure zero-trust remote access via Tailscale.'
         }
