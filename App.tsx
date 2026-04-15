@@ -53,7 +53,16 @@ const App: React.FC = () => {
           category: 'TrueNAS / Server Administration',
           image: trueNASLogo,
           year: new Date().getFullYear().toString(),
-          description: 'Upgraded legacy hardware (HP ProLiant Microserver Gen7) and engineered an on-premises NAS using TrueNAS to successfully replace costly third-party cloud storage for a small business.'
+          description: `The Challenge: The client relied on expensive, recurring third-party cloud storage and had a legacy HP ProLiant MicroServer Gen7 gathering dust.
+
+The Solution: I repurposed the legacy hardware, installing and configuring TrueNAS to create a robust, on-premises Network-Attached Storage (NAS) solution.
+
+Key Implementations:
+• Configured secure local network access (SMB shares) for company employees.
+• Implemented automated backup routines to ensure data integrity.
+• Managed user permissions and access controls.
+
+The Outcome: Successfully eliminated monthly cloud storage fees while increasing local file transfer speeds and maintaining strict data ownership.`
         },
         {
           id: 'zimaos-home-server',
@@ -61,7 +70,14 @@ const App: React.FC = () => {
           category: 'ZimaOS / Networking / VPN',
           image: zimaOSLogo,
           year: new Date().getFullYear().toString(),
-          description: 'Engineered a self-hosted cloud environment on a Dell Optiplex 3060 Micro running ZimaOS, featuring Nextcloud for data management and secure zero-trust remote access via Tailscale.'
+          description: `The Project: Engineered a comprehensive, self-hosted cloud and media environment to bypass reliance on big-tech data silos.
+Hardware: Dell OptiPlex 3060 Micro.
+
+Key Implementations:
+• Deployed ZimaOS as the base operating system for streamlined container management.
+• Hosted Nextcloud for secure file synchronization and document management.
+• Deployed Immich for high-performance photo and video backup.
+• Engineered a zero-trust network perimeter using Tailscale (WireGuard), allowing secure, encrypted remote access to the internal network from anywhere in the world without exposing ports to the public internet.`
         }
       ];
       if (githubProjects.length > 0) {
@@ -509,7 +525,7 @@ const App: React.FC = () => {
 
                   <div className="h-px w-20 bg-white/20 mb-6" />
 
-                  <p className="text-gray-300 leading-relaxed text-lg font-light mb-8">
+                  <p className="text-gray-300 leading-relaxed text-lg font-light mb-8 whitespace-pre-line">
                     {selectedProject.description}
                   </p>
 
