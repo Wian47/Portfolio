@@ -379,7 +379,7 @@ const App: React.FC = () => {
                 name: 'X (Twitter)',
                 value: '@WianS47',
                 icon: Twitter,
-                action: 'Follow Me',
+                action: 'View Profile',
                 href: 'https://x.com/WianS47',
                 color: 'teal',
                 accent: 'bg-[#4fb7b3]/10 border-[#4fb7b3]/50'
