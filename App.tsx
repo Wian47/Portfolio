@@ -419,8 +419,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex gap-6">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin className="w-5 h-5" /></a>
+            <a href="https://github.com/Wian47" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
             <a href="mailto:wian.schoeman1@gmail.com" className="text-gray-400 hover:text-white transition-colors"><Mail className="w-5 h-5" /></a>
           </div>
         </div>
