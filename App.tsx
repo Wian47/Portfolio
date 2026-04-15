@@ -7,7 +7,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronLeft, ChevronRight, Shield, Code, Terminal, Cpu, GraduationCap, Users, Zap, MessageSquare, Mail, Github, Linkedin } from 'lucide-react';
+import { Menu, X, ChevronLeft, ChevronRight, Shield, Code, Terminal, Cpu, GraduationCap, Users, Zap, MessageSquare, Mail, Github, Linkedin, Twitter } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GlitchText';
 import CustomCursor from './components/CustomCursor';
@@ -355,7 +355,7 @@ const App: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 max-w-5xl mx-auto gap-6">
             {[
               {
                 name: 'Email Me',
@@ -376,11 +376,11 @@ const App: React.FC = () => {
                 accent: 'bg-[#6c5ce7]/10 border-[#6c5ce7]/50'
               },
               {
-                name: 'Mobile',
-                value: '+27 79 156 2411',
-                icon: Zap,
-                action: 'Call / WhatsApp',
-                href: 'tel:+27791562411',
+                name: 'X (Twitter)',
+                value: '@WianS47',
+                icon: Twitter,
+                action: 'Follow Me',
+                href: 'https://x.com/WianS47',
                 color: 'teal',
                 accent: 'bg-[#4fb7b3]/10 border-[#4fb7b3]/50'
               },
@@ -420,6 +420,7 @@ const App: React.FC = () => {
 
           <div className="flex gap-6">
             <a href="https://github.com/Wian47" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
+            <a href="https://x.com/WianS47" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors"><Twitter className="w-5 h-5" /></a>
             <a href="mailto:wian.schoeman1@gmail.com" className="text-gray-400 hover:text-white transition-colors"><Mail className="w-5 h-5" /></a>
           </div>
         </div>
