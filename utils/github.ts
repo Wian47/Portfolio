@@ -3,6 +3,7 @@ import { Project } from '../types';
 // Import images directly so Vite can process them
 import netscanImg from '../assets/netscan.png';
 import ulpmImg from '../assets/ulpm.jpg';
+import gitsketchImg from '../assets/gitsketch.jpg';
 
 const GITHUB_USERNAME = 'Wian47';
 const API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&type=public`;
@@ -11,6 +12,7 @@ const API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=upda
 const PROJECT_IMAGES: Record<string, string> = {
     'CLI-NetworkScanner': netscanImg,
     'ULPM': ulpmImg,
+    'GitSketch': gitsketchImg,
 };
 
 export const fetchGitHubProjects = async (): Promise<Project[]> => {

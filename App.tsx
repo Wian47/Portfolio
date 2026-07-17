@@ -21,6 +21,7 @@ import zimaOSLogo from './assets/ZimaOS.png';
 const TECH_STACK = [
   { name: 'Python', color: 'bg-[#3776AB]' },
   { name: 'C / C++', color: 'bg-[#00599C]' },
+  { name: 'Go', color: 'bg-[#00ADD8]' },
   { name: 'Bash', color: 'bg-[#4EAA25]' },
   { name: 'PowerShell', color: 'bg-[#5391FE]' },
   { name: 'SQL', color: 'bg-[#CC2927]' },
@@ -457,7 +458,7 @@ Key Implementations:
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-5xl bg-[#1a1b3b] border border-white/10 overflow-hidden flex flex-col md:flex-row shadow-2xl shadow-[#6c5ce7]/20"
+              className="relative w-full max-w-5xl bg-[#1a1b3b] border border-white/10 overflow-hidden flex flex-col md:flex-row shadow-2xl shadow-[#6c5ce7]/20 max-h-[90vh] md:max-h-[85vh]"
             >
               <button
                 onClick={() => setSelectedProject(null)}
@@ -484,7 +485,7 @@ Key Implementations:
               </button>
 
               {/* Image Side */}
-              <div className="w-full md:w-1/2 h-64 md:h-auto relative overflow-hidden">
+              <div className="w-full md:w-1/2 h-64 md:h-auto relative overflow-hidden flex-shrink-0">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={selectedProject.id}
@@ -503,7 +504,7 @@ Key Implementations:
               </div>
 
               {/* Content Side */}
-              <div className="w-full md:w-1/2 p-8 pb-24 md:p-12 flex flex-col justify-center relative">
+              <div className="w-full md:w-1/2 p-8 pr-16 pb-24 md:p-12 md:pr-24 flex flex-col justify-start overflow-y-auto min-h-0 relative">
                 <motion.div
                   key={selectedProject.id}
                   initial={{ opacity: 0, x: 20 }}
@@ -515,7 +516,7 @@ Key Implementations:
                     <span className="font-mono text-sm tracking-widest uppercase">{selectedProject.year}</span>
                   </div>
 
-                  <h3 className="text-3xl md:text-5xl font-heading font-bold uppercase leading-none mb-2 text-white break-words">
+                  <h3 className="text-xl md:text-2xl lg:text-3xl font-heading font-bold uppercase leading-tight mb-2 text-white break-normal">
                     {selectedProject.title}
                   </h3>
 
