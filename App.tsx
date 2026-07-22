@@ -28,12 +28,12 @@ const TECH_STACK = [
   { name: 'JavaScript', color: 'bg-[#F7DF1E] text-black' },
   { name: 'Linux', color: 'bg-[#FCC624] text-black' },
   { name: 'Git', color: 'bg-[#F05032]' },
-  { name: 'PenTest+', color: 'bg-[#FF4500]' },
-  { name: 'CASP+', color: 'bg-[#800080]' },
+  { name: 'PenTest+ (Coursework)', color: 'bg-[#FF4500]' },
+  { name: 'CASP+ (Coursework)', color: 'bg-[#800080]' },
   { name: 'TrueNAS', color: 'bg-[#0095D5]' },
   { name: 'ZimaOS', color: 'bg-[#4fb7b3]' },
-  { name: 'CompTIA A+', color: 'bg-[#FF4500]' },
-  { name: 'CompTIA Network+', color: 'bg-[#00599C]' },
+  { name: 'CompTIA A+ (Coursework)', color: 'bg-[#FF4500]' },
+  { name: 'CompTIA Network+ (Coursework)', color: 'bg-[#00599C]' },
 ];
 
 const App: React.FC = () => {
@@ -253,12 +253,12 @@ Key Implementations:
 
               <div className="prose prose-invert max-w-none text-gray-200 text-lg font-light leading-relaxed">
                 <p className="mb-8">
-                  Aspiring Cyber Security and IT Operations professional with a completed Higher Certificate in Cyber Security. I blend a strong academic foundation in ethical hacking, network defense, and security analysis with practical, hands-on experience in systems administration and infrastructure deployment. Proven ability to design, deploy, and manage secure server environments, coupled with a high technical aptitude for mastering complex platforms.
+                  Aspiring Cyber Security and IT Operations professional currently pursuing a Bachelor's Degree in Cyber Security at Eduvos, having completed a Higher Certificate in Information Systems. I blend a strong academic foundation in ethical hacking, network defense, and security analysis with practical, hands-on experience in systems administration and infrastructure deployment. Proven ability to design, deploy, and manage secure server environments, coupled with a high technical aptitude for mastering complex platforms.
                 </p>
 
                 <div className="space-y-4 mt-8">
                   {[
-                    { icon: GraduationCap, label: 'Studies', text: 'Higher Certificate in Information Systems: Cyber Security at Eduvos (Feb 2024 - Present)' },
+                    { icon: GraduationCap, label: 'Studies', text: "Bachelor's Degree in Cyber Security at Eduvos (Block 4, in progress) — following a completed Higher Certificate in Information Systems (Feb 2024 - Dec 2025)" },
                     { icon: Users, label: 'Focus', text: 'IT Support, Server Deployment, and Network Security' },
                     { icon: Code, label: 'Tech', text: 'Fluent in Python, Bash, and Network Protocols' },
                     { icon: Zap, label: 'Goal', text: 'Securing digital environments and critical infrastructure' },
