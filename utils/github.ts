@@ -4,6 +4,8 @@ import { Project } from '../types';
 import netscanImg from '../assets/netscan.png';
 import ulpmImg from '../assets/ulpm.jpg';
 import gitsketchImg from '../assets/gitsketch.jpg';
+import tsHudImg from '../assets/ts-hud.png';
+import gitCleanImg from '../assets/git-clean.png';
 
 const GITHUB_USERNAME = 'Wian47';
 const API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&type=public`;
@@ -13,6 +15,8 @@ const PROJECT_IMAGES: Record<string, string> = {
     'CLI-NetworkScanner': netscanImg,
     'ULPM': ulpmImg,
     'GitSketch': gitsketchImg,
+    'ts-hud': tsHudImg,
+    'git-clean': gitCleanImg,
 };
 
 export const fetchGitHubProjects = async (): Promise<Project[]> => {
