@@ -435,24 +435,50 @@ const App: React.FC = () => {
           </p>
         </Reveal>
 
-        <div className="mt-16 grid gap-x-12 gap-y-14 md:grid-cols-2">
-          {CAPABILITIES.map((group, i) => (
-            <Reveal key={group.title} delay={(i % 2) * 110}>
-              <div className="flex items-baseline gap-4">
-                <span className="font-mono text-[10px] tracking-label text-ember">{group.index}</span>
-                <h3 className="font-display text-2xl text-paper md:text-3xl">{group.title}</h3>
-              </div>
-              <ul className="mt-6 border-t border-ink-line">
-                {group.items.map((item) => (
-                  <li
-                    key={item}
-                    className="border-b border-ink-line py-4 text-[15px] leading-relaxed text-paper-dim"
+        {/*
+          Rendered a pair of groups at a time. Each pair is one grid whose rows
+          are shared by both columns via subgrid: the heading occupies row 1 and
+          each list item a row of its own, so a row is exactly as tall as the
+          taller of the two cells facing each other. That keeps every hairline
+          rule level across the columns no matter how the text wraps, without
+          squashing anything to a fixed height.
+        */}
+        <div className="mt-16 space-y-14 md:space-y-16">
+          {[[0, 1], [2, 3]].map((pair) => (
+            <div
+              key={pair[0]}
+              className="grid gap-x-12 gap-y-14 md:grid-cols-2 md:gap-y-0 md:[grid-template-rows:repeat(5,auto)]"
+            >
+              {pair.map((groupIndex, column) => {
+                const group = CAPABILITIES[groupIndex];
+                return (
+                  <Reveal
+                    key={group.title}
+                    delay={column * 110}
+                    className="md:row-[span_5/span_5] md:grid md:[grid-template-rows:subgrid]"
                   >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
+                    <div className="flex items-baseline gap-4 md:pb-6">
+                      <span className="font-mono text-[10px] tracking-label text-ember">
+                        {group.index}
+                      </span>
+                      <h3 className="font-display text-2xl text-paper md:text-3xl">
+                        {group.title}
+                      </h3>
+                    </div>
+                    <ul className="mt-6 border-t border-ink-line md:row-[span_4/span_4] md:mt-0 md:grid md:[grid-template-rows:subgrid]">
+                      {group.items.map((item) => (
+                        <li
+                          key={item}
+                          className="border-b border-ink-line py-4 text-[15px] leading-relaxed text-paper-dim"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </Reveal>
+                );
+              })}
+            </div>
           ))}
         </div>
       </section>
