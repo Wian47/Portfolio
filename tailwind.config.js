@@ -12,7 +12,34 @@ export default {
     './utils/**/*.{ts,tsx}'
   ],
   theme: {
-    extend: {}
+    extend: {
+      colors: {
+        // Warm charcoal rather than black - the whole design rests on this being
+        // slightly off-neutral, so the off-white type reads as ink on paper.
+        ink: {
+          DEFAULT: '#141210',
+          raised: '#1c1917',
+          line: '#2b2622'
+        },
+        paper: {
+          DEFAULT: '#ece5d8',
+          dim: '#9c9285',
+          faint: '#6a6157'
+        },
+        ember: '#c9704a'
+      },
+      fontFamily: {
+        display: ['"Instrument Serif"', 'Georgia', 'Times New Roman', 'serif'],
+        sans: ['Archivo', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace']
+      },
+      letterSpacing: {
+        label: '0.18em'
+      },
+      transitionTimingFunction: {
+        editorial: 'cubic-bezier(0.22, 1, 0.36, 1)'
+      }
+    }
   },
   plugins: []
 };
