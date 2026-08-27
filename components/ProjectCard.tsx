@@ -27,8 +27,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
   return (
     <article
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label={`Open ${project.title}`}
       data-hover="true"
-      className="group cursor-pointer"
+      className="group cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-ember focus-visible:ring-offset-4 focus-visible:ring-offset-ink"
     >
       <div className="flex items-baseline justify-between border-b border-ink-line pb-3">
         <span className="font-mono text-[10px] tracking-label text-paper-faint">

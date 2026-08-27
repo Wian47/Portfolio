@@ -69,7 +69,6 @@ const CAPABILITIES = [
 ];
 
 const CREDENTIALS = [
-  { name: "Bachelor's Degree in Cyber Security", issuer: 'Eduvos', status: 'Block 4 · In progress' },
   { name: 'Higher Certificate in Information Systems', issuer: 'Eduvos', status: 'Completed · Feb 2024 – Dec 2025' },
   { name: 'CompTIA A+', issuer: 'CompTIA', status: 'Coursework' },
   { name: 'CompTIA Network+', issuer: 'CompTIA', status: 'Coursework' },
@@ -86,7 +85,7 @@ const SECTIONS = [
 ];
 
 const PROFILE = [
-  { label: 'Studies', value: "Bachelor's Degree in Cyber Security at Eduvos (Block 4, in progress) — following a completed Higher Certificate in Information Systems (Feb 2024 – Dec 2025)" },
+  { label: 'Studies', value: 'Higher Certificate in Information Systems, Eduvos (Feb 2024 – Dec 2025)' },
   { label: 'Focus', value: 'Helpdesk and end-user support, systems and server administration, networking, and security' },
   { label: 'Tech', value: 'Python, Bash and PowerShell, across Linux administration and network protocols' },
   { label: 'Goal', value: 'Keeping the systems people rely on running, supported and secure' },
@@ -209,7 +208,7 @@ const App: React.FC = () => {
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 md:px-12">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: isLite ? 'auto' : 'smooth' })}
-            className="font-display text-xl tracking-tight text-paper"
+            className="-ml-1 flex h-11 items-center px-1 font-display text-xl tracking-tight text-paper"
             data-hover="true"
             aria-label="Back to top"
           >
@@ -232,7 +231,7 @@ const App: React.FC = () => {
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-paper md:hidden"
+            className="-mr-2 flex h-11 w-11 items-center justify-center text-paper md:hidden"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -247,7 +246,7 @@ const App: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 flex flex-col items-start justify-center gap-2 bg-ink px-8 md:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-start justify-center gap-2 overflow-y-auto bg-ink px-8 py-24 md:hidden"
           >
             {SECTIONS.map((s) => (
               <button
@@ -269,8 +268,13 @@ const App: React.FC = () => {
           className="fade-in font-mono text-[10px] uppercase tracking-label text-paper-dim"
           style={{ '--fade-delay': '150ms' } as React.CSSProperties}
         >
-          IT Support <span className="text-ember">·</span> Systems Administration{' '}
-          <span className="text-ember">·</span> Security
+          <span className="whitespace-nowrap">
+            IT Support <span className="text-ember">·</span>
+          </span>{' '}
+          <span className="whitespace-nowrap">
+            Systems Administration <span className="text-ember">·</span>
+          </span>{' '}
+          <span className="whitespace-nowrap">Security</span>
         </p>
 
         <h1 className="mt-8 font-display leading-[0.88] tracking-tight text-paper">
@@ -305,7 +309,7 @@ const App: React.FC = () => {
       </section>
 
       {/* ── 01 About ───────────────────────────────────────────────── */}
-      <section id="about" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
+      <section id="about" className="mx-auto max-w-[1400px] px-6 py-16 md:px-12 md:py-40">
         <Reveal className="flex items-baseline gap-6">
           <span className="font-mono text-[10px] tracking-label text-ember">01</span>
           <h2 className="font-display text-5xl text-paper md:text-7xl">About</h2>
@@ -325,17 +329,15 @@ const App: React.FC = () => {
 
             <Reveal delay={120}>
               <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-paper-dim">
-                IT support and operations professional currently pursuing a Bachelor's
-                Degree in Cyber Security at Eduvos, having completed a Higher Certificate
-                in Information Systems. My work spans the full width of IT: end-user
-                support and troubleshooting, systems and server administration,
+                IT support and operations professional with a Higher Certificate in
+                Information Systems from Eduvos. My work spans the full width of IT:
+                end-user support and troubleshooting, systems and server administration,
                 networking, and security. I have designed, deployed and managed secure
                 server environments on both current and repurposed hardware, and built
                 tooling for the everyday support problems — printers, removable storage,
                 software deployment — that keep people working. Underneath it sits a
-                strong academic foundation in ethical hacking, network defence and
-                security analysis, and a high technical aptitude for mastering complex
-                platforms.
+                strong foundation in ethical hacking, network defence and security
+                analysis, and a high technical aptitude for mastering complex platforms.
               </p>
             </Reveal>
 
@@ -361,7 +363,7 @@ const App: React.FC = () => {
                     <a
                       href="mailto:wian.schoeman1@gmail.com"
                       data-hover="true"
-                      className="text-[15px] text-paper underline decoration-ember/50 underline-offset-4 transition-colors hover:decoration-ember"
+                      className="inline-block py-2 text-[15px] text-paper underline decoration-ember/50 underline-offset-4 transition-colors hover:decoration-ember"
                     >
                       wian.schoeman1@gmail.com
                     </a>
@@ -416,7 +418,7 @@ const App: React.FC = () => {
       </section>
 
       {/* ── 02 Capabilities ────────────────────────────────────────── */}
-      <section id="capabilities" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
+      <section id="capabilities" className="mx-auto max-w-[1400px] px-6 py-16 md:px-12 md:py-40">
         <Reveal className="flex items-baseline gap-6">
           <span className="font-mono text-[10px] tracking-label text-ember">02</span>
           <h2 className="font-display text-5xl text-paper md:text-7xl">Capabilities</h2>
@@ -456,7 +458,7 @@ const App: React.FC = () => {
       </section>
 
       {/* ── 03 Work ────────────────────────────────────────────────── */}
-      <section id="work" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
+      <section id="work" className="mx-auto max-w-[1400px] px-6 py-16 md:px-12 md:py-40">
         <Reveal className="flex items-baseline gap-6">
           <span className="font-mono text-[10px] tracking-label text-ember">03</span>
           <h2 className="font-display text-5xl text-paper md:text-7xl">Selected Work</h2>
@@ -479,7 +481,7 @@ const App: React.FC = () => {
       </section>
 
       {/* ── 04 Credentials ─────────────────────────────────────────── */}
-      <section id="credentials" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
+      <section id="credentials" className="mx-auto max-w-[1400px] px-6 py-16 md:px-12 md:py-40">
         <Reveal className="flex items-baseline gap-6">
           <span className="font-mono text-[10px] tracking-label text-ember">04</span>
           <h2 className="font-display text-5xl text-paper md:text-7xl">Credentials</h2>
@@ -517,7 +519,7 @@ const App: React.FC = () => {
       </section>
 
       {/* ── 05 Contact ─────────────────────────────────────────────── */}
-      <section id="contact" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
+      <section id="contact" className="mx-auto max-w-[1400px] px-6 py-16 md:px-12 md:py-40">
         <Reveal className="flex items-baseline gap-6">
           <span className="font-mono text-[10px] tracking-label text-ember">05</span>
           <h2 className="font-display text-5xl text-paper md:text-7xl">Contact</h2>
@@ -596,7 +598,7 @@ const App: React.FC = () => {
                 onClick={() => setSelectedProject(null)}
                 data-hover="true"
                 aria-label="Close"
-                className="absolute right-4 top-4 z-20 border border-ink-line bg-ink/70 p-2 text-paper-dim transition-colors hover:border-ember/50 hover:text-paper"
+                className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center border border-ink-line bg-ink/70 text-paper-dim transition-colors hover:border-ember/50 hover:text-paper"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -652,7 +654,7 @@ const App: React.FC = () => {
                     onClick={() => navigateProject(-1)}
                     data-hover="true"
                     aria-label="Previous project"
-                    className="border border-ink-line p-3 text-paper-dim transition-colors hover:border-ember/50 hover:text-paper"
+                    className="flex h-11 w-11 items-center justify-center border border-ink-line text-paper-dim transition-colors hover:border-ember/50 hover:text-paper"
                   >
                     <ArrowLeft className="h-4 w-4" />
                   </button>
@@ -660,7 +662,7 @@ const App: React.FC = () => {
                     onClick={() => navigateProject(1)}
                     data-hover="true"
                     aria-label="Next project"
-                    className="border border-ink-line p-3 text-paper-dim transition-colors hover:border-ember/50 hover:text-paper"
+                    className="flex h-11 w-11 items-center justify-center border border-ink-line text-paper-dim transition-colors hover:border-ember/50 hover:text-paper"
                   >
                     <ArrowRight className="h-4 w-4" />
                   </button>
