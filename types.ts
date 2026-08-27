@@ -13,6 +13,8 @@ export interface Project {
   year: string;
   description: string;
   link?: string;
+  /** Capability domains this project demonstrates, surfaced on the card. */
+  tags?: string[];
 }
 
 export interface ChatMessage {

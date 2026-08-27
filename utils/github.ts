@@ -19,6 +19,18 @@ const PROJECT_TITLES: Record<string, string> = {
     'omarchy-removable-drives': 'Omarchy Removable Drives',
 };
 
+// Capability domains each project demonstrates. Drawn from what the repo
+// actually does, so a reader scanning for support or admin skills finds them.
+const PROJECT_TAGS: Record<string, string[]> = {
+    'omarchy-printer': ['End-User Support', 'Printing', 'Linux'],
+    'omarchy-removable-drives': ['End-User Support', 'Peripherals', 'Storage'],
+    'CLI-NetworkScanner': ['Networking', 'Diagnostics'],
+    'ts-hud': ['Networking', 'Monitoring', 'VPN'],
+    'ULPM': ['Software Deployment', 'Package Management'],
+    'GitSketch': ['Developer Tooling'],
+    'git-clean': ['Developer Tooling', 'Automation'],
+};
+
 const GITHUB_USERNAME = 'Wian47';
 const API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&type=public`;
 
@@ -50,6 +62,7 @@ export const fetchGitHubProjects = async (): Promise<Project[]> => {
                 year: new Date(repo.updated_at).getFullYear().toString(),
                 description: repo.description || 'No description provided.',
                 image: PROJECT_IMAGES[repo.name] || '',
+                tags: PROJECT_TAGS[repo.name],
                 link: repo.html_url
             }));
     } catch (error) {

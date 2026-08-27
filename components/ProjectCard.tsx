@@ -68,6 +68,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
         <p className="mt-3 font-mono text-[10px] uppercase tracking-label text-paper-faint">
           {project.category}
         </p>
+
+        {project.tags && project.tags.length > 0 && (
+          <ul className="mt-4 flex flex-wrap gap-1.5">
+            {project.tags.map((tag) => (
+              <li
+                key={tag}
+                className="border border-ink-line px-2 py-1 font-mono text-[9px] uppercase tracking-label text-paper-faint transition-colors duration-500 group-hover:border-ember/30 group-hover:text-paper-dim"
+              >
+                {tag}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </article>
   );

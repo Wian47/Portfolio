@@ -18,22 +18,79 @@ import zimaOSLogo from './assets/ZimaOS.png';
 
 const TECH_STACK = [
   'Python', 'C / C++', 'Go', 'Bash', 'PowerShell', 'SQL', 'JavaScript',
-  'Linux', 'Git', 'TrueNAS', 'ZimaOS', 'PenTest+ (Coursework)',
-  'CASP+ (Coursework)', 'CompTIA A+ (Coursework)', 'CompTIA Network+ (Coursework)'
+  'Linux', 'Git', 'TrueNAS', 'ZimaOS'
+];
+
+/**
+ * Every item below is demonstrated by a project or deployment elsewhere on this
+ * page - nothing here is aspirational.
+ */
+const CAPABILITIES = [
+  {
+    index: '01',
+    title: 'Helpdesk & End-User Support',
+    items: [
+      'Printer setup, print queues, job handling and consumable monitoring',
+      'Removable media, external drives and peripheral troubleshooting',
+      'Software installation and package management across Flatpak, Snap and system repositories',
+      'User accounts, permissions and access requests'
+    ]
+  },
+  {
+    index: '02',
+    title: 'Systems & Server Administration',
+    items: [
+      'Server builds on both current and repurposed hardware',
+      'Linux administration and shell automation',
+      'Self-hosted and containerised service deployment',
+      'Automated backup routines and data integrity checks'
+    ]
+  },
+  {
+    index: '03',
+    title: 'Networking',
+    items: [
+      'SMB file shares and local network access for staff',
+      'Secure remote access with WireGuard and Tailscale',
+      'Port scanning and network diagnostics',
+      'Mesh network monitoring and visibility'
+    ]
+  },
+  {
+    index: '04',
+    title: 'Security',
+    items: [
+      'Zero-trust perimeters with no ports exposed to the public internet',
+      'Access control and least-privilege permissions',
+      'Network defence and security analysis',
+      'Penetration testing fundamentals'
+    ]
+  }
+];
+
+const CREDENTIALS = [
+  { name: "Bachelor's Degree in Cyber Security", issuer: 'Eduvos', status: 'Block 4 · In progress' },
+  { name: 'Higher Certificate in Information Systems', issuer: 'Eduvos', status: 'Completed · Feb 2024 – Dec 2025' },
+  { name: 'CompTIA A+', issuer: 'CompTIA', status: 'Coursework' },
+  { name: 'CompTIA Network+', issuer: 'CompTIA', status: 'Coursework' },
+  { name: 'CompTIA PenTest+', issuer: 'CompTIA', status: 'Coursework' },
+  { name: 'CompTIA CASP+', issuer: 'CompTIA', status: 'Coursework' }
 ];
 
 const SECTIONS = [
   { id: 'about', index: '01', label: 'About' },
-  { id: 'work', index: '02', label: 'Work' },
-  { id: 'contact', index: '03', label: 'Contact' }
+  { id: 'capabilities', index: '02', label: 'Capabilities' },
+  { id: 'work', index: '03', label: 'Work' },
+  { id: 'credentials', index: '04', label: 'Credentials' },
+  { id: 'contact', index: '05', label: 'Contact' }
 ];
 
 const PROFILE = [
   { label: 'Studies', value: "Bachelor's Degree in Cyber Security at Eduvos (Block 4, in progress) — following a completed Higher Certificate in Information Systems (Feb 2024 – Dec 2025)" },
-  { label: 'Focus', value: 'IT Support, Server Deployment, and Network Security' },
-  { label: 'Tech', value: 'Fluent in Python, Bash, and Network Protocols' },
-  { label: 'Goal', value: 'Securing digital environments and critical infrastructure' },
-  { label: 'Ask me about', value: 'TrueNAS Deployments, Home Lab Infrastructure, and Penetration Testing' }
+  { label: 'Focus', value: 'Helpdesk and end-user support, systems and server administration, networking, and security' },
+  { label: 'Tech', value: 'Python, Bash and PowerShell, across Linux administration and network protocols' },
+  { label: 'Goal', value: 'Keeping the systems people rely on running, supported and secure' },
+  { label: 'Ask me about', value: 'TrueNAS deployments, home lab infrastructure, Linux troubleshooting and penetration testing' }
 ];
 
 const CONTACT = [
@@ -51,6 +108,7 @@ const MANUAL_PROJECTS: Project[] = [
     category: 'TrueNAS / Server Administration',
     image: trueNASLogo,
     year: YEAR,
+    tags: ['Server Deployment', 'Storage', 'Backup', 'Access Control', 'File Sharing'],
     description: `The Challenge: The client relied on expensive, recurring third-party cloud storage and had a legacy HP ProLiant MicroServer Gen7 gathering dust.
 
 The Solution: I repurposed the legacy hardware, installing and configuring TrueNAS to create a robust, on-premises Network-Attached Storage (NAS) solution.
@@ -68,6 +126,7 @@ The Outcome: Successfully eliminated monthly cloud storage fees while increasing
     category: 'ZimaOS / Networking / VPN',
     image: zimaOSLogo,
     year: YEAR,
+    tags: ['Server Deployment', 'Containers', 'VPN', 'Remote Access', 'Backup'],
     description: `The Project: Engineered a comprehensive, self-hosted cloud and media environment to bypass reliance on big-tech data silos.
 Hardware: Dell OptiPlex 3060 Micro.
 
@@ -157,7 +216,7 @@ const App: React.FC = () => {
             Wian<span className="text-ember">.</span>
           </button>
 
-          <nav className="hidden items-center gap-10 md:flex">
+          <nav className="hidden items-center gap-8 md:flex">
             {SECTIONS.map((s) => (
               <button
                 key={s.id}
@@ -210,7 +269,8 @@ const App: React.FC = () => {
           className="fade-in font-mono text-[10px] uppercase tracking-label text-paper-dim"
           style={{ '--fade-delay': '150ms' } as React.CSSProperties}
         >
-          Cyber Security <span className="text-ember">·</span> Systems Administration
+          IT Support <span className="text-ember">·</span> Systems Administration{' '}
+          <span className="text-ember">·</span> Security
         </p>
 
         <h1 className="mt-8 font-display leading-[0.88] tracking-tight text-paper">
@@ -229,9 +289,9 @@ const App: React.FC = () => {
           >
             <div className="mb-6 h-px w-full bg-ink-line" />
             <p className="max-w-md text-[15px] leading-relaxed text-paper-dim">
-              Aspiring Cyber Security &amp; IT Operations professional. Blending a strong
-              foundation in network defence with hands-on system administration and
-              infrastructure troubleshooting.
+              IT support and operations, end to end. From helpdesk troubleshooting and
+              end-user support through server deployment, networking and the security
+              that holds it all together.
             </p>
           </div>
         </div>
@@ -258,20 +318,24 @@ const App: React.FC = () => {
           <div className="md:col-span-7">
             <Reveal>
               <p className="font-display text-2xl leading-snug text-paper md:text-[2rem]">
-                I design, deploy and defend the systems that quietly keep everything
-                else running.
+                From a jammed print queue to a hardened server — I keep the systems
+                people depend on running.
               </p>
             </Reveal>
 
             <Reveal delay={120}>
               <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-paper-dim">
-                Aspiring Cyber Security and IT Operations professional currently pursuing a
-                Bachelor's Degree in Cyber Security at Eduvos, having completed a Higher
-                Certificate in Information Systems. I blend a strong academic foundation in
-                ethical hacking, network defence and security analysis with practical,
-                hands-on experience in systems administration and infrastructure deployment.
-                Proven ability to design, deploy and manage secure server environments,
-                coupled with a high technical aptitude for mastering complex platforms.
+                IT support and operations professional currently pursuing a Bachelor's
+                Degree in Cyber Security at Eduvos, having completed a Higher Certificate
+                in Information Systems. My work spans the full width of IT: end-user
+                support and troubleshooting, systems and server administration,
+                networking, and security. I have designed, deployed and managed secure
+                server environments on both current and repurposed hardware, and built
+                tooling for the everyday support problems — printers, removable storage,
+                software deployment — that keep people working. Underneath it sits a
+                strong academic foundation in ethical hacking, network defence and
+                security analysis, and a high technical aptitude for mastering complex
+                platforms.
               </p>
             </Reveal>
 
@@ -351,10 +415,50 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* ── 02 Work ────────────────────────────────────────────────── */}
-      <section id="work" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
+      {/* ── 02 Capabilities ────────────────────────────────────────── */}
+      <section id="capabilities" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
         <Reveal className="flex items-baseline gap-6">
           <span className="font-mono text-[10px] tracking-label text-ember">02</span>
+          <h2 className="font-display text-5xl text-paper md:text-7xl">Capabilities</h2>
+        </Reveal>
+        <Reveal className="mt-8" delay={100}>
+          <div className="rule-draw h-px w-full bg-ink-line" />
+        </Reveal>
+
+        <Reveal className="mt-10" delay={140}>
+          <p className="max-w-2xl text-[15px] leading-relaxed text-paper-dim">
+            The work runs from the first line of support through to the infrastructure
+            underneath it. Everything listed here is demonstrated by a project or
+            deployment further down this page.
+          </p>
+        </Reveal>
+
+        <div className="mt-16 grid gap-x-12 gap-y-14 md:grid-cols-2">
+          {CAPABILITIES.map((group, i) => (
+            <Reveal key={group.title} delay={(i % 2) * 110}>
+              <div className="flex items-baseline gap-4">
+                <span className="font-mono text-[10px] tracking-label text-ember">{group.index}</span>
+                <h3 className="font-display text-2xl text-paper md:text-3xl">{group.title}</h3>
+              </div>
+              <ul className="mt-6 border-t border-ink-line">
+                {group.items.map((item) => (
+                  <li
+                    key={item}
+                    className="border-b border-ink-line py-4 text-[15px] leading-relaxed text-paper-dim"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 03 Work ────────────────────────────────────────────────── */}
+      <section id="work" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
+        <Reveal className="flex items-baseline gap-6">
+          <span className="font-mono text-[10px] tracking-label text-ember">03</span>
           <h2 className="font-display text-5xl text-paper md:text-7xl">Selected Work</h2>
         </Reveal>
         <Reveal className="mt-8" delay={100}>
@@ -374,10 +478,48 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* ── 03 Contact ─────────────────────────────────────────────── */}
+      {/* ── 04 Credentials ─────────────────────────────────────────── */}
+      <section id="credentials" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
+        <Reveal className="flex items-baseline gap-6">
+          <span className="font-mono text-[10px] tracking-label text-ember">04</span>
+          <h2 className="font-display text-5xl text-paper md:text-7xl">Credentials</h2>
+        </Reveal>
+        <Reveal className="mt-8" delay={100}>
+          <div className="rule-draw h-px w-full bg-ink-line" />
+        </Reveal>
+
+        <div className="mt-16 border-t border-ink-line">
+          {CREDENTIALS.map((credential, i) => (
+            <Reveal key={credential.name} delay={i * 70}>
+              <div className="flex flex-col gap-2 border-b border-ink-line py-6 md:flex-row md:items-baseline md:justify-between md:gap-8">
+                <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-6">
+                  <span className="font-display text-xl text-paper md:text-2xl">
+                    {credential.name}
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
+                    {credential.issuer}
+                  </span>
+                </div>
+                <span className="font-mono text-[10px] uppercase tracking-label text-paper-dim md:flex-shrink-0">
+                  {credential.status}
+                </span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal className="mt-8">
+          <p className="max-w-2xl font-mono text-[10px] uppercase leading-relaxed tracking-label text-paper-faint">
+            “Coursework” denotes study completed toward a certification rather than the
+            certification itself.
+          </p>
+        </Reveal>
+      </section>
+
+      {/* ── 05 Contact ─────────────────────────────────────────────── */}
       <section id="contact" className="mx-auto max-w-[1400px] px-6 py-24 md:px-12 md:py-40">
         <Reveal className="flex items-baseline gap-6">
-          <span className="font-mono text-[10px] tracking-label text-ember">03</span>
+          <span className="font-mono text-[10px] tracking-label text-ember">05</span>
           <h2 className="font-display text-5xl text-paper md:text-7xl">Contact</h2>
         </Reveal>
         <Reveal className="mt-8" delay={100}>
@@ -422,7 +564,8 @@ const App: React.FC = () => {
             © {YEAR} Wian Schoeman
           </p>
           <p className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
-            Cyber Security <span className="text-ember">·</span> Systems Administration
+            IT Support <span className="text-ember">·</span> Systems Administration{' '}
+            <span className="text-ember">·</span> Security
           </p>
         </div>
       </footer>
