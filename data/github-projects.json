@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1338429949",
+    "name": "omarchy-removable-drives",
+    "language": "JavaScript",
+    "description": "USB sticks, SD cards, and external drives in the Omarchy bar: mount, open, and safely eject.",
+    "updatedAt": "2026-08-27T17:07:04Z",
+    "url": "https://github.com/Wian47/omarchy-removable-drives"
+  },
+  {
+    "id": "1341792379",
+    "name": "omarchy-printer",
+    "language": "JavaScript",
+    "description": "Printers, their print settings, and the queue in the Omarchy bar: ink levels, pause, hold, cancel.",
+    "updatedAt": "2026-08-21T13:29:44Z",
+    "url": "https://github.com/Wian47/omarchy-printer"
+  },
+  {
+    "id": "1309965276",
+    "name": "ts-hud",
+    "language": "Go",
+    "description": "A blazing-fast, terminal-native dashboard for your Tailscale mesh network. Replaces tailscale status, adds instant fuzzy search, and lets you SSH into any peer with one keystroke.",
+    "updatedAt": "2026-07-28T09:19:15Z",
+    "url": "https://github.com/Wian47/ts-hud"
+  },
+  {
+    "id": "1303779617",
+    "name": "GitSketch",
+    "language": "Go",
+    "description": "An interactive terminal Git branch and merge visualizer.",
+    "updatedAt": "2026-07-27T08:27:07Z",
+    "url": "https://github.com/Wian47/GitSketch"
+  },
+  {
+    "id": "955892286",
+    "name": "CLI-NetworkScanner",
+    "language": "Python",
+    "description": "A simple command-line network diagnostic tool for scanning ports, checking connectivity, and gathering network information.",
+    "updatedAt": "2026-07-23T12:11:50Z",
+    "url": "https://github.com/Wian47/CLI-NetworkScanner"
+  },
+  {
+    "id": "1103792381",
+    "name": "ULPM",
+    "language": "Python",
+    "description": "A beautiful, all-in-one CLI tool for managing Flatpak, Snap, and System Packages (DNF, APT, Pacman) on Linux.",
+    "updatedAt": "2026-07-23T12:11:48Z",
+    "url": "https://github.com/Wian47/ULPM"
+  },
+  {
+    "id": "1309752270",
+    "name": "git-clean",
+    "language": "Python",
+    "description": "A terminal utility to scan local Git branches, inspect their merged status & commit age, and batch-clean stale branches interactively.",
+    "updatedAt": "2026-07-23T12:11:43Z",
+    "url": "https://github.com/Wian47/git-clean"
+  }
+]

@@ -11,7 +11,7 @@ import CustomCursor from './components/CustomCursor';
 import ProjectCard from './components/ProjectCard';
 import Reveal from './components/Reveal';
 import { Project } from './types';
-import { fetchGitHubProjects } from './utils/github';
+import { getGitHubProjects } from './utils/github';
 import { usePerfTier } from './utils/perf';
 import trueNASLogo from './assets/TrueNAS.png';
 import zimaOSLogo from './assets/ZimaOS.png';
@@ -137,18 +137,13 @@ Key Implementations:
   }
 ];
 
+const PROJECTS: Project[] = [...MANUAL_PROJECTS, ...getGitHubProjects()];
+
 const App: React.FC = () => {
   const isLite = usePerfTier() === 'lite';
-  const [projects, setProjects] = useState<Project[]>(MANUAL_PROJECTS);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    fetchGitHubProjects().then((githubProjects) => {
-      if (githubProjects.length > 0) setProjects([...MANUAL_PROJECTS, ...githubProjects]);
-    });
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -172,13 +167,13 @@ const App: React.FC = () => {
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [selectedProject, projects]);
+  }, [selectedProject]);
 
   const navigateProject = (step: number) => {
     setSelectedProject((current) => {
       if (!current) return current;
-      const i = projects.findIndex((p) => p.id === current.id);
-      return projects[(i + step + projects.length) % projects.length];
+      const i = PROJECTS.findIndex((p) => p.id === current.id);
+      return PROJECTS[(i + step + PROJECTS.length) % PROJECTS.length];
     });
   };
 
@@ -494,7 +489,7 @@ const App: React.FC = () => {
         </Reveal>
 
         <div className="mt-16 grid gap-x-10 gap-y-20 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, i) => (
+          {PROJECTS.map((project, i) => (
             <Reveal key={project.id} delay={(i % 3) * 110}>
               <ProjectCard
                 project={project}
