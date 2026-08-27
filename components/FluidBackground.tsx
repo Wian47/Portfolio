@@ -6,6 +6,7 @@
 
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { usePerfTier } from '../utils/perf';
 
 const StarField = () => {
   // Reduced star count for performance
@@ -52,6 +53,29 @@ const StarField = () => {
 };
 
 const FluidBackground: React.FC = () => {
+  const tier = usePerfTier();
+
+  /*
+    Without GPU compositing the three blurred, screen-blended blobs are a
+    full-viewport Gaussian blur per frame, forever. Serve a static gradient
+    instead - same palette, zero per-frame cost.
+  */
+  if (tier === 'lite') {
+    return (
+      <div className="fixed inset-0 -z-10 overflow-hidden bg-gradient-to-br from-[#31326f] via-[#28295c] to-[#1f2048]">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              'radial-gradient(60% 50% at 10% 5%, rgba(168, 251, 211, 0.16), transparent 70%),' +
+              'radial-gradient(55% 45% at 95% 30%, rgba(79, 183, 179, 0.14), transparent 70%),' +
+              'radial-gradient(60% 50% at 40% 100%, rgba(99, 122, 185, 0.16), transparent 70%)'
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden bg-gradient-to-br from-[#31326f] via-[#28295c] to-[#1f2048]">
       

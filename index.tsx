@@ -3,9 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 
+import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { initPerfTier } from './utils/perf';
+
+// Decide the rendering tier before the first paint so the CSS hook is already in place.
+initPerfTier();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

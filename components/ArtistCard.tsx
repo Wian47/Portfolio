@@ -8,6 +8,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Project } from '../types';
+import { usePerfTier } from '../utils/perf';
 import { ArrowUpRight } from 'lucide-react';
 
 interface ProjectCardProps {
@@ -16,6 +17,18 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
+  const tier = usePerfTier();
+
+  // Animating scale and grayscale() on a full-bleed image is a per-frame software
+  // filter pass over the whole card when the GPU is out of the picture.
+  const imageVariants =
+    tier === 'lite'
+      ? undefined
+      : {
+          rest: { scale: 1, filter: 'grayscale(100%)' },
+          hover: { scale: 1.05, filter: 'grayscale(0%)' }
+        };
+
   return (
     <motion.div
       className="group relative h-[400px] md:h-[500px] w-full overflow-hidden border-b md:border-r border-white/10 bg-black cursor-pointer"
@@ -33,12 +46,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
             src={project.image}
             alt={project.title}
             referrerPolicy="no-referrer"
+            loading="lazy"
+            decoding="async"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             className="h-full w-full object-contain grayscale will-change-transform opacity-60"
-            variants={{
-              rest: { scale: 1, filter: 'grayscale(100%)' },
-              hover: { scale: 1.05, filter: 'grayscale(0%)' }
-            }}
+            variants={imageVariants}
             transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
           />
         )}

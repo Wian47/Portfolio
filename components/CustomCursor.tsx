@@ -6,8 +6,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { usePerfTier } from '../utils/perf';
 
 const CustomCursor: React.FC = () => {
+  const tier = usePerfTier();
   const [isHovering, setIsHovering] = useState(false);
   
   // Initialize off-screen to prevent flash
@@ -20,6 +22,8 @@ const CustomCursor: React.FC = () => {
   const y = useSpring(mouseY, springConfig);
 
   useEffect(() => {
+    if (tier === 'lite') return;
+
     const updateMousePosition = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -33,7 +37,14 @@ const CustomCursor: React.FC = () => {
 
     window.addEventListener('mousemove', updateMousePosition, { passive: true });
     return () => window.removeEventListener('mousemove', updateMousePosition);
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, tier]);
+
+  /*
+    mix-blend-difference forces the browser to re-read and re-composite whatever
+    is underneath the cursor on every pointer move. In software that is a repaint
+    per mouse event, so fall back to the native cursor.
+  */
+  if (tier === 'lite') return null;
 
   return (
     <motion.div

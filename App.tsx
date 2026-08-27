@@ -14,6 +14,7 @@ import CustomCursor from './components/CustomCursor';
 import ProjectCard from './components/ArtistCard';
 import { Project } from './types';
 import { fetchGitHubProjects } from './utils/github';
+import { usePerfTier } from './utils/perf';
 import trueNASLogo from './assets/TrueNAS.png';
 import zimaOSLogo from './assets/ZimaOS.png';
 
@@ -37,9 +38,13 @@ const TECH_STACK = [
 ];
 
 const App: React.FC = () => {
+  const tier = usePerfTier();
+  const isLite = tier === 'lite';
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  // Parallax repaints the whole hero on every scroll frame without GPU compositing.
+  const heroStyle = isLite ? undefined : { y, opacity };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -111,7 +116,7 @@ Key Implementations:
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: isLite ? 'auto' : 'smooth'
       });
     }
   };
@@ -129,7 +134,7 @@ Key Implementations:
   };
 
   return (
-    <div className="relative min-h-screen text-white selection:bg-[#6c5ce7] selection:text-white cursor-auto md:cursor-none overflow-x-hidden">
+    <div className={`relative min-h-screen text-white selection:bg-[#6c5ce7] selection:text-white cursor-auto overflow-x-hidden ${isLite ? '' : 'md:cursor-none'}`}>
       <CustomCursor />
       <FluidBackground />
 
@@ -185,7 +190,7 @@ Key Implementations:
       {/* HERO SECTION */}
       <header className="relative h-[100svh] min-h-[600px] flex flex-col items-center justify-center overflow-hidden px-4">
         <motion.div
-          style={{ y, opacity }}
+          style={heroStyle}
           className="z-10 text-center flex flex-col items-center w-full max-w-6xl pb-24 md:pb-20"
         >
           {/* Role Tag */}
@@ -239,8 +244,10 @@ Key Implementations:
 
       {/* ABOUT & TECHNOLOGIES SECTION */}
       <section id="about" className="relative z-10 py-20 md:py-32 bg-black/20 backdrop-blur-sm border-t border-white/10 overflow-hidden">
-        {/* Decorative blob */}
-        <div className="absolute top-1/2 left-[-20%] w-[50vw] h-[50vw] bg-[#6c5ce7]/20 rounded-full blur-[60px] pointer-events-none" />
+        {/* Decorative blob - a hard-edged circle once the blur is dropped, so skip it */}
+        {!isLite && (
+          <div className="absolute top-1/2 left-[-20%] w-[50vw] h-[50vw] bg-[#6c5ce7]/20 rounded-full blur-[60px] pointer-events-none" />
+        )}
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16">
@@ -497,7 +504,8 @@ Key Implementations:
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="absolute inset-0 w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-500"
+                    decoding="async"
+                    className={`absolute inset-0 w-full h-full object-contain grayscale ${isLite ? '' : 'hover:grayscale-0 transition-all duration-500'}`}
                   />
                 </AnimatePresence>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1a1b3b] via-transparent to-transparent md:bg-gradient-to-r" />

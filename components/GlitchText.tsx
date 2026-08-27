@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { usePerfTier } from '../utils/perf';
 
 interface GradientTextProps {
   text: string;
@@ -15,6 +16,25 @@ interface GradientTextProps {
 }
 
 const GradientText: React.FC<GradientTextProps> = ({ text, as: Component = 'span', className = '' }) => {
+  const tier = usePerfTier();
+
+  /*
+    The animated background-position repaints the whole headline every frame and
+    the blurred glow layer is a large software blur. Render one static gradient.
+  */
+  if (tier === 'lite') {
+    return (
+      <Component className={`relative inline-block font-black tracking-tighter isolate ${className}`}>
+        <span
+          className="block bg-gradient-to-r from-white via-[#a8fbd3] via-[#4fb7b3] via-[#637ab9] to-white bg-clip-text text-transparent"
+          style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+        >
+          {text}
+        </span>
+      </Component>
+    );
+  }
+
   return (
     <Component className={`relative inline-block font-black tracking-tighter isolate ${className}`}>
       {/* Main Gradient Text */}
