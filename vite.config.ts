@@ -4,9 +4,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(() => {
   return {
-    // GitHub Pages serves this from /Portfolio/; Vercel serves it from the domain
-    // root, so keying off Vercel's build-time env var keeps both deployments valid.
-    base: process.env.VERCEL ? '/' : '/Portfolio/',
+    base: '/', // Vercel serves the build from the domain root
     server: {
       port: 3000,
       host: '0.0.0.0',
