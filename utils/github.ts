@@ -6,6 +6,8 @@ import ulpmImg from '../assets/ulpm.jpg';
 import gitsketchImg from '../assets/gitsketch.jpg';
 import tsHudImg from '../assets/ts-hud.png';
 import gitCleanImg from '../assets/git-clean.png';
+import omarchyPrinterImg from '../assets/omarchy-printers.png';
+import omarchyRemovableDrivesImg from '../assets/removable-drives.png';
 
 const GITHUB_USERNAME = 'Wian47';
 const API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&type=public`;
@@ -17,6 +19,8 @@ const PROJECT_IMAGES: Record<string, string> = {
     'GitSketch': gitsketchImg,
     'ts-hud': tsHudImg,
     'git-clean': gitCleanImg,
+    'omarchy-printer': omarchyPrinterImg,
+    'omarchy-removable-drives': omarchyRemovableDrivesImg,
 };
 
 export const fetchGitHubProjects = async (): Promise<Project[]> => {
