@@ -9,6 +9,16 @@ import gitCleanImg from '../assets/git-clean.png';
 import omarchyPrinterImg from '../assets/omarchy-printers.png';
 import omarchyRemovableDrivesImg from '../assets/removable-drives.png';
 
+// Repo names make poor headings once the hyphens are stripped ("ts hud",
+// "omarchy removable drives"). Anything not listed falls back to that default.
+const PROJECT_TITLES: Record<string, string> = {
+    'CLI-NetworkScanner': 'CLI Network Scanner',
+    'ts-hud': 'TS-HUD',
+    'git-clean': 'git-clean',
+    'omarchy-printer': 'Omarchy Printers',
+    'omarchy-removable-drives': 'Omarchy Removable Drives',
+};
+
 const GITHUB_USERNAME = 'Wian47';
 const API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&type=public`;
 
@@ -35,7 +45,7 @@ export const fetchGitHubProjects = async (): Promise<Project[]> => {
             .filter((repo: any) => !repo.fork && repo.name !== 'Portfolio' && repo.name !== 'Wian47')
             .map((repo: any) => ({
                 id: String(repo.id),
-                title: repo.name.replace(/-/g, ' '),
+                title: PROJECT_TITLES[repo.name] || repo.name.replace(/-/g, ' '),
                 category: `${repo.language || 'Code'} / GitHub`,
                 year: new Date(repo.updated_at).getFullYear().toString(),
                 description: repo.description || 'No description provided.',
