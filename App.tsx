@@ -69,7 +69,7 @@ const CAPABILITIES = [
 ];
 
 const CREDENTIALS = [
-  { name: 'Higher Certificate in Information Systems', issuer: 'Eduvos', status: 'Completed · Feb 2024 – Dec 2025' },
+  { name: 'Higher Certificate in Cyber Security', issuer: 'Eduvos', status: 'Completed · Feb 2024 – Dec 2025' },
   { name: 'CompTIA A+', issuer: 'CompTIA', status: 'Coursework' },
   { name: 'CompTIA Network+', issuer: 'CompTIA', status: 'Coursework' },
   { name: 'CompTIA PenTest+', issuer: 'CompTIA', status: 'Coursework' },
@@ -85,7 +85,7 @@ const SECTIONS = [
 ];
 
 const PROFILE = [
-  { label: 'Studies', value: 'Higher Certificate in Information Systems, Eduvos (Feb 2024 – Dec 2025)' },
+  { label: 'Studies', value: 'Higher Certificate in Cyber Security, Eduvos (Feb 2024 – Dec 2025)' },
   { label: 'Focus', value: 'Helpdesk and end-user support, systems and server administration, networking, and security' },
   { label: 'Tech', value: 'Python, Bash and PowerShell, across Linux administration and network protocols' },
   { label: 'Goal', value: 'Keeping the systems people rely on running, supported and secure' },
@@ -325,7 +325,7 @@ const App: React.FC = () => {
             <Reveal delay={120}>
               <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-paper-dim">
                 IT support and operations professional with a Higher Certificate in
-                Information Systems from Eduvos. My work spans the full width of IT:
+                Cyber Security from Eduvos. My work spans the full width of IT:
                 end-user support and troubleshooting, systems and server administration,
                 networking, and security. I have designed, deployed and managed secure
                 server environments on both current and repurposed hardware, and built
