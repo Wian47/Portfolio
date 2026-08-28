@@ -310,7 +310,7 @@ const App: React.FC = () => {
             style={{ '--fade-delay': '750ms' } as React.CSSProperties}
           >
             <div className="mb-6 h-px w-full bg-ink-line" />
-            <p className="max-w-md text-[15px] leading-relaxed text-paper-dim">
+            <p className="max-w-md text-[16px] leading-relaxed text-paper-dim">
               IT support and operations, end to end. From helpdesk troubleshooting and
               end-user support through server deployment, networking and the security
               that holds it all together.
@@ -346,7 +346,7 @@ const App: React.FC = () => {
             </Reveal>
 
             <Reveal delay={120}>
-              <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-paper-dim">
+              <p className="mt-8 max-w-2xl text-[16px] leading-relaxed text-paper-dim">
                 IT support and operations professional with a Higher Certificate in
                 Cyber Security from Eduvos. My work spans the full width of IT:
                 end-user support and troubleshooting, systems and server administration,
@@ -366,7 +366,7 @@ const App: React.FC = () => {
                     <dt className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
                       {row.label}
                     </dt>
-                    <dd className="text-[15px] leading-relaxed text-paper-dim md:col-span-3">
+                    <dd className="text-[16px] leading-relaxed text-paper-dim md:col-span-3">
                       {row.value}
                     </dd>
                   </div>
@@ -381,7 +381,7 @@ const App: React.FC = () => {
                     <a
                       href="mailto:wian.schoeman1@gmail.com"
                       data-hover="true"
-                      className="inline-block py-2 text-[15px] text-paper underline decoration-ember/50 underline-offset-4 transition-colors hover:decoration-ember"
+                      className="inline-block py-2 text-[16px] text-paper underline decoration-ember/50 underline-offset-4 transition-colors hover:decoration-ember"
                     >
                       wian.schoeman1@gmail.com
                     </a>
@@ -467,7 +467,7 @@ const App: React.FC = () => {
         </Reveal>
 
         <Reveal className="mt-10" delay={140}>
-          <p className="max-w-2xl text-[15px] leading-relaxed text-paper-dim">
+          <p className="max-w-2xl text-[16px] leading-relaxed text-paper-dim">
             The work runs from the first line of support through to the infrastructure
             underneath it. Everything listed here is demonstrated by a project or
             deployment further down this page.
@@ -508,7 +508,7 @@ const App: React.FC = () => {
                       {group.items.map((item) => (
                         <li
                           key={item}
-                          className="border-b border-ink-line py-4 text-[15px] leading-relaxed text-paper-dim"
+                          className="border-b border-ink-line py-4 text-[16px] leading-relaxed text-paper-dim"
                         >
                           {item}
                         </li>
@@ -697,7 +697,7 @@ const App: React.FC = () => {
 
                 <div className="my-8 h-px w-16 bg-ember" />
 
-                <p className="whitespace-pre-line text-[15px] leading-relaxed text-paper-dim">
+                <p className="whitespace-pre-line text-[16px] leading-relaxed text-paper-dim">
                   {selectedProject.description}
                 </p>
 

@@ -23,8 +23,10 @@ export default {
         },
         paper: {
           DEFAULT: '#ece5d8',
-          dim: '#9c9285',
-          faint: '#6a6157'
+          // Contrast against ink: dim 8.05:1, faint 4.66:1. The previous faint
+          // was 3.08:1, which fails WCAG AA at the 10-11px the labels use.
+          dim: '#b1a99f',
+          faint: '#897d70'
         },
         ember: '#c9704a'
       },
