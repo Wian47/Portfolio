@@ -167,6 +167,23 @@ Key Implementations:
 • Hosted Nextcloud for secure file synchronization and document management.
 • Deployed Immich for high-performance photo and video backup.
 • Engineered a zero-trust network perimeter using Tailscale (WireGuard), allowing secure, encrypted remote access to the internal network from anywhere in the world without exposing ports to the public internet.`
+  },
+  {
+    id: 'planai-hackathon',
+    title: 'PlanAI',
+    category: 'Azure AI / Supabase / Hackathon',
+    image: '',
+    year: '2025',
+    tags: ['AI', 'Azure', 'Supabase', 'Team Build', 'Hackathon'],
+    description: `The Event: Microsoft AI Skills Hackathon, run by Geekulcha with 22 On Sloane on 3 and 4 May 2025. Two days, a team, and a working product at the end of it.
+
+The Problem: A marked test tells a student what they got wrong. It does not tell them what to study next, or in what order.
+
+The Build: PlanAI reads an uploaded test paper with Azure AI Document Intelligence, maps incorrect answers back to the knowledge domains behind them, and generates a multi-week study plan that adapts as further practice results come in.
+
+The Stack: HTML, JavaScript and Tailwind CSS on the front end, Supabase for the PostgreSQL database, authentication and row-level security, with Azure AI services and Microsoft Copilot driving the analysis and plan generation.
+
+My Role: Developer on the team, building to a 48 hour deadline and demonstrating the solution to judges at the close of the event.`
   }
 ];
 
@@ -601,6 +618,32 @@ const App: React.FC = () => {
                 <p className="max-w-2xl font-mono text-[10px] uppercase leading-relaxed tracking-label text-paper-dim">
                   The CompTIA-named modules are Eduvos coursework aligned to the exam
                   objectives, not certifications held.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={140}>
+            <div className="grid grid-cols-1 gap-3 border-b border-ink-line py-6 md:grid-cols-4 md:gap-6">
+              <span className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
+                Hands-on
+              </span>
+              <div className="flex flex-col gap-3 md:col-span-3">
+                <a
+                  href="https://tryhackme.com/p/wian.47"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  data-hover="true"
+                  className="group inline-flex w-fit items-baseline gap-3 font-display text-xl text-paper transition-colors duration-500 hover:text-ember md:text-2xl"
+                >
+                  TryHackMe
+                  <span className="font-mono text-[10px] uppercase tracking-label text-paper-faint transition-colors duration-500 group-hover:text-ember">
+                    tryhackme.com/p/wian.47
+                  </span>
+                </a>
+                <p className="max-w-2xl font-mono text-[10px] uppercase leading-relaxed tracking-label text-paper-dim">
+                  Top 5 percent · 93 rooms completed. Offensive and defensive labs worked
+                  through in a live environment, alongside capture the flag events.
                 </p>
               </div>
             </div>
