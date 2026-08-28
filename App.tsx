@@ -183,7 +183,7 @@ The Build: PlanAI reads an uploaded test paper with Azure AI Document Intelligen
 
 The Stack: HTML, JavaScript and Tailwind CSS on the front end, Supabase for the PostgreSQL database, authentication and row-level security, with Azure AI services and Microsoft Copilot driving the analysis and plan generation.
 
-My Role: Developer on the team, building to a 48 hour deadline and demonstrating the solution to judges at the close of the event.`
+My Role: Developer on the team and its largest contributor, with 13 of the 19 commits. I built the authentication layer, writing the Supabase auth service and the client wiring behind it, along with the login, profile and results views, and set up the Tailwind front end the rest of the interface was built on.`
   }
 ];
 
