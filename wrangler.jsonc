@@ -1,0 +1,16 @@
+{
+  // Deployed to Cloudflare Workers as a static asset upload: there is no Worker
+  // script, only the Vite build output. `npx wrangler deploy` reads this file to
+  // find that output, so the build command must have run first.
+  //
+  // The name has to match the Workers project in the dashboard. If they differ,
+  // a second Worker is created rather than the existing one being updated.
+  "name": "portfolio",
+  "compatibility_date": "2026-08-28",
+  "assets": {
+    "directory": "./dist/",
+    // The site is one page served from index.html. Without this, a request for
+    // any other path returns a bare 404 instead of the page.
+    "not_found_handling": "single-page-application"
+  }
+}
