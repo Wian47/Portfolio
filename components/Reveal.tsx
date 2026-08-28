@@ -23,6 +23,14 @@ import { getPerfTier } from '../utils/perf';
  * settling near an edge cannot oscillate. Still two observers for the whole
  * page and one CSS transition per element, with no animation loop.
  *
+ * The rise also mirrors the direction of travel, so content always enters from
+ * the edge it came in through rather than always rising. That offset is set
+ * when an element resets, not when it reveals: the edge it left by is the edge
+ * it will come back through, and at that moment it is off screen, so the style
+ * change costs nothing and has a clear frame before the transition reads it.
+ * Setting it at reveal time would need a forced reflow to be picked up as the
+ * transition's starting point.
+ *
  * The transition itself lives in index.html under [data-reveal].
  */
 
@@ -65,7 +73,16 @@ const getResetObserver = (): IntersectionObserver => {
             resetObserver?.unobserve(entry.target);
             return;
           }
-          entry.target.removeAttribute('data-shown');
+          const el = entry.target as HTMLElement;
+          const rect = entry.boundingClientRect;
+          const top = entry.rootBounds?.top ?? 0;
+          const bottom = entry.rootBounds?.bottom ?? window.innerHeight;
+          // Left underneath the viewport, so it returns from underneath and
+          // should rise; left over the top, so it returns from above and should
+          // descend. Anything ambiguous keeps whatever it had.
+          if (rect.top >= bottom) el.style.setProperty('--reveal-from', '18px');
+          else if (rect.bottom <= top) el.style.setProperty('--reveal-from', '-18px');
+          el.removeAttribute('data-shown');
         });
       },
       // No rootMargin: an element must be entirely outside the viewport before

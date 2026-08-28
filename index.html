@@ -62,7 +62,9 @@
       */
       [data-reveal] {
         opacity: 0;
-        transform: translateY(18px);
+        /* Sign is flipped by components/Reveal.tsx so content enters from the
+           edge it is actually coming in through. */
+        transform: translateY(var(--reveal-from, 18px));
       }
       [data-reveal][data-shown] {
         opacity: 1;
