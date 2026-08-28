@@ -10,7 +10,6 @@
     "projects:refresh": "node scripts/fetch-projects.mjs"
   },
   "dependencies": {
-    "@vercel/analytics": "^2.0.1",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.553.0",
     "react": "^19.2.0",
