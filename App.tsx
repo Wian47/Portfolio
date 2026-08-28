@@ -340,7 +340,7 @@ const App: React.FC = () => {
           <div className="md:col-span-7">
             <Reveal>
               <p className="font-display text-2xl leading-snug text-paper md:text-[2rem]">
-                From a jammed print queue to a hardened server — I keep the systems
+                From a jammed print queue to a hardened server, I keep the systems
                 people depend on running.
               </p>
             </Reveal>
@@ -352,8 +352,8 @@ const App: React.FC = () => {
                 end-user support and troubleshooting, systems and server administration,
                 networking, and security. I have designed, deployed and managed secure
                 server environments on both current and repurposed hardware, and built
-                tooling for the everyday support problems — printers, removable storage,
-                software deployment — that keep people working. Underneath it sits a
+                tooling for the everyday support problems (printers, removable storage,
+                software deployment) that keep people working. Underneath it sits a
                 strong foundation in ethical hacking, network defence and security
                 analysis, and a high technical aptitude for mastering complex platforms.
               </p>
@@ -391,7 +391,7 @@ const App: React.FC = () => {
             </dl>
           </div>
 
-          {/* Console panel — a quiet nod to the work itself */}
+          {/* Console panel: a quiet nod to the work itself */}
           <div className="md:col-span-5">
             <Reveal delay={160}>
               <div className="sticky top-28 border border-ink-line bg-ink-raised">
@@ -409,7 +409,7 @@ const App: React.FC = () => {
                   <p className="text-paper">&gt; ok</p>
                   <div className="my-4 h-px w-full bg-ink-line" />
                   <p className="text-paper-faint">
-                    Fun fact — I love exploring emerging security technologies and new
+                    Fun fact: I love exploring emerging security technologies and new
                     programming languages.
                   </p>
                 </div>
@@ -450,7 +450,7 @@ const App: React.FC = () => {
         <Reveal className="mt-6" delay={80}>
           <p className="max-w-3xl text-[13px] leading-relaxed text-paper-faint">
             <span className="font-mono text-[10px] uppercase tracking-label">Also in the toolbox</span>
-            {' — '}
+            {': '}
             {ALSO_IN_THE_TOOLBOX}
           </p>
         </Reveal>
