@@ -16,10 +16,33 @@ import { usePerfTier } from './utils/perf';
 import trueNASLogo from './assets/TrueNAS.png';
 import zimaOSLogo from './assets/ZimaOS.png';
 
-const TECH_STACK = [
-  'Python', 'C / C++', 'Go', 'Bash', 'PowerShell', 'SQL', 'JavaScript',
-  'Linux', 'Git', 'TrueNAS', 'ZimaOS'
+/**
+ * Mirrors the tech stack on the GitHub profile README, grouped the same way.
+ * TrueNAS, ZimaOS and Tailscale are carried over because the deployments in
+ * Selected Work demonstrate them; everything else comes straight from the
+ * README so the two stay in step.
+ */
+const TOOLKIT = [
+  {
+    label: 'Languages',
+    items: ['TypeScript', 'JavaScript', 'Python', 'Go', 'HTML', 'CSS', 'Bash']
+  },
+  {
+    label: 'Frameworks',
+    items: ['React', 'Node.js', 'Express', 'Vite', 'Tailwind CSS', 'Qt / QML', 'Vitest']
+  },
+  {
+    label: 'Data',
+    items: ['PostgreSQL', 'Prisma']
+  },
+  {
+    label: 'Platforms',
+    items: ['Linux', 'Arch Linux', 'Git', 'GitHub Actions', 'Docker', 'npm', 'Tailscale', 'TrueNAS', 'ZimaOS']
+  }
 ];
+
+const ALSO_IN_THE_TOOLBOX =
+  'Bubble Tea + Lip Gloss (Go TUIs) · Typer + Rich (Python CLIs) · Zod · React Router · Framer Motion · Scapy';
 
 /**
  * Every item below is demonstrated by a project or deployment elsewhere on this
@@ -87,7 +110,7 @@ const SECTIONS = [
 const PROFILE = [
   { label: 'Studies', value: 'Higher Certificate in Cyber Security, Eduvos (Feb 2024 – Dec 2025)' },
   { label: 'Focus', value: 'Helpdesk and end-user support, systems and server administration, networking, and security' },
-  { label: 'Tech', value: 'Python, Bash and PowerShell, across Linux administration and network protocols' },
+  { label: 'Tech', value: 'Go and Python for the terminal, TypeScript for the web, Bash and Linux underneath' },
   { label: 'Goal', value: 'Keeping the systems people rely on running, supported and secure' },
   { label: 'Ask me about', value: 'TrueNAS deployments, home lab infrastructure, Linux troubleshooting and penetration testing' }
 ];
@@ -396,20 +419,41 @@ const App: React.FC = () => {
         </div>
 
         {/* Toolkit */}
-        <Reveal className="mt-24">
+        <Reveal className="mt-20 md:mt-24">
           <h3 className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
             Toolkit
           </h3>
         </Reveal>
-        <div className="mt-6 flex flex-wrap gap-2">
-          {TECH_STACK.map((tech, i) => (
-            <Reveal key={tech} delay={i * 35}>
-              <span className="inline-block border border-ink-line px-3 py-2 font-mono text-[11px] text-paper-dim transition-colors duration-500 hover:border-ember/40 hover:text-paper">
-                {tech}
-              </span>
+
+        <div className="mt-6 border-t border-ink-line">
+          {TOOLKIT.map((group, i) => (
+            <Reveal key={group.label} delay={i * 80}>
+              <div className="grid grid-cols-1 gap-3 border-b border-ink-line py-6 md:grid-cols-4 md:gap-6">
+                <span className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
+                  {group.label}
+                </span>
+                <ul className="flex flex-wrap gap-2 md:col-span-3">
+                  {group.items.map((item) => (
+                    <li
+                      key={item}
+                      className="border border-ink-line px-3 py-2 font-mono text-[11px] text-paper-dim transition-colors duration-500 hover:border-ember/40 hover:text-paper"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </Reveal>
           ))}
         </div>
+
+        <Reveal className="mt-6" delay={80}>
+          <p className="max-w-3xl text-[13px] leading-relaxed text-paper-faint">
+            <span className="font-mono text-[10px] uppercase tracking-label">Also in the toolbox</span>
+            {' — '}
+            {ALSO_IN_THE_TOOLBOX}
+          </p>
+        </Reveal>
       </section>
 
       {/* ── 02 Capabilities ────────────────────────────────────────── */}
