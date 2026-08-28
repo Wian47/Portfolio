@@ -4,31 +4,76 @@
 */
 
 import React, { useEffect, useRef } from 'react';
+import { getPerfTier } from '../utils/perf';
 
 /**
- * Scroll-triggered reveal. A single shared IntersectionObserver flips a data
- * attribute and unobserves, so the whole page costs one observer and one CSS
- * transition per element - no animation loop, which is what keeps this smooth
- * when the browser is compositing on the CPU. The transition itself lives in
- * index.html under [data-reveal].
+ * Scroll-triggered reveal, playing in both directions: elements rise in as they
+ * enter the viewport and reset once they have fully left it, so scrolling back
+ * up replays the animation rather than walking through a page that is already
+ * fully revealed.
+ *
+ * Two shared observers rather than one, because a single threshold would make
+ * elements flicker at the viewport edge - the point at which an element is
+ * "in" has to sit well inside the point at which it is "out":
+ *
+ *   reveal  8% visible, and clear of the bottom 10% of the viewport
+ *   reset   0% visible, measured against the whole viewport
+ *
+ * That gap is the hysteresis. Nothing can satisfy both at once, so an element
+ * settling near an edge cannot oscillate. Still two observers for the whole
+ * page and one CSS transition per element, with no animation loop.
+ *
+ * The transition itself lives in index.html under [data-reveal].
  */
 
-let observer: IntersectionObserver | null = null;
+let revealObserver: IntersectionObserver | null = null;
+let resetObserver: IntersectionObserver | null = null;
 
-const getObserver = (): IntersectionObserver => {
-  if (!observer) {
-    observer = new IntersectionObserver(
+/**
+ * The lite tier exists to stop per-frame compositing work on a CPU rasteriser,
+ * and replaying 26 transitions on every pass is exactly that. It also covers
+ * prefers-reduced-motion, which forces this tier: repeatedly fading the page in
+ * and out is precisely what someone asking for reduced motion does not want.
+ * Checked when an observer fires rather than up front, so the frame-rate probe
+ * downgrading a second after load still takes effect.
+ */
+const isLite = (): boolean => getPerfTier() === 'lite';
+
+const getRevealObserver = (): IntersectionObserver => {
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           entry.target.setAttribute('data-shown', '');
-          observer?.unobserve(entry.target);
+          if (isLite()) revealObserver?.unobserve(entry.target);
         });
       },
       { rootMargin: '0px 0px -10% 0px', threshold: 0.08 }
     );
   }
-  return observer;
+  return revealObserver;
+};
+
+const getResetObserver = (): IntersectionObserver => {
+  if (!resetObserver) {
+    resetObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) return;
+          if (isLite()) {
+            resetObserver?.unobserve(entry.target);
+            return;
+          }
+          entry.target.removeAttribute('data-shown');
+        });
+      },
+      // No rootMargin: an element must be entirely outside the viewport before
+      // it resets, otherwise it would drop out while still partly on screen.
+      { threshold: 0 }
+    );
+  }
+  return resetObserver;
 };
 
 interface RevealProps {
@@ -52,9 +97,14 @@ const Reveal: React.FC<RevealProps> = ({ children, className = '', delay = 0, as
       return;
     }
 
-    const io = getObserver();
-    io.observe(el);
-    return () => io.unobserve(el);
+    const reveal = getRevealObserver();
+    const reset = getResetObserver();
+    reveal.observe(el);
+    reset.observe(el);
+    return () => {
+      reveal.unobserve(el);
+      reset.unobserve(el);
+    };
   }, []);
 
   return (

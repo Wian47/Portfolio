@@ -49,20 +49,27 @@
       .font-display { font-weight: 400; }
 
       /*
-        Scroll reveals. Driven by IntersectionObserver adding [data-shown] rather
-        than a JS animation loop, so the browser only does one transition per
-        element - this stays smooth even when compositing on the CPU.
+        Scroll reveals, playing in both directions. IntersectionObserver adds
+        [data-shown] on entry and removes it once the element is fully out of
+        view, so scrolling back up replays the rise instead of walking through
+        a page that is already revealed. No JS animation loop either way.
+
+        The transition sits on the shown state, not the base. CSS animates using
+        the destination rule, so revealing eases over 0.9s while resetting has
+        no transition to apply and snaps. That snap only ever happens off
+        screen, and it means scrolling back to an element finds it fully reset
+        rather than caught halfway through a fade it never finished.
       */
       [data-reveal] {
         opacity: 0;
         transform: translateY(18px);
-        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-                    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-        transition-delay: var(--reveal-delay, 0ms);
       }
       [data-reveal][data-shown] {
         opacity: 1;
         transform: none;
+        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        transition-delay: var(--reveal-delay, 0ms);
       }
 
       /* Masked line-by-line rise for the hero wordmark */
@@ -82,13 +89,15 @@
       }
       @keyframes fadeIn { to { opacity: 1; } }
 
-      /* Hairline that draws itself across when revealed */
+      /* Hairline that draws itself across when revealed, and un-draws off screen */
       .rule-draw {
         transform: scaleX(0);
         transform-origin: left;
+      }
+      [data-shown] .rule-draw, .rule-draw[data-shown] {
+        transform: scaleX(1);
         transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
       }
-      [data-shown] .rule-draw, .rule-draw[data-shown] { transform: scaleX(1); }
 
       /*
         Lite tier: set by utils/perf.ts when the browser is compositing on the CPU
@@ -112,9 +121,12 @@
       /* A genuine reduced-motion request means no movement at all, only fades */
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
-        [data-reveal] { transform: none; transition: opacity 0.4s linear; }
+        [data-reveal] { transform: none; }
+        [data-reveal][data-shown] { transition: opacity 0.4s linear; }
         .rise-line { animation: none; transform: none; }
-        .rule-draw { transition: none; transform: scaleX(1); }
+        /* Reveals stay one-shot here - see components/Reveal.tsx - so the rule
+           is simply drawn, never redrawn. */
+        .rule-draw, [data-shown] .rule-draw { transition: none; transform: scaleX(1); }
       }
     </style>
   </head>
