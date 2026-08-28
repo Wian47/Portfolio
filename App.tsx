@@ -587,26 +587,25 @@ const App: React.FC = () => {
               <span className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
                 Modules passed
               </span>
-              <ul className="flex flex-wrap gap-2 md:col-span-3">
-                {MODULES_PASSED.map((module) => (
-                  <li
-                    key={module}
-                    className="border border-ink-line px-3 py-2 font-mono text-[11px] text-paper-dim transition-colors duration-500 hover:border-ember/40 hover:text-paper"
-                  >
-                    {module}
-                  </li>
-                ))}
-              </ul>
+              <div className="flex flex-col gap-5 md:col-span-3">
+                <ul className="flex flex-wrap gap-2">
+                  {MODULES_PASSED.map((module) => (
+                    <li
+                      key={module}
+                      className="border border-ink-line px-3 py-2 font-mono text-[11px] text-paper-dim transition-colors duration-500 hover:border-ember/40 hover:text-paper"
+                    >
+                      {module}
+                    </li>
+                  ))}
+                </ul>
+                <p className="max-w-2xl font-mono text-[10px] uppercase leading-relaxed tracking-label text-paper-dim">
+                  The CompTIA-named modules are Eduvos coursework aligned to the exam
+                  objectives, not certifications held.
+                </p>
+              </div>
             </div>
           </Reveal>
         </div>
-
-        <Reveal className="mt-8">
-          <p className="max-w-3xl font-mono text-[10px] uppercase leading-relaxed tracking-label text-paper-faint">
-            The CompTIA-named modules above are Eduvos coursework aligned to the exam
-            objectives, not certifications held.
-          </p>
-        </Reveal>
       </section>
 
       {/* ── 05 Contact ─────────────────────────────────────────────── */}
