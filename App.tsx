@@ -91,12 +91,22 @@ const CAPABILITIES = [
   }
 ];
 
-const CREDENTIALS = [
-  { name: 'Higher Certificate in Cyber Security', issuer: 'Eduvos', status: 'Completed · Feb 2024 – Dec 2025' },
-  { name: 'CompTIA A+', issuer: 'CompTIA', status: 'Coursework' },
-  { name: 'CompTIA Network+', issuer: 'CompTIA', status: 'Coursework' },
-  { name: 'CompTIA PenTest+', issuer: 'CompTIA', status: 'Coursework' },
-  { name: 'CompTIA CASP+', issuer: 'CompTIA', status: 'Coursework' }
+/**
+ * Taken from the Eduvos academic transcript. The qualification is named in full
+ * as it appears there, no completion status is claimed, and the modules are
+ * listed as passed subjects rather than as certifications - they are Eduvos
+ * modules aligned to the CompTIA exam objectives, not credentials CompTIA
+ * issued.
+ */
+const QUALIFICATION = {
+  name: 'Higher Certificate in Information Systems: Cyber Security',
+  issuer: 'Eduvos, Bedfordview',
+  status: 'NQF 5 · Feb 2024 – Dec 2025'
+};
+
+const MODULES_PASSED = [
+  'Security+', 'A+', 'Network+', 'PenTest+', 'CySA+', 'CASP+',
+  'Linux Administration', 'Linux Operating System', 'Wireless Networks & Security'
 ];
 
 const SECTIONS = [
@@ -108,7 +118,7 @@ const SECTIONS = [
 ];
 
 const PROFILE = [
-  { label: 'Studies', value: 'Higher Certificate in Cyber Security, Eduvos (Feb 2024 – Dec 2025)' },
+  { label: 'Studies', value: 'Higher Certificate in Information Systems: Cyber Security, Eduvos (Feb 2024 – Dec 2025)' },
   { label: 'Focus', value: 'Helpdesk and end-user support, systems and server administration, networking, and security' },
   { label: 'Tech', value: 'Go and Python for the terminal, TypeScript for the web, Bash and Linux underneath' },
   { label: 'Goal', value: 'Keeping the systems people rely on running, supported and secure' },
@@ -347,8 +357,8 @@ const App: React.FC = () => {
 
             <Reveal delay={120}>
               <p className="mt-8 max-w-2xl text-[16px] leading-relaxed text-paper-dim">
-                IT support and operations professional with a Higher Certificate in
-                Cyber Security from Eduvos. My work spans the full width of IT:
+                IT support and operations professional trained in cyber security at
+                Eduvos. My work spans the full width of IT:
                 end-user support and troubleshooting, systems and server administration,
                 networking, and security. I have designed, deployed and managed secure
                 server environments on both current and repurposed hardware, and built
@@ -556,29 +566,45 @@ const App: React.FC = () => {
         </Reveal>
 
         <div className="mt-16 border-t border-ink-line">
-          {CREDENTIALS.map((credential, i) => (
-            <Reveal key={credential.name} delay={i * 70}>
-              <div className="flex flex-col gap-2 border-b border-ink-line py-6 md:flex-row md:items-baseline md:justify-between md:gap-8">
-                <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-6">
-                  <span className="font-display text-xl text-paper md:text-2xl">
-                    {credential.name}
-                  </span>
-                  <span className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
-                    {credential.issuer}
-                  </span>
-                </div>
-                <span className="font-mono text-[10px] uppercase tracking-label text-paper-dim md:flex-shrink-0">
-                  {credential.status}
+          <Reveal>
+            <div className="flex flex-col gap-2 border-b border-ink-line py-6 md:flex-row md:items-baseline md:justify-between md:gap-8">
+              <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-6">
+                <span className="font-display text-xl text-paper md:text-2xl">
+                  {QUALIFICATION.name}
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
+                  {QUALIFICATION.issuer}
                 </span>
               </div>
-            </Reveal>
-          ))}
+              <span className="font-mono text-[10px] uppercase tracking-label text-paper-dim md:flex-shrink-0">
+                {QUALIFICATION.status}
+              </span>
+            </div>
+          </Reveal>
+
+          <Reveal delay={90}>
+            <div className="grid grid-cols-1 gap-3 border-b border-ink-line py-6 md:grid-cols-4 md:gap-6">
+              <span className="font-mono text-[10px] uppercase tracking-label text-paper-faint">
+                Modules passed
+              </span>
+              <ul className="flex flex-wrap gap-2 md:col-span-3">
+                {MODULES_PASSED.map((module) => (
+                  <li
+                    key={module}
+                    className="border border-ink-line px-3 py-2 font-mono text-[11px] text-paper-dim transition-colors duration-500 hover:border-ember/40 hover:text-paper"
+                  >
+                    {module}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
         </div>
 
         <Reveal className="mt-8">
-          <p className="max-w-2xl font-mono text-[10px] uppercase leading-relaxed tracking-label text-paper-faint">
-            “Coursework” denotes study completed toward a certification rather than the
-            certification itself.
+          <p className="max-w-3xl font-mono text-[10px] uppercase leading-relaxed tracking-label text-paper-faint">
+            The CompTIA-named modules above are Eduvos coursework aligned to the exam
+            objectives, not certifications held.
           </p>
         </Reveal>
       </section>
