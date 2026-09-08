@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Private page content. The repo is public, so this never gets committed; it is
+# uploaded by `wrangler deploy` from the local build and gated by Cloudflare Access.
+public/private/

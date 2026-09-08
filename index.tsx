@@ -18,8 +18,32 @@ if (!rootElement) {
 }
 
 const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+
+/**
+ * The private pages are a dynamic import rather than a branch inside App, so the
+ * portfolio bundle everyone downloads carries none of their markup. Cloudflare
+ * Workers serves index.html for these paths via `not_found_handling`, which is
+ * why no router is needed for a handful of routes.
+ */
+const PRIVATE_ROUTES: Record<string, () => Promise<{ default: React.ComponentType }>> = {
+  '/build': () => import('./components/BuildPage')
+};
+
+const path = window.location.pathname.replace(/\/+$/, '') || '/';
+const loadPrivate = PRIVATE_ROUTES[path];
+
+if (loadPrivate) {
+  loadPrivate().then(({ default: Page }) => {
+    root.render(
+      <React.StrictMode>
+        <Page />
+      </React.StrictMode>
+    );
+  });
+} else {
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+}
