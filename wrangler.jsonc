@@ -7,6 +7,9 @@
   // a second Worker is created rather than the existing one being updated.
   "name": "portfolio",
   "compatibility_date": "2026-08-28",
+  // Cloudflare Access is bound to the zone hostname, so anything reachable on
+  // *.workers.dev bypasses it. The private routes would be readable there.
+  "workers_dev": false,
   "assets": {
     "directory": "./dist/",
     // The site is one page served from index.html. Without this, a request for
