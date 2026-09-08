@@ -16,19 +16,27 @@ that gate the JSON is readable by anyone who guesses the URL.
 
 ## Set up Cloudflare Access
 
-Access is free for up to 50 users and takes about ten minutes.
+Access is free for up to 50 users. One application covers both paths.
 
-1. Open the Cloudflare dashboard, then **Zero Trust** → **Access** → **Applications**.
-2. **Add an application** → **Self-hosted**.
-3. Application domain: `wianschoeman.com`, path `build`.
-4. Add a policy: action **Allow**, rule **Emails** → `wian.schoeman1@gmail.com`.
-5. Save, then repeat steps 2 to 4 for a second application with path `private`.
+1. Cloudflare dashboard, then **Zero Trust**, then **Access controls**, then
+   **Applications**, then **Add an application**, then **Self-hosted**.
+2. Under **Destinations**, leave Subdomain blank, set Domain to `wianschoeman.com`,
+   and set Path to `build`. The UI supplies the leading slash.
+3. Click **Add public hostname** and add a second row with the same domain and Path
+   `private`.
+4. Under **Access policies**, **Create new policy**. Action **Allow**, Include rule
+   **Emails**, value `wian.schoeman1@gmail.com`.
+5. Under **Authentication**, leave **Accept all available identity providers** on and
+   turn **Apply instant authentication** on.
+6. Under **Details**, set Session Duration to **1 month**.
+7. **Create**.
 
-Both applications are needed. The first gates the page, the second gates the JSON
-the page fetches. Protecting a path also protects everything beneath it.
+Both destinations are required. The first gates the page, the second gates the JSON
+the page fetches. Protecting a path also protects everything beneath it, so `private`
+covers `/private/cx3-build.json`.
 
-For the login method, One-time PIN needs no identity provider: Cloudflare emails a
-code. Google or GitHub SSO works too.
+Do not use the **Add Workers** destination type. It targets the whole Worker, which
+would put the entire portfolio behind a login.
 
 ## Prove it is actually protected
 
