@@ -10,5 +10,7 @@
     "noEmit": true
   },
   "include": ["**/*.ts", "../trip/**/*.ts"],
-  "exclude": ["../trip/**/*.test.ts"]
+  // `trip/api.ts` is the browser's side of the same contract and speaks DOM
+  // fetch, which workerd's RequestInit does not have. The Worker never imports it.
+  "exclude": ["../trip/**/*.test.ts", "../trip/api.ts"]
 }

@@ -56,3 +56,14 @@ export const positionKey = (p: Position): string => {
   const [lon, lat] = roundPosition(p);
   return `${lon.toFixed(5)},${lat.toFixed(5)}`;
 };
+
+/**
+ * A coordinate pair off the clipboard. Google Maps and Apple Maps both copy
+ * latitude first, so that is the order accepted here, and it is the one place
+ * in the app where a pair is not lon-first.
+ */
+export const parsePastedCoordinates = (raw: string): Parsed<Position> => {
+  const match = /^\s*(-?\d+(?:\.\d+)?)\s*[,\s]\s*(-?\d+(?:\.\d+)?)\s*$/.exec(raw);
+  if (match === null) return fail('expected "latitude, longitude"');
+  return positionFromLatLon(Number(match[1]), Number(match[2]));
+};

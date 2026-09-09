@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 
-import { STOP_KIND, type BudgetCategory, type Stop, type VehicleProfile } from './model';
+import { STOP_KIND, type BudgetCategory, type Stop, type Trip, type VehicleProfile } from './model';
 
 /**
  * Integer cents, ZAR, everywhere. No float reaches a total. Fuel is derived from
@@ -47,6 +47,12 @@ export const budgetByCategory = (stops: readonly Stop[]): BudgetTotals => {
     if (category !== null) totals[category] += stop.costCents ?? 0;
   }
   return totals;
+};
+
+/** Authored spend only. Fuel is added from routed distance once legs exist. */
+export const tripTotals = (trip: Trip): { byCategory: BudgetTotals; totalCents: Cents } => {
+  const byCategory = budgetByCategory(trip.stops);
+  return { byCategory, totalCents: sumCents(Object.values(byCategory)) };
 };
 
 export const formatRand = (cents: Cents): string => {
