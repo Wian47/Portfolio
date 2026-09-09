@@ -4,7 +4,8 @@
 */
 
 import type { Trip, VersionedTrip } from './model';
-import type { TripOp } from './ops';
+import { applyAll, type TripOp } from './ops';
+import { parseTrip } from './validate';
 
 /**
  * The sync policy, as a pure function. No React, no fetch, no timers, so the
@@ -19,6 +20,9 @@ import type { TripOp } from './ops';
  */
 
 export type MutationId = string & { readonly __brand: 'MutationId' };
+
+/** The only producer, so an id can never be typed by hand or reused by accident. */
+export const newMutationId = (): MutationId => crypto.randomUUID() as MutationId;
 
 /**
  * A frozen attempt. The id and the bytes are minted together and neither can
@@ -78,16 +82,47 @@ export type FlushOutcome =
  * round trip and a mystery.
  */
 export const planFlush = (state: TripState): Flush | { error: string } | null => {
-  throw new Error('not implemented');
+  if (state.log.length === 0) return null;
+
+  const parsed = parseTrip(applyAll(state.base.trip, state.log));
+  if (!parsed.ok) return { error: parsed.error };
+
+  return Object.freeze({
+    mutationId: newMutationId(),
+    body: JSON.stringify(parsed.value),
+    ifMatch: state.base.version,
+    covers: state.log.length
+  });
 };
+
+const attemptsSoFar = (sync: SyncState): number => (sync.kind === 'retrying' ? sync.attempt : 0);
 
 /** The single place an outcome moves `base`, `log` and the mutation id together. */
 export const applyOutcome = (state: TripState, flush: Flush, outcome: FlushOutcome): TripState => {
-  throw new Error('not implemented');
+  switch (outcome.kind) {
+    case 'applied':
+      return { base: outcome.server, log: state.log.slice(flush.covers), sync: { kind: 'idle' } };
+
+    case 'stale':
+      // A 409 means the write never landed, so the whole log survives, this
+      // flush's ops included, and the next attempt is a different payload
+      // under a different id.
+      return { base: outcome.server, log: state.log, sync: { kind: 'idle' } };
+
+    case 'unreachable':
+      // The same `Flush`, so the same id over the same bytes. The Worker
+      // remembers nothing it has not answered, so the retry either replays the
+      // response we lost or applies for the first time.
+      return { ...state, sync: { kind: 'retrying', flush, attempt: attemptsSoFar(state.sync) + 1 } };
+
+    case 'signedOut':
+      return { ...state, sync: { kind: 'signedOut' } };
+
+    case 'rejected':
+      return { ...state, sync: { kind: 'blocked', reason: outcome.reason } };
+  }
 };
 
-export const viewOf = (state: TripState): Trip => {
-  throw new Error('not implemented');
-};
+export const viewOf = (state: TripState): Trip => applyAll(state.base.trip, state.log);
 
 export const hasUnsavedWork = (state: TripState): boolean => state.log.length > 0;
