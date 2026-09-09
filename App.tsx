@@ -53,7 +53,7 @@ const CAPABILITIES = [
     index: '01',
     title: 'Helpdesk & End-User Support',
     items: [
-      'Printer setup, print queues, job handling and consumable monitoring',
+      'Per-application bandwidth visibility when a machine or link is running slow',
       'Removable media, external drives and peripheral troubleshooting',
       'Software installation and package management across Flatpak, Snap and system repositories',
       'User accounts, permissions and access requests'
@@ -379,10 +379,11 @@ const App: React.FC = () => {
                 end-user support and troubleshooting, systems and server administration,
                 networking, and security. I have designed, deployed and managed secure
                 server environments on both current and repurposed hardware, and built
-                tooling for the everyday support problems (printers, removable storage,
-                software deployment) that keep people working. Underneath it sits a
-                strong foundation in ethical hacking, network defence and security
-                analysis, and a high technical aptitude for mastering complex platforms.
+                tooling for the everyday support problems (removable storage, slow
+                connections, software deployment) that keep people working. Underneath
+                it sits a strong foundation in ethical hacking, network defence and
+                security analysis, and a high technical aptitude for mastering complex
+                platforms.
               </p>
             </Reveal>
 
