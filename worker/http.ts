@@ -18,6 +18,12 @@ export interface Env {
    * leaves it unset and uses the derived URL.
    */
   ACCESS_JWKS_URL?: string;
+  /**
+   * Overrides the Photon origin, the same seam and for the same reason: the
+   * verification run points it at a local stub so the geocode checks are
+   * deterministic and offline. Production leaves it unset.
+   */
+  GEOCODE_UPSTREAM?: string;
   ORS_API_KEY?: string;
 }
 

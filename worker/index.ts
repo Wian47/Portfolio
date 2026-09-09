@@ -9,6 +9,7 @@ import { parseTrip } from '../trip/validate';
 import { verifyAccess, type Identity } from './access';
 import { replayMutation, rememberMutation } from './cache';
 import { json, noContent, problem, readJson, type Env } from './http';
+import { handleGeocode, handleReverse } from './proxy/geocode';
 import { archiveTrip, getTrip, insertTrip, listTrips, replaceTrip } from './trips';
 
 /**
@@ -96,7 +97,9 @@ const ROUTES: readonly Route[] = [
   { method: 'POST', pattern: /^\/build\/api\/trips$/, handler: handleCreate },
   { method: 'GET', pattern: /^\/build\/api\/trips\/([^/]+)$/, handler: handleGet },
   { method: 'PUT', pattern: /^\/build\/api\/trips\/([^/]+)$/, handler: handleReplace },
-  { method: 'DELETE', pattern: /^\/build\/api\/trips\/([^/]+)$/, handler: handleArchive }
+  { method: 'DELETE', pattern: /^\/build\/api\/trips\/([^/]+)$/, handler: handleArchive },
+  { method: 'GET', pattern: /^\/build\/api\/geocode$/, handler: handleGeocode },
+  { method: 'GET', pattern: /^\/build\/api\/reverse$/, handler: handleReverse }
 ];
 
 const MUTATING = new Set(['POST', 'PUT', 'DELETE']);
