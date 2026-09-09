@@ -17,7 +17,8 @@
 
 import { randomUUID } from 'node:crypto';
 import {
-  WORKER_PORT, applyMigrations, resetLocalState, startKeyServer, startWorker
+  PHOTON_PORT, WORKER_PORT, applyMigrations, resetLocalState, startKeyServer, startPhotonStub,
+  startWorker
 } from './dev-stack.mjs';
 
 const BASE = `http://127.0.0.1:${WORKER_PORT}`;
@@ -76,6 +77,7 @@ const sampleTrip = (id) => ({
 
 let worker = null;
 let keys = null;
+let photon = null;
 
 const run = async () => {
   console.log('access');
@@ -176,6 +178,91 @@ const run = async () => {
   const afterArchive = await call('/build/api/trips');
   check('an archived trip leaves the list', !afterArchive.json?.trips?.some((t) => t.id === id));
   check('archiving twice is 404', (await call(`/build/api/trips/${id}`, { method: 'DELETE' })).status === 404);
+
+  console.log('geocode');
+  check('an unauthenticated search is refused',
+    (await call('/build/api/geocode?q=Barrydale', { token: null })).status === 403);
+  check('nothing was asked of Photon on the way to that refusal', photon.seen.length === 0);
+
+  const found = await call('/build/api/geocode?q=Barrydale');
+  const place = found.json?.places?.[0];
+  check('a search returns places', found.status === 200 && found.json?.places?.length === 1,
+    found.text.slice(0, 200));
+  check('the coordinate comes back longitude first',
+    place?.at?.[0] === 20.7175 && place?.at?.[1] === -33.9053, JSON.stringify(place?.at));
+  check('the place keeps the name Photon gave it', place?.name === 'Barrydale');
+  check('the address says where it is without repeating its name',
+    place?.address === 'Overberg District Municipality, Western Cape, South Africa', place?.address);
+
+  const asked = photon.seen.at(-1);
+  check('the search went to Photon once', photon.seen.length === 1);
+  check('the result count is capped at 8', asked?.query.get('limit') === '8');
+  check('the User-Agent identifies the site',
+    asked?.userAgent.includes('wianschoeman.com'), asked?.userAgent);
+  check('the User-Agent carries no email address',
+    !asked?.userAgent.includes('@'), asked?.userAgent);
+
+  const repeated = await call('/build/api/geocode?q=%20%20BARRYDALE%20');
+  check('the same query in another case and spacing is served from KV',
+    repeated.status === 200 && photon.seen.length === 1,
+    `${photon.seen.length} upstream requests`);
+  check('the cached answer is the answer that was cached', repeated.text === found.text);
+
+  const biased = await call('/build/api/geocode?q=Barrydale&near=18.42,-33.93');
+  const withBias = photon.seen.at(-1);
+  check('a bias point is a different question, and is asked', biased.status === 200 && photon.seen.length === 2);
+  check('the bias reaches Photon as lat and lon',
+    withBias?.query.get('lat') === '-33.93' && withBias?.query.get('lon') === '18.42',
+    String(withBias?.query));
+
+  const nothing = await call('/build/api/geocode?q=nowhere%20at%20all');
+  check('a query that matches nothing is an empty list, not an error',
+    nothing.status === 200 && Array.isArray(nothing.json?.places) && nothing.json.places.length === 0,
+    nothing.text.slice(0, 200));
+
+  check('a blank q is refused', (await call('/build/api/geocode?q=%20%20')).status === 400);
+  check('a missing q is refused', (await call('/build/api/geocode')).status === 400);
+  check('an oversized q is refused', (await call(`/build/api/geocode?q=${'a'.repeat(500)}`)).status === 400);
+  check('a half-written near is refused', (await call('/build/api/geocode?q=Barrydale&near=18.42')).status === 400);
+  check('a near past the pole is refused', (await call('/build/api/geocode?q=Barrydale&near=18.42,-99')).status === 400);
+  check('a refused request never reached Photon', photon.seen.length === 3,
+    `${photon.seen.length} upstream requests`);
+
+  console.log('geocode upstream failure (the Worker error logged below is the point)');
+  const broken = await call('/build/api/geocode?q=boom');
+  check('an upstream failure is a 502, not a 500',
+    broken.status === 502 && broken.json?.error === 'geocode_upstream', broken.text.slice(0, 200));
+  const afterFailure = photon.seen.length;
+  const retried = await call('/build/api/geocode?q=boom');
+  check('a failure is not cached, so the retry tries again',
+    retried.status === 502 && photon.seen.length === afterFailure + 1,
+    `${photon.seen.length - afterFailure} upstream requests`);
+
+  console.log('reverse');
+  const reversed = await call('/build/api/reverse?at=22.204206,-33.59029');
+  check('reverse names the point', reversed.status === 200 && reversed.json?.place?.name === 'Oudtshoorn',
+    reversed.text.slice(0, 200));
+  check('reverse keeps the coordinate longitude first',
+    reversed.json?.place?.at?.[0] === 22.204206 && reversed.json?.place?.at?.[1] === -33.5902954,
+    JSON.stringify(reversed.json?.place?.at));
+  check('reverse describes it without repeating the name',
+    reversed.json?.place?.address === 'George, Western Cape, South Africa',
+    reversed.json?.place?.address);
+
+  const reverseCalls = photon.seen.length;
+  check('the same point again is served from KV',
+    (await call('/build/api/reverse?at=22.204206,-33.59029')).status === 200
+      && photon.seen.length === reverseCalls);
+
+  const empty = await call('/build/api/reverse?at=0,0');
+  check('a point with nothing near it is a null place',
+    empty.status === 200 && empty.json?.place === null, empty.text.slice(0, 200));
+
+  check('a malformed at is refused', (await call('/build/api/reverse?at=nonsense')).status === 400);
+  check('half a coordinate is refused', (await call('/build/api/reverse?at=22.2')).status === 400);
+  check('an empty coordinate is refused', (await call('/build/api/reverse?at=%2C')).status === 400);
+  check('a latitude past the pole is refused', (await call('/build/api/reverse?at=22.2,120')).status === 400);
+  check('a missing at is refused', (await call('/build/api/reverse')).status === 400);
 };
 
 const main = async () => {
@@ -183,7 +270,8 @@ const main = async () => {
   await applyMigrations();
   keys = await startKeyServer();
   mint = keys.mint;
-  worker = await startWorker();
+  photon = await startPhotonStub();
+  worker = await startWorker({ photonPort: PHOTON_PORT });
   await run();
 };
 
@@ -195,6 +283,7 @@ main()
   .finally(() => {
     worker?.stop();
     keys?.close();
+    photon?.close();
     console.log(`\n${checks - failures}/${checks} checks passed`);
     process.exit(failures === 0 ? 0 : 1);
   });
