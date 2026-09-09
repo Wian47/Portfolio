@@ -15,40 +15,14 @@
  *   node scripts/verify-worker.mjs
  */
 
-import { createServer } from 'node:http';
-import { spawn } from 'node:child_process';
-import { generateKeyPairSync, createSign, randomUUID } from 'node:crypto';
-import { rm } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+import {
+  WORKER_PORT, applyMigrations, resetLocalState, startKeyServer, startWorker
+} from './dev-stack.mjs';
 
-const WORKER_PORT = 8788;
-const JWKS_PORT = 8799;
-const TEAM_DOMAIN = 'verify-local.cloudflareaccess.com';
-const AUD = 'aud-for-local-verification';
-const OWNER = 'wian.schoeman1@gmail.com';
 const BASE = `http://127.0.0.1:${WORKER_PORT}`;
-const KID = 'verify-key-1';
 
-const { publicKey, privateKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
-const jwk = { ...publicKey.export({ format: 'jwk' }), kid: KID, alg: 'RS256', use: 'sig' };
-
-const b64 = (value) => Buffer.from(value).toString('base64url');
-
-const mint = (claims = {}, { kid = KID, tamper = false } = {}) => {
-  const now = Math.floor(Date.now() / 1000);
-  const header = b64(JSON.stringify({ alg: 'RS256', kid, typ: 'JWT' }));
-  const payload = b64(JSON.stringify({
-    aud: [AUD],
-    email: OWNER,
-    iss: `https://${TEAM_DOMAIN}`,
-    iat: now,
-    nbf: now - 10,
-    exp: now + 600,
-    ...claims
-  }));
-  const signature = createSign('RSA-SHA256').update(`${header}.${payload}`).end().sign(privateKey);
-  const encoded = b64(signature);
-  return `${header}.${payload}.${tamper ? `${encoded.slice(0, -2)}AA` : encoded}`;
-};
+let mint = null;
 
 let failures = 0;
 let checks = 0;
@@ -63,11 +37,12 @@ const check = (label, condition, detail = '') => {
   }
 };
 
-const call = async (path, { method = 'GET', token = mint(), body, headers = {} } = {}) => {
+const call = async (path, { method = 'GET', token = undefined, body, headers = {} } = {}) => {
+  const assertion = token === undefined ? mint() : token;
   const response = await fetch(`${BASE}${path}`, {
     method,
     headers: {
-      ...(token === null ? {} : { 'cf-access-jwt-assertion': token }),
+      ...(assertion === null ? {} : { 'cf-access-jwt-assertion': assertion }),
       ...(body === undefined ? {} : { 'content-type': 'application/json' }),
       ...headers
     },
@@ -78,24 +53,6 @@ const call = async (path, { method = 'GET', token = mint(), body, headers = {} }
   try { json = text.length > 0 ? JSON.parse(text) : null; } catch { json = null; }
   return { status: response.status, headers: response.headers, text, json };
 };
-
-const waitForWorker = async () => {
-  for (let attempt = 0; attempt < 120; attempt += 1) {
-    try {
-      const response = await fetch(`${BASE}/build/api/trips`, { method: 'GET' });
-      if (response.status > 0) return;
-    } catch {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
-  }
-  throw new Error('wrangler dev never came up');
-};
-
-const sh = (command, args) => new Promise((resolve, reject) => {
-  const child = spawn(command, args, { stdio: ['ignore', 'ignore', 'inherit'] });
-  child.on('error', reject);
-  child.on('exit', (code) => (code === 0 ? resolve() : reject(new Error(`${command} exited ${code}`))));
-});
 
 const sampleTrip = (id) => ({
   id,
@@ -117,16 +74,8 @@ const sampleTrip = (id) => ({
   updatedAt: '2026-09-09T05:00:00Z'
 });
 
-const jwks = createServer((req, res) => {
-  if (req.url === '/certs') {
-    res.writeHead(200, { 'content-type': 'application/json' });
-    res.end(JSON.stringify({ keys: [jwk] }));
-    return;
-  }
-  res.writeHead(404).end();
-});
-
 let worker = null;
+let keys = null;
 
 const run = async () => {
   console.log('access');
@@ -230,23 +179,11 @@ const run = async () => {
 };
 
 const main = async () => {
-  await rm('.wrangler/state/v3/d1', { recursive: true, force: true });
-  await rm('.wrangler/state/v3/kv', { recursive: true, force: true });
-  await sh('npx', ['wrangler', 'd1', 'execute', 'portfolio-trips', '--local', '--file=migrations/0001_trips.sql']);
-
-  await new Promise((resolve) => jwks.listen(JWKS_PORT, '127.0.0.1', resolve));
-
-  worker = spawn('npx', [
-    'wrangler', 'dev',
-    '--port', String(WORKER_PORT),
-    '--ip', '127.0.0.1',
-    '--var', `ACCESS_TEAM_DOMAIN:${TEAM_DOMAIN}`,
-    '--var', `ACCESS_AUD:${AUD}`,
-    '--var', `OWNER_EMAIL:${OWNER}`,
-    '--var', `ACCESS_JWKS_URL:http://127.0.0.1:${JWKS_PORT}/certs`
-  ], { stdio: ['ignore', 'ignore', 'inherit'] });
-
-  await waitForWorker();
+  await resetLocalState();
+  await applyMigrations();
+  keys = await startKeyServer();
+  mint = keys.mint;
+  worker = await startWorker();
   await run();
 };
 
@@ -256,8 +193,8 @@ main()
     console.error(error);
   })
   .finally(() => {
-    worker?.kill('SIGTERM');
-    jwks.close();
+    worker?.stop();
+    keys?.close();
     console.log(`\n${checks - failures}/${checks} checks passed`);
     process.exit(failures === 0 ? 0 : 1);
   });
