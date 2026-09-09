@@ -12,7 +12,7 @@ import ulpmImg from '../assets/ulpm.jpg';
 import gitsketchImg from '../assets/gitsketch.jpg';
 import tsHudImg from '../assets/ts-hud.png';
 import gitCleanImg from '../assets/git-clean.png';
-import omarchyPrinterImg from '../assets/omarchy-printers.png';
+import omarchySiphonImg from '../assets/omarchy-siphon.png';
 import omarchyRemovableDrivesImg from '../assets/removable-drives.png';
 
 // Image mappings for specific projects
@@ -22,7 +22,7 @@ const PROJECT_IMAGES: Record<string, string> = {
     'GitSketch': gitsketchImg,
     'ts-hud': tsHudImg,
     'git-clean': gitCleanImg,
-    'omarchy-printer': omarchyPrinterImg,
+    'omarchy-siphon': omarchySiphonImg,
     'omarchy-removable-drives': omarchyRemovableDrivesImg,
 };
 
@@ -32,14 +32,14 @@ const PROJECT_TITLES: Record<string, string> = {
     'CLI-NetworkScanner': 'CLI Network Scanner',
     'ts-hud': 'TS-HUD',
     'git-clean': 'git-clean',
-    'omarchy-printer': 'Omarchy Printers',
+    'omarchy-siphon': 'Omarchy Siphon',
     'omarchy-removable-drives': 'Omarchy Removable Drives',
 };
 
 // Capability domains each project demonstrates. Drawn from what the repo
 // actually does, so a reader scanning for support or admin skills finds them.
 const PROJECT_TAGS: Record<string, string[]> = {
-    'omarchy-printer': ['End-User Support', 'Printing', 'Linux'],
+    'omarchy-siphon': ['Networking', 'Monitoring', 'Linux'],
     'omarchy-removable-drives': ['End-User Support', 'Peripherals', 'Storage'],
     'CLI-NetworkScanner': ['Networking', 'Diagnostics'],
     'ts-hud': ['Networking', 'Monitoring', 'VPN'],
