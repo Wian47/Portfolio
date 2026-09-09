@@ -20,7 +20,7 @@
 
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
-import { generateKeyPairSync, createSign } from 'node:crypto';
+import { generateKeyPairSync, createSign, randomUUID } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import { rm } from 'node:fs/promises';
 
@@ -30,7 +30,13 @@ export const PHOTON_PORT = 8797;
 export const TEAM_DOMAIN = 'dev-local.cloudflareaccess.com';
 export const AUD = 'aud-for-local-development';
 export const OWNER = 'wian.schoeman1@gmail.com';
-const KID = 'dev-key-1';
+/**
+ * Unique per run. The Worker caches a JWKS by key id, and local KV survives
+ * between runs, so a fixed id would let a previous run's public key shadow this
+ * run's and every assertion would fail its signature check for no visible
+ * reason. Cost an afternoon once.
+ */
+const KID = `dev-key-${randomUUID().slice(0, 8)}`;
 
 const b64 = (value) => Buffer.from(value).toString('base64url');
 
@@ -191,8 +197,9 @@ export const applyMigrations = async () =>
   });
 
 export const resetLocalState = async () => {
-  await rm('.wrangler/state/v3/d1', { recursive: true, force: true });
-  await rm('.wrangler/state/v3/kv', { recursive: true, force: true });
+  for (const store of ['d1', 'kv', 'cache']) {
+    await rm(`.wrangler/state/v3/${store}`, { recursive: true, force: true });
+  }
 };
 
 const main = async () => {

@@ -106,7 +106,11 @@ const MUTATING = new Set(['POST', 'PUT', 'DELETE']);
 
 const handleApi = async (request: Request, env: Env, pathname: string): Promise<Response> => {
   const access = await verifyAccess(request, env);
-  if (!access.ok) return problem(403, 'forbidden');
+  if (!access.ok) {
+    // The caller is told nothing. The log is where the reason belongs.
+    console.warn('access refused:', access.reason);
+    return problem(403, 'forbidden');
+  }
 
   let pathMatched = false;
   for (const route of ROUTES) {
