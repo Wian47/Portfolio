@@ -26,3 +26,6 @@ dist-ssr
 # Private page content. The repo is public, so this never gets committed; it is
 # uploaded by `wrangler deploy` from the local build and gated by Cloudflare Access.
 public/private/
+
+# Local wrangler state: the dev D1 file and KV store.
+.wrangler

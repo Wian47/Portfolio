@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2022",
+    // Every state machine in trip/ is a discriminated union, and without this
+    // flag `if (!result.ok)` does not narrow, so the unions type-check as if
+    // they were plain objects. The rest of the repo already passes under it.
+    "strictNullChecks": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "module": "ESNext",
@@ -26,5 +30,6 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "noEmit": true
-  }
+  },
+  "exclude": ["worker", "dist", "node_modules"]
 }
