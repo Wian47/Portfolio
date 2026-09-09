@@ -1,19 +1,51 @@
 {
-  // Deployed to Cloudflare Workers as a static asset upload: there is no Worker
-  // script, only the Vite build output. `npx wrangler deploy` reads this file to
-  // find that output, so the build command must have run first.
+  // Deployed to Cloudflare Workers as a Worker script plus a static asset
+  // upload. Everything outside `/build/api/*` never reaches the script: the
+  // asset handler serves it, exactly as it did when this was assets-only.
+  //
+  // `npx wrangler deploy` reads this file to find the build output, so
+  // `npm run build` must have run first.
   //
   // The name has to match the Workers project in the dashboard. If they differ,
   // a second Worker is created rather than the existing one being updated.
   "name": "portfolio",
-  "compatibility_date": "2026-08-28",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-09",
   // Cloudflare Access is bound to the zone hostname, so anything reachable on
   // *.workers.dev bypasses it. The private routes would be readable there.
   "workers_dev": false,
   "assets": {
     "directory": "./dist/",
+    "binding": "ASSETS",
     // The site is one page served from index.html. Without this, a request for
     // any other path returns a bare 404 instead of the page.
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
+    // Only the API reaches the Worker. Everything else is served straight from
+    // the asset store, so the public portfolio pays nothing for this script.
+    "run_worker_first": ["/build/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "portfolio-trips",
+      // Replace with the id printed by `npx wrangler d1 create portfolio-trips`.
+      // Local development ignores this value and uses a file under .wrangler/.
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      // Replace with the id printed by `npx wrangler kv namespace create CACHE`.
+      "id": "REPLACE_WITH_KV_NAMESPACE_ID"
+    }
+  ],
+  "vars": {
+    "ACCESS_TEAM_DOMAIN": "small-tooth-a1b8.cloudflareaccess.com",
+    // The Access application's audience tag, from the dashboard. The Worker
+    // refuses every request while this is blank rather than opening up.
+    "ACCESS_AUD": "",
+    "OWNER_EMAIL": "wian.schoeman1@gmail.com"
   }
+  // ORS_API_KEY is set with `npx wrangler secret put ORS_API_KEY`, never here.
 }

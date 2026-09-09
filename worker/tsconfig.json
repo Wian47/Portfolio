@@ -1,0 +1,14 @@
+{
+  // The Worker runs on workerd, not in a browser. Its globals (Response, fetch,
+  // crypto) are Cloudflare's rather than the DOM's, so pulling both sets of
+  // types into one program would make every `Response` ambiguous. The site's
+  // tsconfig excludes this directory for the same reason.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "types": ["@cloudflare/workers-types"],
+    "noEmit": true
+  },
+  "include": ["**/*.ts", "../trip/**/*.ts"],
+  "exclude": ["../trip/**/*.test.ts"]
+}
