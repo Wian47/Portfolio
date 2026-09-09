@@ -1,9 +1,12 @@
 import { defineConfig } from 'vitest/config';
 
-/** The pure core only. Nothing under components/ is tested here; it has no DOM. */
+/**
+ * The pure modules. `components/trip/dnd.ts` is in because it holds the drag
+ * arithmetic and imports no React; nothing that renders is tested here.
+ */
 export default defineConfig({
   test: {
-    include: ['trip/**/*.test.ts'],
+    include: ['trip/**/*.test.ts', 'components/trip/*.test.ts'],
     environment: 'node'
   }
 });

@@ -24,13 +24,17 @@ const root = ReactDOM.createRoot(rootElement);
  * portfolio bundle everyone downloads carries none of their markup. Cloudflare
  * Workers serves index.html for these paths via `not_found_handling`, which is
  * why no router is needed for a handful of routes.
+ *
+ * The patterns are prefixes rather than exact paths, because the planner puts
+ * the trip id in the URL and every route under `/build` has to resolve to it.
  */
-const PRIVATE_ROUTES: Record<string, () => Promise<{ default: React.ComponentType }>> = {
-  '/build': () => import('./components/BuildPage')
-};
+const PRIVATE_ROUTES: [RegExp, () => Promise<{ default: React.ComponentType }>][] = [
+  [/^\/build(\/.*)?$/, () => import('./components/trip/TripPage')]
+];
 
 const path = window.location.pathname.replace(/\/+$/, '') || '/';
-const loadPrivate = PRIVATE_ROUTES[path];
+const matched = PRIVATE_ROUTES.find(([pattern]) => pattern.test(path));
+const loadPrivate = matched === undefined ? undefined : matched[1];
 
 if (loadPrivate) {
   loadPrivate().then(({ default: Page }) => {
